@@ -23,7 +23,7 @@ class QuickActionCard extends StatelessWidget {
     return DashboardCard(
       onTap: onTap,
       padding: const EdgeInsets.all(14.0),
-      borderColor: color.withOpacity(0.25),
+      borderColor: color.withValues(alpha: 0.25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,9 +31,9 @@ class QuickActionCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.14),
+              color: color.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: color.withOpacity(0.3)),
+              border: Border.all(color: color.withValues(alpha: 0.3)),
             ),
             child: Icon(icon, color: color, size: 20),
           ),

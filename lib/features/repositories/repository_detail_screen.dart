@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/widgets.dart';
 
@@ -25,12 +24,12 @@ class RepositoryDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SGCard(
+            const SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.folder_special_rounded, color: AppColors.primary, size: 28),
                       SizedBox(width: 12),
                       Expanded(
@@ -42,17 +41,17 @@ class RepositoryDetailScreen extends StatelessWidget {
                       SGChip(label: 'GRADE A', variant: SGChipVariant.success),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
+                  SizedBox(height: 12),
+                  Text(
                     'Main enterprise API gateway handling authentication, role RBAC enforcement, and vulnerability database integrations.',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  const SizedBox(height: 16),
-                  const Divider(color: AppColors.cardBorder),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 16),
+                  Divider(color: AppColors.cardBorder),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Default Branch: main', style: TextStyle(fontSize: 13, color: AppColors.textMuted)),
                       Text('Language: Go / Python', style: TextStyle(fontSize: 13, color: AppColors.textMuted)),
                     ],

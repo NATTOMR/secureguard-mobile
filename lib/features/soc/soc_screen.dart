@@ -68,7 +68,7 @@ class SocScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: SGCard(
-        borderColor: alert.severity == SeverityLevel.critical ? AppColors.critical.withOpacity(0.5) : null,
+        borderColor: alert.severity == SeverityLevel.critical ? AppColors.critical.withValues(alpha: 0.5) : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

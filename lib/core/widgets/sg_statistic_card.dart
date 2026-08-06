@@ -35,9 +35,9 @@ class SGStatisticCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.12),
+                  color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: iconColor.withOpacity(0.3)),
+                  border: Border.all(color: iconColor.withValues(alpha: 0.3)),
                 ),
                 child: Icon(icon, color: iconColor, size: 20),
               ),
@@ -45,7 +45,7 @@ class SGStatisticCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: (isTrendPositive ? AppColors.success : AppColors.critical).withOpacity(0.15),
+                    color: (isTrendPositive ? AppColors.success : AppColors.critical).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(

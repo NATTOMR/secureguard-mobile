@@ -78,10 +78,10 @@ class SGBottomNavigation extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.18) : Colors.transparent,
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.18) : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           border: isSelected
-              ? Border.all(color: AppColors.primary.withOpacity(0.4), width: 1)
+              ? Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 1)
               : Border.all(color: Colors.transparent),
         ),
         child: Column(

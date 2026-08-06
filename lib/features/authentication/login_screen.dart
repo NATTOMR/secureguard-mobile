@@ -101,9 +101,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
                     ),
                     const SizedBox(width: 12),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'SecureGuard',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -144,8 +144,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 20),
 
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Expanded(child: Divider(color: AppColors.cardBorder)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),

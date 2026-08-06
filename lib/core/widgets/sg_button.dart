@@ -67,7 +67,7 @@ class SGButton extends StatelessWidget {
       );
     } else {
       childWidget = Row(
-        mainAxisAlignment: Maincenter,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[

@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.15),
+                color: AppColors.primary.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -61,10 +61,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary.withOpacity(0.5), width: 2),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.4),
+                        color: AppColors.primary.withValues(alpha: 0.4),
                         blurRadius: 30,
                         spreadRadius: 5,
                       ),
@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 )
                     .animate()
                     .scale(duration: 800.ms, curve: Curves.easeOutBack)
-                    .shimmer(duration: 1200.ms, color: Colors.white.withOpacity(0.5)),
+                    .shimmer(duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5)),
 
                 const SizedBox(height: 32),
 
@@ -112,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary.withOpacity(0.8)),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary.withValues(alpha: 0.8)),
                   ),
                 ).animate().fadeIn(delay: 600.ms),
               ],
@@ -124,10 +124,10 @@ class _SplashScreenState extends State<SplashScreen> {
             bottom: 40,
             left: 0,
             right: 0,
-            child: Text(
+            child: const Text(
               AppStrings.appVersion,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMuted,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

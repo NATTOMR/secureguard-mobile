@@ -38,7 +38,7 @@ class FindingCard extends StatelessWidget {
       child: DashboardCard(
         onTap: onTap,
         padding: const EdgeInsets.all(14.0),
-        borderColor: finding.severity == SeverityLevel.critical ? AppColors.critical.withOpacity(0.4) : null,
+        borderColor: finding.severity == SeverityLevel.critical ? AppColors.critical.withValues(alpha: 0.4) : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

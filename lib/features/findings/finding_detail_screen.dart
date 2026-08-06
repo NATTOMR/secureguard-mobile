@@ -26,13 +26,13 @@ class FindingDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SGCard(
+            const SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         'CVE-2024-3094',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.critical),
@@ -40,22 +40,22 @@ class FindingDetailScreen extends StatelessWidget {
                       SGChip(label: 'CRITICAL 10.0', variant: SGChipVariant.critical),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
+                  SizedBox(height: 12),
+                  Text(
                     'XZ Utils Backdoor Vulnerability in SSHD Pipeline',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8),
+                  Text(
                     'Malicious obfuscated code introduced in XZ Utils release builds allows remote attacker to bypass SSH authentication and execute arbitrary code.',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  const SizedBox(height: 16),
-                  const Divider(color: AppColors.cardBorder),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 16),
+                  Divider(color: AppColors.cardBorder),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Repo: auth-gateway-service', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
                       Text('File: base-image.Dockerfile:L14', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
                     ],
@@ -72,10 +72,10 @@ class FindingDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            SGCard(
+            const SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     '1. Upgrade xz-utils package to version >= 5.6.2.\n'
                     '2. Rebuild docker base layers and purge cached images in CI runner.\n'

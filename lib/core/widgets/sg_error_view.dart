@@ -25,9 +25,9 @@ class SGErrorView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.critical.withOpacity(0.12),
+                color: AppColors.critical.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.critical.withOpacity(0.4)),
+                border: Border.all(color: AppColors.critical.withValues(alpha: 0.4)),
               ),
               child: const Icon(Icons.gpp_maybe_rounded, size: 48, color: AppColors.critical),
             ),

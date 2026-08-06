@@ -43,9 +43,9 @@ class ProfileScreen extends ConsumerWidget {
                     style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 12),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SGChip(label: 'Lead Security Architect', variant: SGChipVariant.info),
                       SizedBox(width: 8),
                       SGChip(label: 'ADMIN ACCESS', variant: SGChipVariant.success),

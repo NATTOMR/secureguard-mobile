@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/widgets.dart';
 
@@ -25,13 +24,13 @@ class ScanDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SGCard(
+            const SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         'SAST Static Analysis Engine',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -39,14 +38,14 @@ class ScanDetailScreen extends StatelessWidget {
                       SGChip(label: 'COMPLETED', variant: SGChipVariant.success),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
+                  SizedBox(height: 12),
+                  Text(
                     'Target: auth-gateway-service (main branch)',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Row(
-                    children: const [
+                    children: [
                       SGChip(label: '8 Findings', variant: SGChipVariant.critical),
                       SizedBox(width: 8),
                       SGChip(label: 'Duration: 12m 14s', variant: SGChipVariant.info),

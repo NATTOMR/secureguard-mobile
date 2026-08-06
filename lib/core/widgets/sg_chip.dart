@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
-enum SGChipVariant { critical, high, medium, low, success, info }
+enum SGChipVariant { critical, high, medium, warning, low, success, info }
 
 class SGChip extends StatelessWidget {
   final String label;
@@ -26,6 +26,7 @@ class SGChip extends StatelessWidget {
         color = AppColors.high;
         break;
       case SGChipVariant.medium:
+      case SGChipVariant.warning:
         color = AppColors.warning;
         break;
       case SGChipVariant.low:
@@ -42,9 +43,9 @@ class SGChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.4), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.4), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

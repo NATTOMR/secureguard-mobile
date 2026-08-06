@@ -35,10 +35,10 @@ class ReportsScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 12),
-                  Wrap(
+                  const Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: const [
+                    children: [
                       SGChip(label: 'SOC 2 Type II', variant: SGChipVariant.info),
                       SGChip(label: 'ISO 27001', variant: SGChipVariant.success),
                       SGChip(label: 'HIPAA Compliance', variant: SGChipVariant.medium),

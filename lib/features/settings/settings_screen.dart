@@ -40,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: const Text('Require Biometric Lock', style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
                   subtitle: const Text('Require Face ID / Fingerprint on app open', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                   value: _biometricEnabled,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _biometricEnabled = val),
                 ),
                 const Divider(color: AppColors.cardBorder),
@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: const Text('Push Threat Notifications', style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
                   subtitle: const Text('Receive real-time SIEM alerts for Critical CVEs', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                   value: _pushNotifications,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _pushNotifications = val),
                 ),
                 const Divider(color: AppColors.cardBorder),
@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: const Text('Encrypted Offline Cache', style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
                   subtitle: const Text('Store repository metadata securely using AES-256', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                   value: _offlineCaching,
-                  activeColor: AppColors.primary,
+                  activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _offlineCaching = val),
                 ),
               ],
@@ -65,10 +65,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: 24),
 
-          SGCard(
+          const SGCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'About SecureGuard Mobile',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),

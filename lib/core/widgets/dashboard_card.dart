@@ -51,7 +51,7 @@ class _DashboardCardState extends State<DashboardCard> {
           border: border,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.35),
+              color: Colors.black.withValues(alpha: 0.35),
               blurRadius: 14,
               offset: const Offset(0, 4),
             ),
@@ -66,7 +66,7 @@ class _DashboardCardState extends State<DashboardCard> {
                   });
                 },
                 borderRadius: AppColors.cardBorderRadius,
-                splashColor: AppColors.primary.withOpacity(0.15),
+                splashColor: AppColors.primary.withValues(alpha: 0.15),
                 child: widget.child,
               )
             : widget.child,

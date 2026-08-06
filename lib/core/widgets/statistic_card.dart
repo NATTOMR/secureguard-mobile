@@ -26,7 +26,7 @@ class StatisticCard extends StatelessWidget {
     return DashboardCard(
       onTap: onTap,
       gradient: gradient,
-      borderColor: accentColor.withOpacity(0.3),
+      borderColor: accentColor.withValues(alpha: 0.3),
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,9 +38,9 @@ class StatisticCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.15),
+                  color: accentColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: accentColor.withOpacity(0.3)),
+                  border: Border.all(color: accentColor.withValues(alpha: 0.3)),
                 ),
                 child: Icon(icon, color: accentColor, size: 20),
               ),

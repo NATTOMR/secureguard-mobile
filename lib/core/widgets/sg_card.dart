@@ -34,7 +34,7 @@ class SGCard extends StatelessWidget {
       border: border,
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
           blurRadius: 12,
           offset: const Offset(0, 4),
         ),
@@ -55,8 +55,8 @@ class SGCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: AppColors.cardBorderRadius,
-          splashColor: AppColors.primary.withOpacity(0.15),
-          highlightColor: AppColors.primary.withOpacity(0.05),
+          splashColor: AppColors.primary.withValues(alpha: 0.15),
+          highlightColor: AppColors.primary.withValues(alpha: 0.05),
           child: content,
         ),
       );

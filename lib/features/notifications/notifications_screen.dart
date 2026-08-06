@@ -55,7 +55,7 @@ class NotificationsScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: (isCritical ? AppColors.critical : AppColors.primary).withOpacity(0.15),
+                color: (isCritical ? AppColors.critical : AppColors.primary).withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(

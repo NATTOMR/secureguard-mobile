@@ -10,4 +10,3 @@ linter:
     avoid_empty_else: true
     avoid_relative_lib_imports: true
     empty_catches: true
-    unnecessary_null_comparison: true

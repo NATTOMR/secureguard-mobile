@@ -116,7 +116,7 @@ class _AiCopilotScreenState extends ConsumerState<AiCopilotScreen> {
                 const SizedBox(width: 12),
                 IconButton.filled(
                   icon: const Icon(Icons.send_rounded, color: Colors.white),
-                  backgroundColor: AppColors.primary,
+                  style: IconButton.styleFrom(backgroundColor: AppColors.primary),
                   onPressed: () => _sendPrompt(_promptController.text),
                 ),
               ],
@@ -136,7 +136,7 @@ class _AiCopilotScreenState extends ConsumerState<AiCopilotScreen> {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
         ),
         child: Row(
           children: [
