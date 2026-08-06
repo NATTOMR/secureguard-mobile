@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    avoid_print: true
+    use_key_in_widget_constructors: true
+    always_declare_return_types: true
+    avoid_empty_else: true
+    avoid_relative_lib_imports: true
+    empty_catches: true
+    unnecessary_null_comparison: true

@@ -1,0 +1,62 @@
+name: secureguard_mobile
+description: Official Mobile Application for SecureGuard Enterprise Security Platform.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management & Routing
+  flutter_riverpod: ^2.5.1
+  go_router: ^13.2.0
+
+  # Networking & Storage
+  dio: ^5.4.1
+  flutter_secure_storage: ^9.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Serialization & Immutability
+  json_annotation: ^4.8.1
+  freezed_annotation: ^2.4.1
+  equatable: ^2.0.5
+
+  # UI, Styling & Animations
+  flutter_animate: ^4.5.0
+  google_fonts: ^6.1.0
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  fl_chart: ^0.66.2
+
+  # Device & System Integration
+  connectivity_plus: ^5.0.2
+  package_info_plus: ^5.0.1
+  url_launcher: ^6.2.5
+  intl: ^0.19.0
+  permission_handler: ^11.3.0
+  local_auth: ^2.1.8
+  logger: ^2.0.2+1
+
+  # Firebase Infrastructure (Placeholders for enterprise integration)
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
+  freezed: ^2.4.7
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
