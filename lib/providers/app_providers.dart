@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
 import '../features/ai/data/ai_repository.dart';
 import '../features/alerts/data/alerts_repository.dart';
@@ -42,8 +43,13 @@ final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepositoryImpl();
 });
 
-final scanRepositoryProvider = Provider((ref) => ScanRepository());
-final findingRepositoryProvider = Provider((ref) => FindingRepository());
+final scanRepositoryProvider = Provider<ScanRepository>((ref) {
+  return ScanRepository(apiClient: ref.watch(apiClientProvider));
+});
+
+final findingRepositoryProvider = Provider<FindingRepository>((ref) {
+  return FindingRepository(apiClient: ref.watch(apiClientProvider));
+});
 
 // Authentication State
 class AuthState {
@@ -73,8 +79,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final user = await _repo.login(email: email, password: password);
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
-      final demo = await _repo.getDemoUser();
-      state = state.copyWith(user: demo, isLoading: false);
+      if (AppConfig.isDemoMode) {
+        final demo = await _repo.getDemoUser();
+        state = state.copyWith(user: demo, isLoading: false);
+      } else {
+        state = state.copyWith(isLoading: false, error: e.toString());
+        rethrow;
+      }
     }
   }
 
@@ -84,8 +95,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final user = await _repo.loginWithGitHub();
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
-      final demo = await _repo.getDemoUser();
-      state = state.copyWith(user: demo, isLoading: false);
+      if (AppConfig.isDemoMode) {
+        final demo = await _repo.getDemoUser();
+        state = state.copyWith(user: demo, isLoading: false);
+      } else {
+        state = state.copyWith(isLoading: false, error: e.toString());
+        rethrow;
+      }
     }
   }
 
@@ -105,27 +121,36 @@ final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((r
   return AuthStateNotifier(ref.watch(authRepositoryProvider));
 });
 
+// Execution Mode State Provider
+final isDemoModeProvider = StateProvider<bool>((ref) => AppConfig.isDemoMode);
+
 // Telemetry & Data Future Providers
 final dashboardDataProvider = FutureProvider<DashboardModel>((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(dashboardRepositoryProvider).getDashboardSummary();
 });
 
 final repositoriesDataProvider = FutureProvider<List<RepositoryModel>>((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(repositoryRepositoryProvider).getRepositories();
 });
 
 final alertsDataProvider = FutureProvider<List<AlertModel>>((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(alertsRepositoryProvider).getAlerts();
 });
 
 final appSettingsProvider = FutureProvider<AppSettingsModel>((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(settingsRepositoryProvider).loadSettings();
 });
 
 final scansListProvider = FutureProvider((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(scanRepositoryProvider).getScans();
 });
 
 final findingsListProvider = FutureProvider((ref) async {
+  ref.watch(isDemoModeProvider);
   return ref.watch(findingRepositoryProvider).getFindings();
 });

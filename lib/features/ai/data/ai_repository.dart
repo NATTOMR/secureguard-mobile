@@ -15,19 +15,19 @@ class AiRepositoryImpl implements AiRepository {
 
   @override
   Future<AiMessageModel> sendSecurityPrompt(String prompt) async {
+    // 1. REAL FASTAPI BACKEND MODE
     if (!AppConfig.isDemoMode) {
-      try {
-        final response = await apiClient.post(
-          ApiEndpoints.aiChat,
-          data: {'prompt': prompt, 'context': 'mobile_security_copilot'},
-        );
-        return AiMessageModel.fromJson(response as Map<String, dynamic>);
-      } catch (_) {
-        // Fallback to local security remediation logic if offline
+      final response = await apiClient.post(
+        ApiEndpoints.aiChat,
+        data: {'prompt': prompt, 'context': 'mobile_security_copilot'},
+      );
+      if (response is Map<String, dynamic>) {
+        return AiMessageModel.fromJson(response);
       }
+      throw Exception('Invalid AI response format received from FastAPI backend');
     }
 
-    // Clearly marked demo / offline security response generator
+    // 2. OFFLINE / DEMO SIMULATION MODE
     final responseText = _generateMockSecurityResponse(prompt);
     return AiMessageModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),

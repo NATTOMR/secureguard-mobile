@@ -15,15 +15,16 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardAsync = ref.watch(dashboardDataProvider);
+    final isDemo = ref.watch(isDemoModeProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const SGAppBar(
+      appBar: SGAppBar(
         title: AppStrings.appName,
         subtitle: AppStrings.appTagline,
         showStatusBadge: true,
-        statusText: 'SOC ONLINE',
-        statusType: StatusType.normal,
+        statusText: isDemo ? 'DEMO MODE' : 'SOC ONLINE',
+        statusType: isDemo ? StatusType.warning : StatusType.normal,
       ),
       body: dashboardAsync.when(
         data: (data) => _buildDashboardContent(context, ref, data),

@@ -7,6 +7,11 @@ class AppSettingsModel extends Equatable {
   final bool criticalAlertsOnly;
   final bool encryptedLocalStorage;
   final String themeMode; // 'dark', 'system'
+  final bool isDemoMode;
+  final bool githubConnected;
+  final bool wazuhConnected;
+  final bool dailyDigestEnabled;
+  final bool soundHapticsEnabled;
 
   const AppSettingsModel({
     required this.backendUrl,
@@ -15,6 +20,11 @@ class AppSettingsModel extends Equatable {
     this.criticalAlertsOnly = false,
     this.encryptedLocalStorage = true,
     this.themeMode = 'dark',
+    this.isDemoMode = true,
+    this.githubConnected = true,
+    this.wazuhConnected = true,
+    this.dailyDigestEnabled = true,
+    this.soundHapticsEnabled = false,
   });
 
   AppSettingsModel copyWith({
@@ -24,6 +34,11 @@ class AppSettingsModel extends Equatable {
     bool? criticalAlertsOnly,
     bool? encryptedLocalStorage,
     String? themeMode,
+    bool? isDemoMode,
+    bool? githubConnected,
+    bool? wazuhConnected,
+    bool? dailyDigestEnabled,
+    bool? soundHapticsEnabled,
   }) {
     return AppSettingsModel(
       backendUrl: backendUrl ?? this.backendUrl,
@@ -32,6 +47,11 @@ class AppSettingsModel extends Equatable {
       criticalAlertsOnly: criticalAlertsOnly ?? this.criticalAlertsOnly,
       encryptedLocalStorage: encryptedLocalStorage ?? this.encryptedLocalStorage,
       themeMode: themeMode ?? this.themeMode,
+      isDemoMode: isDemoMode ?? this.isDemoMode,
+      githubConnected: githubConnected ?? this.githubConnected,
+      wazuhConnected: wazuhConnected ?? this.wazuhConnected,
+      dailyDigestEnabled: dailyDigestEnabled ?? this.dailyDigestEnabled,
+      soundHapticsEnabled: soundHapticsEnabled ?? this.soundHapticsEnabled,
     );
   }
 
@@ -43,6 +63,11 @@ class AppSettingsModel extends Equatable {
       criticalAlertsOnly: json['critical_alerts_only'] as bool? ?? false,
       encryptedLocalStorage: json['encrypted_local_storage'] as bool? ?? true,
       themeMode: json['theme_mode'] as String? ?? 'dark',
+      isDemoMode: json['is_demo_mode'] as bool? ?? true,
+      githubConnected: json['github_connected'] as bool? ?? true,
+      wazuhConnected: json['wazuh_connected'] as bool? ?? true,
+      dailyDigestEnabled: json['daily_digest_enabled'] as bool? ?? true,
+      soundHapticsEnabled: json['sound_haptics_enabled'] as bool? ?? false,
     );
   }
 
@@ -53,6 +78,11 @@ class AppSettingsModel extends Equatable {
         'critical_alerts_only': criticalAlertsOnly,
         'encrypted_local_storage': encryptedLocalStorage,
         'theme_mode': themeMode,
+        'is_demo_mode': isDemoMode,
+        'github_connected': githubConnected,
+        'wazuh_connected': wazuhConnected,
+        'daily_digest_enabled': dailyDigestEnabled,
+        'sound_haptics_enabled': soundHapticsEnabled,
       };
 
   @override
@@ -63,5 +93,10 @@ class AppSettingsModel extends Equatable {
         criticalAlertsOnly,
         encryptedLocalStorage,
         themeMode,
+        isDemoMode,
+        githubConnected,
+        wazuhConnected,
+        dailyDigestEnabled,
+        soundHapticsEnabled,
       ];
 }

@@ -16,19 +16,22 @@ class AlertsRepositoryImpl implements AlertsRepository {
 
   @override
   Future<List<AlertModel>> getAlerts() async {
+    // 1. OFFLINE / DEMO SIMULATION MODE
     if (AppConfig.isDemoMode) {
       return _getMockAlerts();
     }
 
-    try {
-      final response = await apiClient.get(ApiEndpoints.alerts);
-      if (response is List) {
-        return response.map((e) => AlertModel.fromJson(e as Map<String, dynamic>)).toList();
-      }
-      return _getMockAlerts();
-    } catch (_) {
-      return _getMockAlerts();
+    // 2. REAL FASTAPI BACKEND MODE
+    final response = await apiClient.get(ApiEndpoints.alerts);
+    if (response is List) {
+      return response.map((e) => AlertModel.fromJson(e as Map<String, dynamic>)).toList();
     }
+    if (response is Map<String, dynamic> && response['alerts'] is List) {
+      return (response['alerts'] as List)
+          .map((e) => AlertModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception('Unexpected data format received from /v1/soc/alerts');
   }
 
   @override
@@ -43,11 +46,15 @@ class AlertsRepositoryImpl implements AlertsRepository {
 
   @override
   Future<void> updateAlertStatus(String id, AlertStatus newStatus) async {
-    // In production, posts status update to FastAPI SOC backend
+    if (AppConfig.isDemoMode) return;
+    await apiClient.put(
+      '${ApiEndpoints.alerts}/$id/status',
+      data: {'status': newStatus.name},
+    );
   }
 
   // -------------------------------------------------------------
-  // CLEARLY MARKED DEMO / MOCK DATA FOR UI DEVELOPMENT
+  // CLEARLY MARKED DEMO / MOCK DATA FOR OFFLINE DEVELOPMENT
   // -------------------------------------------------------------
   List<AlertModel> _getMockAlerts() {
     return [

@@ -1,6 +1,9 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
+  // Health / Root Probe
+  static const String health = '/health';
+
   // Authentication
   static const String login = '/v1/auth/login';
   static const String me = '/v1/auth/me';
@@ -8,7 +11,7 @@ class ApiEndpoints {
   // Dashboard & Overview
   static const String dashboard = '/v1/dashboard/summary';
 
-  // Repositories & Findings
+  // Repositories, Scans & Findings
   static const String repositories = '/v1/repositories';
   static const String scans = '/v1/scans';
   static const String findings = '/v1/findings';

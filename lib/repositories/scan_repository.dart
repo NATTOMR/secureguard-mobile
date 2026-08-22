@@ -1,8 +1,29 @@
+import '../core/config/app_config.dart';
+import '../core/network/api_client.dart';
+import '../core/network/api_endpoints.dart';
 import '../models/models.dart';
 
 class ScanRepository {
+  final ApiClient? apiClient;
+
+  ScanRepository({this.apiClient});
+
   Future<List<ScanModel>> getScans() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    // Real API mode
+    if (!AppConfig.isDemoMode && apiClient != null) {
+      final response = await apiClient!.get(ApiEndpoints.scans);
+      if (response is List) {
+        return response.map((e) => ScanModel.fromJson(e as Map<String, dynamic>)).toList();
+      }
+      if (response is Map<String, dynamic> && response['scans'] is List) {
+        return (response['scans'] as List)
+            .map((e) => ScanModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+    }
+
+    // Demo mode fallback
+    await Future.delayed(const Duration(milliseconds: 300));
     final now = DateTime.now();
     return [
       ScanModel(

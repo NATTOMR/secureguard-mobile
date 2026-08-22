@@ -14,22 +14,21 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
   @override
   Future<DashboardModel> getDashboardSummary() async {
-    // If demo mode is active or backend is unreachable, serve marked mock data
+    // 1. OFFLINE / DEMO SIMULATION MODE
     if (AppConfig.isDemoMode) {
       return _getMockDashboardSummary();
     }
 
-    try {
-      final response = await apiClient.get(ApiEndpoints.dashboard);
-      return DashboardModel.fromJson(response as Map<String, dynamic>);
-    } catch (_) {
-      // Graceful fallback to demo data for offline development
-      return _getMockDashboardSummary();
+    // 2. REAL FASTAPI BACKEND MODE
+    final response = await apiClient.get(ApiEndpoints.dashboard);
+    if (response is Map<String, dynamic>) {
+      return DashboardModel.fromJson(response);
     }
+    throw Exception('Invalid telemetry payload received from FastAPI /v1/dashboard/summary');
   }
 
   // -------------------------------------------------------------
-  // CLEARLY MARKED DEMO / MOCK DATA FOR UI DEVELOPMENT
+  // CLEARLY MARKED DEMO / MOCK DATA FOR OFFLINE DEVELOPMENT
   // -------------------------------------------------------------
   DashboardModel _getMockDashboardSummary() {
     return DashboardModel(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/config/app_config.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
@@ -31,22 +32,69 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _handleLoginSuccess() {
-    context.go(AppRouter.dashboard);
+    if (mounted) {
+      context.go(AppRouter.dashboard);
+    }
   }
 
   Future<void> _handleEmailLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      await ref.read(authStateProvider.notifier).loginWithEmail(
-            _emailController.text,
-            _passwordController.text,
+      try {
+        await ref.read(authStateProvider.notifier).loginWithEmail(
+              _emailController.text.trim(),
+              _passwordController.text,
+            );
+        _handleLoginSuccess();
+      } catch (e) {
+        if (mounted) {
+          final errorMessage = e.toString().replaceAll('ApiException: ', '');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Authentication Failed: $errorMessage',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+              backgroundColor: AppColors.critical,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 4),
+              action: SnackBarAction(
+                label: 'Use Demo Mode',
+                textColor: Colors.white,
+                onPressed: () {
+                  AppConfig.isDemoMode = true;
+                  _handleOfflineLogin();
+                },
+              ),
+            ),
           );
-      _handleLoginSuccess();
+        }
+      }
     }
   }
 
   Future<void> _handleGithubLogin() async {
-    await ref.read(authStateProvider.notifier).loginWithGithub();
-    _handleLoginSuccess();
+    try {
+      await ref.read(authStateProvider.notifier).loginWithGithub();
+      _handleLoginSuccess();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('GitHub Authentication failed: $e'),
+            backgroundColor: AppColors.critical,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _handleOfflineLogin() async {

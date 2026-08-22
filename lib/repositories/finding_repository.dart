@@ -1,8 +1,29 @@
+import '../core/config/app_config.dart';
+import '../core/network/api_client.dart';
+import '../core/network/api_endpoints.dart';
 import '../models/models.dart';
 
 class FindingRepository {
+  final ApiClient? apiClient;
+
+  FindingRepository({this.apiClient});
+
   Future<List<FindingModel>> getFindings() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    // Real API mode
+    if (!AppConfig.isDemoMode && apiClient != null) {
+      final response = await apiClient!.get(ApiEndpoints.findings);
+      if (response is List) {
+        return response.map((e) => FindingModel.fromJson(e as Map<String, dynamic>)).toList();
+      }
+      if (response is Map<String, dynamic> && response['findings'] is List) {
+        return (response['findings'] as List)
+            .map((e) => FindingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+    }
+
+    // Demo Mode fallback
+    await Future.delayed(const Duration(milliseconds: 300));
     final now = DateTime.now();
     return [
       FindingModel(
