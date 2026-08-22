@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../constants/app_strings.dart';
 
 class SGBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -22,7 +23,7 @@ class SGBottomNavigation extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -30,31 +31,31 @@ class SGBottomNavigation extends StatelessWidget {
                 index: 0,
                 icon: Icons.dashboard_outlined,
                 activeIcon: Icons.dashboard_rounded,
-                label: 'Dashboard',
+                label: AppStrings.navDashboard,
               ),
               _buildNavItem(
                 index: 1,
                 icon: Icons.folder_open_outlined,
                 activeIcon: Icons.folder_rounded,
-                label: 'Repos',
+                label: AppStrings.navRepositories,
               ),
               _buildNavItem(
                 index: 2,
-                icon: Icons.radar_outlined,
-                activeIcon: Icons.radar_rounded,
-                label: 'Scans',
+                icon: Icons.auto_awesome_outlined,
+                activeIcon: Icons.auto_awesome_rounded,
+                label: 'AI Copilot',
               ),
               _buildNavItem(
                 index: 3,
-                icon: Icons.security_outlined,
-                activeIcon: Icons.security_rounded,
-                label: 'SOC',
+                icon: Icons.notifications_none_rounded,
+                activeIcon: Icons.notifications_active_rounded,
+                label: AppStrings.navAlerts,
               ),
               _buildNavItem(
                 index: 4,
-                icon: Icons.person_outline_rounded,
-                activeIcon: Icons.person_rounded,
-                label: 'Profile',
+                icon: Icons.settings_outlined,
+                activeIcon: Icons.settings_rounded,
+                label: AppStrings.navSettings,
               ),
             ],
           ),
@@ -73,13 +74,13 @@ class SGBottomNavigation extends StatelessWidget {
 
     return InkWell(
       onTap: () => onTap(index),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(14),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary.withValues(alpha: 0.18) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: isSelected
               ? Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 1)
               : Border.all(color: Colors.transparent),
@@ -92,11 +93,11 @@ class SGBottomNavigation extends StatelessWidget {
               color: isSelected ? AppColors.primary : AppColors.textMuted,
               size: 22,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 10.5,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 color: isSelected ? AppColors.textPrimary : AppColors.textMuted,
               ),

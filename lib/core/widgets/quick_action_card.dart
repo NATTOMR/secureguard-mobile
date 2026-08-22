@@ -6,7 +6,8 @@ class QuickActionCard extends StatelessWidget {
   final String title;
   final String? subtitle;
   final IconData icon;
-  final Color color;
+  final Color? color;
+  final Color? accentColor;
   final VoidCallback onTap;
 
   const QuickActionCard({
@@ -14,16 +15,19 @@ class QuickActionCard extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.icon,
-    required this.color,
+    this.color,
+    this.accentColor,
     required this.onTap,
   });
+
+  Color get effectiveColor => accentColor ?? color ?? AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
     return DashboardCard(
       onTap: onTap,
       padding: const EdgeInsets.all(14.0),
-      borderColor: color.withValues(alpha: 0.25),
+      borderColor: effectiveColor.withValues(alpha: 0.25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,11 +35,11 @@ class QuickActionCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.14),
+              color: effectiveColor.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: color.withValues(alpha: 0.3)),
+              border: Border.all(color: effectiveColor.withValues(alpha: 0.3)),
             ),
-            child: Icon(icon, color: color, size: 20),
+            child: Icon(icon, color: effectiveColor, size: 20),
           ),
           const SizedBox(height: 10),
           Text(

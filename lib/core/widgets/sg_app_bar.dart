@@ -4,6 +4,7 @@ import 'sg_status_badge.dart';
 
 class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? subtitle;
   final bool showBackButton;
   final List<Widget>? actions;
   final bool showStatusBadge;
@@ -13,7 +14,8 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
   const SGAppBar({
     super.key,
     required this.title,
-    this.showBackButton = true,
+    this.subtitle,
+    this.showBackButton = false,
     this.actions,
     this.showStatusBadge = false,
     this.statusText = 'SYSTEM NORMAL',
@@ -32,20 +34,38 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () => Navigator.maybePop(context),
             )
           : null,
-      title: Row(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-              letterSpacing: -0.3,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                  letterSpacing: -0.3,
+                ),
+              ),
+              if (showStatusBadge) ...[
+                const SizedBox(width: 10),
+                SGStatusBadge(label: statusText, type: statusType),
+              ],
+            ],
           ),
-          if (showStatusBadge) ...[
-            const SizedBox(width: 12),
-            SGStatusBadge(label: statusText, type: statusType),
+          if (subtitle != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              subtitle!,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
         ],
       ),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'core/router/app_router.dart';
+import 'app.dart';
 import 'core/storage/hive_storage_service.dart';
-import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,18 +25,4 @@ void main() async {
       child: SecureGuardApp(),
     ),
   );
-}
-
-class SecureGuardApp extends StatelessWidget {
-  const SecureGuardApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'SecureGuard Mobile',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      routerConfig: AppRouter.router,
-    );
-  }
 }

@@ -6,7 +6,8 @@ class SGStatisticCard extends StatelessWidget {
   final String title;
   final String value;
   final IconData icon;
-  final Color iconColor;
+  final Color? iconColor;
+  final Color? accentColor;
   final String? trendText;
   final bool isTrendPositive;
   final VoidCallback? onTap;
@@ -16,11 +17,14 @@ class SGStatisticCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.icon,
-    this.iconColor = AppColors.primary,
+    this.iconColor,
+    this.accentColor,
     this.trendText,
     this.isTrendPositive = true,
     this.onTap,
   });
+
+  Color get effectiveColor => accentColor ?? iconColor ?? AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +39,11 @@ class SGStatisticCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.12),
+                  color: effectiveColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: iconColor.withValues(alpha: 0.3)),
+                  border: Border.all(color: effectiveColor.withValues(alpha: 0.3)),
                 ),
-                child: Icon(icon, color: iconColor, size: 20),
+                child: Icon(icon, color: effectiveColor, size: 20),
               ),
               if (trendText != null)
                 Container(
@@ -70,11 +74,11 @@ class SGStatisticCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 26,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
               letterSpacing: -0.5,
@@ -84,7 +88,7 @@ class SGStatisticCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 12.5,
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),

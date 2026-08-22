@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_strings.dart';
-import '../../core/router/app_router.dart';
-import '../../core/services/biometric_service.dart';
-import '../../core/widgets/widgets.dart';
-import '../../providers/app_providers.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/router/app_router.dart';
+import '../../../core/services/biometric_service.dart';
+import '../../../core/widgets/widgets.dart';
+import '../../../providers/app_providers.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -109,7 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                         ),
                         Text(
-                          'SOC MOBILE PLATFORM',
+                          'ENTERPRISE SECURITY PLATFORM',
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary, letterSpacing: 1.2),
                         ),
                       ],
@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Corporate Email Input
                 SGTextField(
                   label: 'Corporate Email',
-                  hintText: 'name@company.com',
+                  hintText: 'analyst@company.com',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: const Icon(Icons.email_outlined),
@@ -212,7 +212,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Password reset link sent to admin desk.')),
+                          const SnackBar(content: Text('Password reset instructions dispatched.')),
                         );
                       },
                       child: const Text(

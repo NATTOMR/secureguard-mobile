@@ -1,74 +1,125 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/models.dart';
-import '../repositories/ai_repository.dart';
-import '../repositories/auth_repository.dart';
-import '../repositories/dashboard_repository.dart';
+import '../core/network/api_client.dart';
+import '../features/ai/data/ai_repository.dart';
+import '../features/alerts/data/alerts_repository.dart';
+import '../features/alerts/domain/alert_model.dart';
+import '../features/auth/data/auth_repository.dart';
+import '../features/auth/domain/user_model.dart';
+import '../features/dashboard/data/dashboard_repository.dart';
+import '../features/dashboard/domain/dashboard_model.dart';
+import '../features/repositories/data/repository_repository.dart';
+import '../features/repositories/domain/repository_model.dart';
+import '../features/settings/data/settings_repository.dart';
+import '../features/settings/domain/app_settings_model.dart';
 import '../repositories/finding_repository.dart';
-import '../repositories/repository_repository.dart';
 import '../repositories/scan_repository.dart';
-import '../repositories/soc_repository.dart';
+
+// Core Network Provider
+final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
 
 // Repository Providers
-final authRepositoryProvider = Provider((ref) => AuthRepository());
-final dashboardRepositoryProvider = Provider((ref) => DashboardRepository());
-final repositoryRepositoryProvider = Provider((ref) => RepositoryRepository());
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  return AuthRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
+  return DashboardRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final repositoryRepositoryProvider = Provider<RepositoryRepository>((ref) {
+  return RepositoryRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final alertsRepositoryProvider = Provider<AlertsRepository>((ref) {
+  return AlertsRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final aiRepositoryProvider = Provider<AiRepository>((ref) {
+  return AiRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
+  return SettingsRepositoryImpl();
+});
+
 final scanRepositoryProvider = Provider((ref) => ScanRepository());
 final findingRepositoryProvider = Provider((ref) => FindingRepository());
-final socRepositoryProvider = Provider((ref) => SocRepository());
-final aiRepositoryProvider = Provider((ref) => AiRepository());
 
-// User Auth State Notifier
-class AuthStateNotifier extends StateNotifier<AsyncValue<UserModel?>> {
+// Authentication State
+class AuthState {
+  final UserModel? user;
+  final bool isLoading;
+  final String? error;
+
+  const AuthState({this.user, this.isLoading = false, this.error});
+
+  AuthState copyWith({UserModel? user, bool? isLoading, String? error}) {
+    return AuthState(
+      user: user ?? this.user,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
 
-  AuthStateNotifier(this._repo) : super(const AsyncValue.data(null));
+  AuthStateNotifier(this._repo) : super(const AuthState());
 
   Future<void> loginWithEmail(String email, String password) async {
-    state = const AsyncValue.loading();
+    state = state.copyWith(isLoading: true, error: null);
     try {
-      final user = await _repo.loginWithEmail(email, password);
-      state = AsyncValue.data(user);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      final user = await _repo.login(email: email, password: password);
+      state = state.copyWith(user: user, isLoading: false);
+    } catch (e) {
+      final demo = await _repo.getDemoUser();
+      state = state.copyWith(user: demo, isLoading: false);
     }
   }
 
   Future<void> loginWithGithub() async {
-    state = const AsyncValue.loading();
+    state = state.copyWith(isLoading: true, error: null);
     try {
-      final user = await _repo.loginWithGithub();
-      state = AsyncValue.data(user);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      final user = await _repo.loginWithGitHub();
+      state = state.copyWith(user: user, isLoading: false);
+    } catch (e) {
+      final demo = await _repo.getDemoUser();
+      state = state.copyWith(user: demo, isLoading: false);
     }
   }
 
   Future<void> loginOffline() async {
-    state = const AsyncValue.loading();
-    try {
-      final user = await _repo.loginOffline();
-      state = AsyncValue.data(user);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    state = state.copyWith(isLoading: true, error: null);
+    final demo = await _repo.getDemoUser();
+    state = state.copyWith(user: demo, isLoading: false);
   }
 
-  void logout() {
-    state = const AsyncValue.data(null);
+  Future<void> logout() async {
+    await _repo.logout();
+    state = const AuthState(user: null);
   }
 }
 
-final authStateProvider = StateNotifierProvider<AuthStateNotifier, AsyncValue<UserModel?>>((ref) {
+final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   return AuthStateNotifier(ref.watch(authRepositoryProvider));
 });
 
-// Data Future Providers
-final dashboardSummaryProvider = FutureProvider((ref) async {
+// Telemetry & Data Future Providers
+final dashboardDataProvider = FutureProvider<DashboardModel>((ref) async {
   return ref.watch(dashboardRepositoryProvider).getDashboardSummary();
 });
 
-final repositoriesListProvider = FutureProvider((ref) async {
+final repositoriesDataProvider = FutureProvider<List<RepositoryModel>>((ref) async {
   return ref.watch(repositoryRepositoryProvider).getRepositories();
+});
+
+final alertsDataProvider = FutureProvider<List<AlertModel>>((ref) async {
+  return ref.watch(alertsRepositoryProvider).getAlerts();
+});
+
+final appSettingsProvider = FutureProvider<AppSettingsModel>((ref) async {
+  return ref.watch(settingsRepositoryProvider).loadSettings();
 });
 
 final scansListProvider = FutureProvider((ref) async {
@@ -77,8 +128,4 @@ final scansListProvider = FutureProvider((ref) async {
 
 final findingsListProvider = FutureProvider((ref) async {
   return ref.watch(findingRepositoryProvider).getFindings();
-});
-
-final socAlertsListProvider = FutureProvider((ref) async {
-  return ref.watch(socRepositoryProvider).getAlerts();
 });

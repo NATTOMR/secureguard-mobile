@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SecureGuard Mobile 🛡️
 
 Official Android and iOS enterprise mobile application for the **SecureGuard Enterprise Security Platform**. Built with Flutter 3, Dart 3, Clean Architecture, and Riverpod state management.
@@ -117,6 +116,3 @@ flutter pub get
 # 2. Run the application
 flutter run
 ```
-=======
-# secureguard-mobile
->>>>>>> 4c50f74dc7f478947c31d6bb7fdd78519307339d

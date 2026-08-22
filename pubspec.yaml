@@ -34,7 +34,7 @@ dependencies:
 
   # Device & System Integration
   connectivity_plus: ^5.0.2
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.1.0
   url_launcher: ^6.2.5
   intl: ^0.19.0
   permission_handler: ^11.3.0

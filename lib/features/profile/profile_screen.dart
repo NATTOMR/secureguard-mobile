@@ -12,7 +12,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userState = ref.watch(authStateProvider).value;
+    final userState = ref.watch(authStateProvider).user;
 
     return Scaffold(
       backgroundColor: AppColors.background,

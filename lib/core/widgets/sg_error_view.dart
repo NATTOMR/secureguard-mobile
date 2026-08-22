@@ -4,15 +4,19 @@ import 'sg_button.dart';
 
 class SGErrorView extends StatelessWidget {
   final String title;
-  final String errorMessage;
-  final VoidCallback onRetry;
+  final String? errorMessage;
+  final String? message;
+  final VoidCallback? onRetry;
 
   const SGErrorView({
     super.key,
-    this.title = 'Security Service Error',
-    required this.errorMessage,
-    required this.onRetry,
+    this.title = 'Security Telemetry Error',
+    this.errorMessage,
+    this.message,
+    this.onRetry,
   });
+
+  String get effectiveMessage => errorMessage ?? message ?? 'An unexpected network error occurred.';
 
   @override
   Widget build(BuildContext context) {
@@ -29,35 +33,37 @@ class SGErrorView extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.critical.withValues(alpha: 0.4)),
               ),
-              child: const Icon(Icons.gpp_maybe_rounded, size: 48, color: AppColors.critical),
+              child: const Icon(Icons.gpp_maybe_rounded, size: 44, color: AppColors.critical),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 17,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              errorMessage,
+              effectiveMessage,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 color: AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 24),
-            SGButton(
-              label: 'Retry Request',
-              onPressed: onRetry,
-              width: 160,
-              height: 44,
-              variant: SGButtonVariant.secondary,
-            ),
+            if (onRetry != null) ...[
+              const SizedBox(height: 20),
+              SGButton(
+                label: 'Retry Connection',
+                onPressed: onRetry,
+                width: 170,
+                height: 42,
+                variant: SGButtonVariant.secondary,
+              ),
+            ],
           ],
         ),
       ),
