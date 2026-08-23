@@ -30,10 +30,10 @@ void main() async {
     if (prefs.containsKey('sg_is_demo_mode')) {
       AppConfig.isDemoMode = prefs.getBool('sg_is_demo_mode') ?? false;
     } else {
-      // First Launch: probe live FastAPI backend at http://10.0.2.2:8000
+      // First Launch: probe live FastAPI backend
       final testClient = ApiClient();
       final health = await testClient.checkHealth().timeout(
-        const Duration(milliseconds: 1500),
+        const Duration(milliseconds: 3000),
         onTimeout: () => (isReachable: false, statusCode: 0, latencyMs: 0, message: 'timeout'),
       );
       if (health.isReachable) {
