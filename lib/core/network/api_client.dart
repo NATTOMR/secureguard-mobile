@@ -69,6 +69,14 @@ class ApiClient {
     _dio.options.headers.remove('Authorization');
   }
 
+  String? get authToken {
+    final header = _dio.options.headers['Authorization'] as String?;
+    if (header != null && header.startsWith('Bearer ')) {
+      return header.substring(7);
+    }
+    return null;
+  }
+
   bool get hasAuthToken => _dio.options.headers.containsKey('Authorization');
 
   Future<dynamic> get(String endpoint, {Map<String, dynamic>? queryParameters}) async {

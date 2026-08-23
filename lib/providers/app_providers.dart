@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
+import '../core/network/websocket_service.dart';
 import '../features/ai/data/ai_repository.dart';
 import '../features/alerts/data/alerts_repository.dart';
 import '../features/alerts/domain/alert_model.dart';
@@ -15,8 +17,19 @@ import '../features/settings/domain/app_settings_model.dart';
 import '../repositories/finding_repository.dart';
 import '../repositories/scan_repository.dart';
 
-// Core Network Provider
+// Core Network Providers
 final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
+
+final webSocketServiceProvider = Provider<WebSocketService>((ref) {
+  final ws = WebSocketService();
+  ref.onDispose(() => ws.dispose());
+  return ws;
+});
+
+final webSocketStatusStreamProvider = StreamProvider<WebSocketStatus>((ref) {
+  final ws = ref.watch(webSocketServiceProvider);
+  return ws.statusStream;
+});
 
 // Repository Providers
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -70,14 +83,18 @@ class AuthState {
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
+  final WebSocketService _ws;
 
-  AuthStateNotifier(this._repo) : super(const AuthState());
+  AuthStateNotifier(this._repo, this._ws) : super(const AuthState());
 
   Future<void> loginWithEmail(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final user = await _repo.login(email: email, password: password);
       state = state.copyWith(user: user, isLoading: false);
+      if (!AppConfig.isDemoMode) {
+        _ws.connect();
+      }
     } catch (e) {
       if (AppConfig.isDemoMode) {
         final demo = await _repo.getDemoUser();
@@ -94,6 +111,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       final user = await _repo.loginWithGitHub();
       state = state.copyWith(user: user, isLoading: false);
+      if (!AppConfig.isDemoMode) {
+        _ws.connect();
+      }
     } catch (e) {
       if (AppConfig.isDemoMode) {
         final demo = await _repo.getDemoUser();
@@ -112,22 +132,163 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    await _ws.disconnect();
     await _repo.logout();
     state = const AuthState(user: null);
   }
 }
 
 final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
-  return AuthStateNotifier(ref.watch(authRepositoryProvider));
+  return AuthStateNotifier(
+    ref.watch(authRepositoryProvider),
+    ref.watch(webSocketServiceProvider),
+  );
 });
 
 // Execution Mode State Provider
 final isDemoModeProvider = StateProvider<bool>((ref) => AppConfig.isDemoMode);
 
-// Telemetry & Data Future Providers
-final dashboardDataProvider = FutureProvider<DashboardModel>((ref) async {
+// Real-Time Live Alerts StateNotifier
+class LiveAlertsNotifier extends StateNotifier<AsyncValue<List<AlertModel>>> {
+  final AlertsRepository _repo;
+  final WebSocketService _ws;
+  StreamSubscription? _eventSub;
+
+  LiveAlertsNotifier(this._repo, this._ws) : super(const AsyncValue.loading()) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    await refresh();
+    _eventSub?.cancel();
+    _eventSub = _ws.eventStream.listen(_handleWebSocketEvent);
+
+    if (!AppConfig.isDemoMode) {
+      _ws.connect();
+    } else {
+      _ws.disconnect();
+    }
+  }
+
+  Future<void> refresh() async {
+    try {
+      final alerts = await _repo.getAlerts();
+      state = AsyncValue.data(alerts);
+    } catch (err, stack) {
+      state = AsyncValue.error(err, stack);
+    }
+  }
+
+  void _handleWebSocketEvent(Map<String, dynamic> event) {
+    final type = event['type'] as String?;
+    if (type == 'security_alert' && event['alert'] != null) {
+      try {
+        final newAlert = AlertModel.fromJson(event['alert'] as Map<String, dynamic>);
+        state.whenData((list) {
+          // Avoid duplicate additions
+          final updated = [newAlert, ...list.where((a) => a.id != newAlert.id)];
+          state = AsyncValue.data(updated);
+        });
+      } catch (_) {}
+    } else if ((type == 'alert_updated' || type == 'alert_resolved') && event['alert'] != null) {
+      try {
+        final updatedAlert = AlertModel.fromJson(event['alert'] as Map<String, dynamic>);
+        state.whenData((list) {
+          final updated = list.map((a) => a.id == updatedAlert.id ? updatedAlert : a).toList();
+          state = AsyncValue.data(updated);
+        });
+      } catch (_) {}
+    }
+  }
+
+  @override
+  void dispose() {
+    _eventSub?.cancel();
+    super.dispose();
+  }
+}
+
+final liveAlertsNotifierProvider = StateNotifierProvider<LiveAlertsNotifier, AsyncValue<List<AlertModel>>>((ref) {
   ref.watch(isDemoModeProvider);
-  return ref.watch(dashboardRepositoryProvider).getDashboardSummary();
+  return LiveAlertsNotifier(
+    ref.watch(alertsRepositoryProvider),
+    ref.watch(webSocketServiceProvider),
+  );
+});
+
+// Real-Time Live Dashboard StateNotifier
+class LiveDashboardNotifier extends StateNotifier<AsyncValue<DashboardModel>> {
+  final DashboardRepository _repo;
+  final WebSocketService _ws;
+  StreamSubscription? _eventSub;
+
+  LiveDashboardNotifier(this._repo, this._ws) : super(const AsyncValue.loading()) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    await refresh();
+    _eventSub?.cancel();
+    _eventSub = _ws.eventStream.listen(_handleWebSocketEvent);
+  }
+
+  Future<void> refresh() async {
+    try {
+      final summary = await _repo.getDashboardSummary();
+      state = AsyncValue.data(summary);
+    } catch (err, stack) {
+      state = AsyncValue.error(err, stack);
+    }
+  }
+
+  void _handleWebSocketEvent(Map<String, dynamic> event) {
+    final type = event['type'] as String?;
+    if (type == 'security_alert' && event['alert'] != null) {
+      try {
+        final alertMap = event['alert'] as Map<String, dynamic>;
+        final sev = (alertMap['severity'] as String? ?? '').toLowerCase();
+        state.whenData((dashboard) {
+          final isCrit = sev == 'critical';
+          final isHigh = sev == 'high';
+          final newEvent = SecurityEventSummary(
+            id: alertMap['id'] as String? ?? 'evt_${DateTime.now().millisecondsSinceEpoch}',
+            title: alertMap['title'] as String? ?? 'Security Incident',
+            source: alertMap['source'] as String? ?? 'Wazuh SOC',
+            severity: sev.isNotEmpty ? '${sev[0].toUpperCase()}${sev.substring(1)}' : 'Medium',
+            timestamp: DateTime.tryParse(alertMap['timestamp'] as String? ?? '') ?? DateTime.now(),
+          );
+
+          state = AsyncValue.data(
+            dashboard.copyWith(
+              activeAlertsCount: dashboard.activeAlertsCount + 1,
+              criticalCount: isCrit ? dashboard.criticalCount + 1 : dashboard.criticalCount,
+              highCount: isHigh ? dashboard.highCount + 1 : dashboard.highCount,
+              recentEvents: [newEvent, ...dashboard.recentEvents.take(9)],
+            ),
+          );
+        });
+      } catch (_) {}
+    }
+  }
+
+  @override
+  void dispose() {
+    _eventSub?.cancel();
+    super.dispose();
+  }
+}
+
+final liveDashboardNotifierProvider = StateNotifierProvider<LiveDashboardNotifier, AsyncValue<DashboardModel>>((ref) {
+  ref.watch(isDemoModeProvider);
+  return LiveDashboardNotifier(
+    ref.watch(dashboardRepositoryProvider),
+    ref.watch(webSocketServiceProvider),
+  );
+});
+
+// Telemetry & Data Future Providers
+final dashboardDataProvider = Provider<AsyncValue<DashboardModel>>((ref) {
+  return ref.watch(liveDashboardNotifierProvider);
 });
 
 final repositoriesDataProvider = FutureProvider<List<RepositoryModel>>((ref) async {
@@ -135,9 +296,8 @@ final repositoriesDataProvider = FutureProvider<List<RepositoryModel>>((ref) asy
   return ref.watch(repositoryRepositoryProvider).getRepositories();
 });
 
-final alertsDataProvider = FutureProvider<List<AlertModel>>((ref) async {
-  ref.watch(isDemoModeProvider);
-  return ref.watch(alertsRepositoryProvider).getAlerts();
+final alertsDataProvider = Provider<AsyncValue<List<AlertModel>>>((ref) {
+  return ref.watch(liveAlertsNotifierProvider);
 });
 
 final appSettingsProvider = FutureProvider<AppSettingsModel>((ref) async {
@@ -154,3 +314,4 @@ final findingsListProvider = FutureProvider((ref) async {
   ref.watch(isDemoModeProvider);
   return ref.watch(findingRepositoryProvider).getFindings();
 });
+

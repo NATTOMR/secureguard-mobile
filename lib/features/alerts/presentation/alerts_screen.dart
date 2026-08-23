@@ -8,6 +8,8 @@ import '../../../core/widgets/widgets.dart';
 import '../../../providers/app_providers.dart';
 import '../domain/alert_model.dart';
 
+import '../../../core/network/websocket_service.dart';
+
 class AlertsScreen extends ConsumerStatefulWidget {
   const AlertsScreen({super.key});
 
@@ -22,15 +24,42 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
   @override
   Widget build(BuildContext context) {
     final alertsAsync = ref.watch(alertsDataProvider);
+    final isDemo = ref.watch(isDemoModeProvider);
+    final wsStatusAsync = ref.watch(webSocketStatusStreamProvider);
+
+    // Dynamic Live Real-Time Stream Status Badge
+    final String statusText;
+    final StatusType statusType;
+
+    if (isDemo) {
+      statusText = 'DEMO MODE';
+      statusType = StatusType.warning;
+    } else {
+      final wsStatus = wsStatusAsync.value ?? ref.watch(webSocketServiceProvider).currentStatus;
+      switch (wsStatus) {
+        case WebSocketStatus.connected:
+          statusText = 'LIVE';
+          statusType = StatusType.normal;
+          break;
+        case WebSocketStatus.reconnecting:
+          statusText = 'RECONNECTING';
+          statusType = StatusType.warning;
+          break;
+        case WebSocketStatus.disconnected:
+          statusText = 'OFFLINE';
+          statusType = StatusType.critical;
+          break;
+      }
+    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const SGAppBar(
+      appBar: SGAppBar(
         title: AppStrings.navAlerts,
         subtitle: 'SIEM, SOC & SAST Live Incident Stream',
         showStatusBadge: true,
-        statusText: 'FEED ACTIVE',
-        statusType: StatusType.normal,
+        statusText: statusText,
+        statusType: statusType,
       ),
       body: Column(
         children: [
@@ -99,7 +128,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                 return RefreshIndicator(
                   color: AppColors.primary,
                   backgroundColor: AppColors.surface,
-                  onRefresh: () async => ref.invalidate(alertsDataProvider),
+                  onRefresh: () => ref.read(liveAlertsNotifierProvider.notifier).refresh(),
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: filtered.length,
@@ -114,7 +143,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
               loading: () => const Center(child: SGLoading(message: 'Querying SOC alert stream...')),
               error: (err, _) => SGErrorView(
                 message: 'Failed to fetch alerts: $err',
-                onRetry: () => ref.invalidate(alertsDataProvider),
+                onRetry: () => ref.read(liveAlertsNotifierProvider.notifier).refresh(),
               ),
             ),
           ),

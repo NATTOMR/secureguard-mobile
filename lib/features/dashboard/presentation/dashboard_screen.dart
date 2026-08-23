@@ -33,7 +33,7 @@ class DashboardScreen extends ConsumerWidget {
         ),
         error: (err, stack) => SGErrorView(
           message: 'Unable to load dashboard telemetry: $err',
-          onRetry: () => ref.invalidate(dashboardDataProvider),
+          onRetry: () => ref.read(liveDashboardNotifierProvider.notifier).refresh(),
         ),
       ),
     );
@@ -43,9 +43,7 @@ class DashboardScreen extends ConsumerWidget {
     return RefreshIndicator(
       color: AppColors.primary,
       backgroundColor: AppColors.surface,
-      onRefresh: () async {
-        ref.invalidate(dashboardDataProvider);
-      },
+      onRefresh: () => ref.read(liveDashboardNotifierProvider.notifier).refresh(),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),

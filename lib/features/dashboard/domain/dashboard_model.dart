@@ -142,6 +142,36 @@ class DashboardModel extends Equatable {
 
   int get totalVulnerabilities => criticalCount + highCount + mediumCount + lowCount;
 
+  DashboardModel copyWith({
+    int? postureScore,
+    String? postureStatus,
+    int? totalRepositories,
+    int? totalScansToday,
+    int? criticalCount,
+    int? highCount,
+    int? mediumCount,
+    int? lowCount,
+    int? activeAlertsCount,
+    List<SystemStatusModel>? systemStatuses,
+    List<SecurityEventSummary>? recentEvents,
+    List<RecentScanSummary>? recentScans,
+  }) {
+    return DashboardModel(
+      postureScore: postureScore ?? this.postureScore,
+      postureStatus: postureStatus ?? this.postureStatus,
+      totalRepositories: totalRepositories ?? this.totalRepositories,
+      totalScansToday: totalScansToday ?? this.totalScansToday,
+      criticalCount: criticalCount ?? this.criticalCount,
+      highCount: highCount ?? this.highCount,
+      mediumCount: mediumCount ?? this.mediumCount,
+      lowCount: lowCount ?? this.lowCount,
+      activeAlertsCount: activeAlertsCount ?? this.activeAlertsCount,
+      systemStatuses: systemStatuses ?? this.systemStatuses,
+      recentEvents: recentEvents ?? this.recentEvents,
+      recentScans: recentScans ?? this.recentScans,
+    );
+  }
+
   factory DashboardModel.fromJson(Map<String, dynamic> json) {
     return DashboardModel(
       postureScore: json['posture_score'] as int? ?? 88,

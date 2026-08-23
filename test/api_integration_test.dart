@@ -3,6 +3,7 @@ import 'package:secureguard_mobile/core/config/app_config.dart';
 import 'package:secureguard_mobile/core/error/api_exception.dart';
 import 'package:secureguard_mobile/core/network/api_client.dart';
 import 'package:secureguard_mobile/core/network/api_endpoints.dart';
+import 'package:secureguard_mobile/core/network/websocket_service.dart';
 import 'package:secureguard_mobile/features/ai/data/ai_repository.dart';
 import 'package:secureguard_mobile/features/alerts/data/alerts_repository.dart';
 import 'package:secureguard_mobile/features/auth/data/auth_repository.dart';
@@ -130,6 +131,40 @@ void main() {
     test('Live API mode is active when isDemoMode is false', () {
       AppConfig.isDemoMode = false;
       expect(AppConfig.isDemoMode, isFalse);
+    });
+  });
+
+  group('WebSocket Real-Time URL Conversion & Architecture Tests', () {
+    test('WebSocketService correctly converts http to ws for local emulator', () {
+      AppConfig.apiBaseUrl = 'http://10.0.2.2:8000';
+      final ws = WebSocketService();
+      final uri = ws.getWebSocketUri('test_token_123');
+
+      expect(uri.scheme, equals('ws'));
+      expect(uri.host, equals('10.0.2.2'));
+      expect(uri.port, equals(8000));
+      expect(uri.path, equals('/ws/alerts'));
+      expect(uri.queryParameters['token'], equals('test_token_123'));
+    });
+
+    test('WebSocketService correctly converts https to wss for Render cloud', () {
+      AppConfig.apiBaseUrl = 'https://secureguard-backend-7eqm.onrender.com';
+      final ws = WebSocketService();
+      final uri = ws.getWebSocketUri('test_jwt_secure');
+
+      expect(uri.scheme, equals('wss'));
+      expect(uri.host, equals('secureguard-backend-7eqm.onrender.com'));
+      expect(uri.path, equals('/ws/alerts'));
+      expect(uri.queryParameters['token'], equals('test_jwt_secure'));
+    });
+
+    test('WebSocketService stays disconnected when Demo Mode is active', () async {
+      AppConfig.isDemoMode = true;
+      final ws = WebSocketService();
+      await ws.connect(explicitToken: 'mock_token');
+
+      expect(ws.currentStatus, equals(WebSocketStatus.disconnected));
+      ws.dispose();
     });
   });
 }

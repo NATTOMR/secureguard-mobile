@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/network/websocket_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/services/biometric_service.dart';
 import '../../../core/widgets/widgets.dart';
@@ -601,6 +602,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 10),
+          // Real-Time WebSocket Stream Status
+          Consumer(
+            builder: (context, ref, _) {
+              final wsStatusAsync = ref.watch(webSocketStatusStreamProvider);
+              final wsStatus = wsStatusAsync.value ?? ref.watch(webSocketServiceProvider).currentStatus;
+
+              final String wsLabel = _isDemoMode
+                  ? 'OFFLINE (DEMO)'
+                  : (wsStatus == WebSocketStatus.connected
+                      ? 'LIVE'
+                      : (wsStatus == WebSocketStatus.reconnecting ? 'RECONNECTING' : 'OFFLINE'));
+              final StatusType wsType = _isDemoMode
+                  ? StatusType.warning
+                  : (wsStatus == WebSocketStatus.connected
+                      ? StatusType.normal
+                      : (wsStatus == WebSocketStatus.reconnecting ? StatusType.warning : StatusType.critical));
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.stream_rounded, size: 14, color: AppColors.textMuted),
+                      SizedBox(width: 6),
+                      Text(
+                        'Real-Time WebSocket:',
+                        style: TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  SGStatusBadge(label: wsLabel, type: wsType),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 12),
           const Divider(color: AppColors.cardBorder, height: 1),
