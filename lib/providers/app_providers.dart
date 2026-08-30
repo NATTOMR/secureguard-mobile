@@ -1,8 +1,11 @@
+import '../core/constants/app_colors.dart';
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
 import '../core/network/websocket_service.dart';
+import '../core/services/notification_service.dart';
 import '../features/ai/data/ai_repository.dart';
 import '../features/alerts/data/alerts_repository.dart';
 import '../features/alerts/domain/alert_model.dart';
@@ -17,8 +20,10 @@ import '../features/settings/domain/app_settings_model.dart';
 import '../repositories/finding_repository.dart';
 import '../repositories/scan_repository.dart';
 
-// Core Network Providers
+// Core Network & Infrastructure Providers
 final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
+
+final notificationServiceProvider = Provider<NotificationService>((ref) => NotificationService());
 
 final webSocketServiceProvider = Provider<WebSocketService>((ref) {
   final ws = WebSocketService();
@@ -152,16 +157,20 @@ final isDemoModeProvider = StateProvider<bool>((ref) => AppConfig.isDemoMode);
 class LiveAlertsNotifier extends StateNotifier<AsyncValue<List<AlertModel>>> {
   final AlertsRepository _repo;
   final WebSocketService _ws;
+  final NotificationService _notifications;
   StreamSubscription? _eventSub;
+  StreamSubscription? _pushSub;
 
-  LiveAlertsNotifier(this._repo, this._ws) : super(const AsyncValue.loading()) {
+  LiveAlertsNotifier(this._repo, this._ws, this._notifications) : super(const AsyncValue.loading()) {
     _init();
   }
 
   Future<void> _init() async {
     await refresh();
     _eventSub?.cancel();
+    _pushSub?.cancel();
     _eventSub = _ws.eventStream.listen(_handleWebSocketEvent);
+    _pushSub = _notifications.onNotificationReceived.listen(_handlePushEvent);
 
     if (!AppConfig.isDemoMode) {
       _ws.connect();
@@ -177,6 +186,35 @@ class LiveAlertsNotifier extends StateNotifier<AsyncValue<List<AlertModel>>> {
     } catch (err, stack) {
       state = AsyncValue.error(err, stack);
     }
+  }
+
+  void _handlePushEvent(Map<String, dynamic> payload) {
+    try {
+      final title = payload['title'] as String? ?? 'Security Alert';
+      final body = payload['body'] as String? ?? '';
+      final source = payload['source'] as String? ?? 'FCM Push';
+      final sevStr = (payload['severity'] as String? ?? 'critical').toLowerCase();
+      
+      AlertSeverity severity = AlertSeverity.medium;
+      if (sevStr == 'critical') severity = AlertSeverity.critical;
+      if (sevStr == 'high') severity = AlertSeverity.high;
+      if (sevStr == 'low') severity = AlertSeverity.low;
+
+      final newAlert = AlertModel(
+        id: 'fcm_${DateTime.now().millisecondsSinceEpoch}',
+        title: title,
+        description: body,
+        severity: severity,
+        source: source,
+        timestamp: DateTime.now(),
+        status: AlertStatus.active,
+        remediationRecommendation: 'Investigate incident details and apply mitigation patch.',
+      );
+
+      state.whenData((list) {
+        state = AsyncValue.data([newAlert, ...list]);
+      });
+    } catch (_) {}
   }
 
   void _handleWebSocketEvent(Map<String, dynamic> event) {
@@ -204,6 +242,7 @@ class LiveAlertsNotifier extends StateNotifier<AsyncValue<List<AlertModel>>> {
   @override
   void dispose() {
     _eventSub?.cancel();
+    _pushSub?.cancel();
     super.dispose();
   }
 }
@@ -213,6 +252,7 @@ final liveAlertsNotifierProvider = StateNotifierProvider<LiveAlertsNotifier, Asy
   return LiveAlertsNotifier(
     ref.watch(alertsRepositoryProvider),
     ref.watch(webSocketServiceProvider),
+    ref.watch(notificationServiceProvider),
   );
 });
 
@@ -315,3 +355,50 @@ final findingsListProvider = FutureProvider((ref) async {
   return ref.watch(findingRepositoryProvider).getFindings();
 });
 
+
+
+// Dynamic App Theme StateNotifier
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  final SettingsRepository _settingsRepo;
+
+  ThemeModeNotifier(this._settingsRepo) : super(ThemeMode.dark) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final settings = await _settingsRepo.loadSettings();
+      switch (settings.themeMode.toLowerCase()) {
+        case 'light':
+          state = ThemeMode.light;
+          AppColors.isDark = false;
+          break;
+        case 'system':
+          state = ThemeMode.system;
+          AppColors.isDark = true;
+          break;
+        case 'dark':
+        default:
+          state = ThemeMode.dark;
+          AppColors.isDark = true;
+          break;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    state = mode;
+    AppColors.isDark = mode != ThemeMode.light;
+    try {
+      final current = await _settingsRepo.loadSettings();
+      String modeStr = 'dark';
+      if (mode == ThemeMode.light) modeStr = 'light';
+      if (mode == ThemeMode.system) modeStr = 'system';
+      await _settingsRepo.saveSettings(current.copyWith(themeMode: modeStr));
+    } catch (_) {}
+  }
+}
+
+final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+  return ThemeModeNotifier(ref.watch(settingsRepositoryProvider));
+});

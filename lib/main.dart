@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
 import 'core/network/api_client.dart';
+import 'core/services/notification_service.dart';
 import 'core/storage/hive_storage_service.dart';
 
 void main() async {
@@ -17,6 +18,9 @@ void main() async {
 
   // Initialize Encrypted Hive Offline Storage
   await HiveStorageService.init();
+
+  // Initialize Enterprise Push Notifications & FCM
+  await NotificationService().initialize();
 
   // Initialize SharedPreferences & Backend Connectivity Default
   try {

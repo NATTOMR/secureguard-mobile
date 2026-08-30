@@ -10,7 +10,7 @@ class SGCard extends StatelessWidget {
   final double? width;
   final double? height;
 
-  const SGCard({
+  SGCard({
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(20.0),

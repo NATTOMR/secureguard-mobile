@@ -18,7 +18,7 @@ class AlertDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const SGAppBar(
+      appBar: SGAppBar(
         title: 'Incident Triage',
         showBackButton: true,
         showStatusBadge: true,
@@ -69,46 +69,46 @@ class AlertDetailScreen extends ConsumerWidget {
                               style: TextStyle(color: sevColor, fontWeight: FontWeight.bold, fontSize: 11),
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             'Source: ${alert.source}',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                           ),
                           const Spacer(),
                           Text(
                             'Status: ${alert.status.name.toUpperCase()}',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       Text(
                         alert.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                           height: 1.3,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       Text(
                         alert.description,
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.45),
+                        style: TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.45),
                       ),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Remediation Recommendation Card
                 if (alert.remediationRecommendation != null) ...[
-                  const Text(
+                  Text(
                     'Recommended Remediation Protocol',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -119,30 +119,30 @@ class AlertDetailScreen extends ConsumerWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.security_update_good_rounded, color: AppColors.success, size: 22),
-                        const SizedBox(width: 12),
+                        Icon(Icons.security_update_good_rounded, color: AppColors.success, size: 22),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             alert.remediationRecommendation!,
-                            style: const TextStyle(fontSize: 13, color: AppColors.textPrimary, height: 1.4),
+                            style: TextStyle(fontSize: 13, color: AppColors.textPrimary, height: 1.4),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                 ],
 
                 // Action Buttons
                 SGButton(
                   label: 'Remediate with SecureGuard AI',
-                  icon: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 20),
+                  icon: Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 20),
                   onPressed: () {
                     context.go(AppRouter.aiAssistant);
                   },
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 SGButton(
                   label: 'Mark Incident Investigated',
@@ -161,7 +161,7 @@ class AlertDetailScreen extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(child: SGLoading(message: 'Loading alert triage data...')),
+        loading: () => Center(child: SGLoading(message: 'Loading alert triage data...')),
         error: (err, _) => SGErrorView(message: 'Failed to load alert: $err'),
       ),
     );

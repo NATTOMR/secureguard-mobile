@@ -35,25 +35,29 @@ class ChartCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  if (subtitle != null) ...[
-                    const SizedBox(height: 2),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    if (subtitle != null) ...[
+                      SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
               if (badgeLabel != null)
                 Container(
@@ -65,7 +69,7 @@ class ChartCard extends StatelessWidget {
                   ),
                   child: Text(
                     badgeLabel!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
@@ -74,7 +78,7 @@ class ChartCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           SizedBox(
             height: 170,
             child: chartWidget ?? _buildDefaultBarChart(),
@@ -112,27 +116,27 @@ class ChartCard extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 switch (value.toInt()) {
                   case 0:
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Crit', style: TextStyle(fontSize: 11, color: AppColors.critical, fontWeight: FontWeight.bold)),
                     );
                   case 1:
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('High', style: TextStyle(fontSize: 11, color: AppColors.high, fontWeight: FontWeight.bold)),
                     );
                   case 2:
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Med', style: TextStyle(fontSize: 11, color: AppColors.warning, fontWeight: FontWeight.bold)),
                     );
                   case 3:
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Low', style: TextStyle(fontSize: 11, color: AppColors.low, fontWeight: FontWeight.bold)),
                     );
                   default:
-                    return const Text('');
+                    return Text('');
                 }
               },
             ),
@@ -142,7 +146,7 @@ class ChartCard extends StatelessWidget {
           show: true,
           drawVerticalLine: false,
           horizontalInterval: 20,
-          getDrawingHorizontalLine: (val) => const FlLine(color: AppColors.cardBorder, strokeWidth: 1),
+          getDrawingHorizontalLine: (val) => FlLine(color: AppColors.cardBorder, strokeWidth: 1),
         ),
         borderData: FlBorderData(show: false),
         barGroups: [

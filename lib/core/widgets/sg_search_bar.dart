@@ -7,7 +7,7 @@ class SGSearchBar extends StatelessWidget {
   final VoidCallback? onFilterTap;
   final TextEditingController? controller;
 
-  const SGSearchBar({
+  SGSearchBar({
     super.key,
     this.hintText = 'Search repositories, CVEs, alerts...',
     this.onChanged,
@@ -26,14 +26,14 @@ class SGSearchBar extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
-        style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
-          prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
+          hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 14),
+          prefixIcon: Icon(Icons.search_rounded, color: AppColors.textSecondary),
           suffixIcon: onFilterTap != null
               ? IconButton(
-                  icon: const Icon(Icons.tune_rounded, color: AppColors.primary),
+                  icon: Icon(Icons.tune_rounded, color: AppColors.primary),
                   onPressed: onFilterTap,
                 )
               : null,

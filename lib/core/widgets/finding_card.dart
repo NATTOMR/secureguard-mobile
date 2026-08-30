@@ -47,7 +47,7 @@ class FindingCard extends StatelessWidget {
               children: [
                 Text(
                   finding.cveId,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
@@ -56,35 +56,38 @@ class FindingCard extends StatelessWidget {
                 SGChip(label: finding.severity.name, variant: chipVariant),
               ],
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               finding.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Row(
               children: [
-                const Icon(Icons.source_rounded, size: 13, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                Text(
-                  finding.repositoryName,
-                  style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                Icon(Icons.source_rounded, size: 13, color: AppColors.textMuted),
+                SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    finding.repositoryName,
+                    style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                const Spacer(),
-                const Icon(Icons.radar_rounded, size: 13, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                const Text(
+                SizedBox(width: 8),
+                Icon(Icons.radar_rounded, size: 13, color: AppColors.textMuted),
+                SizedBox(width: 4),
+                Text(
                   'Semgrep Engine',
                   style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   AppFormatters.formatShortDate(finding.detectedAt),
-                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
               ],
             ),

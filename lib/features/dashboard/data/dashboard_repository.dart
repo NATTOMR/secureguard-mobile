@@ -41,7 +41,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       mediumCount: 24,
       lowCount: 58,
       activeAlertsCount: 7,
-      systemStatuses: const [
+      systemStatuses: [
         SystemStatusModel(name: 'FastAPI Backend Engine', status: 'operational', latencyMs: 18),
         SystemStatusModel(name: 'GitHub App Webhook', status: 'operational', latencyMs: 34),
         SystemStatusModel(name: 'Semgrep SAST Engine', status: 'operational', latencyMs: 42),

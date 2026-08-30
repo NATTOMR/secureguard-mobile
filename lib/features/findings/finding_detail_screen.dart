@@ -26,7 +26,7 @@ class FindingDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SGCard(
+            SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,15 +64,15 @@ class FindingDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
+            Text(
               'Remediation Steps & Fix Guide',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
-            const SGCard(
+            SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -86,12 +86,12 @@ class FindingDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(delay: 200.ms),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             SGButton(
               label: 'Ask AI Copilot for Fix Code',
               variant: SGButtonVariant.primary,
-              icon: const Icon(Icons.psychology_rounded, color: Colors.white),
+              icon: Icon(Icons.psychology_rounded, color: Colors.white),
               onPressed: () => context.push(AppRouter.aiCopilot),
             ).animate().fadeIn(delay: 300.ms),
           ],

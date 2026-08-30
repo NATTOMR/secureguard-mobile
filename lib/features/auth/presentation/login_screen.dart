@@ -52,12 +52,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             SnackBar(
               content: Row(
                 children: [
-                  const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
-                  const SizedBox(width: 8),
+                  Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Authentication Failed: $errorMessage',
-                      style: const TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
@@ -134,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Top Header Brand Logo
                 Row(
@@ -146,10 +146,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.cardBorder),
                       ),
-                      child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
+                      child: Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
                     ),
-                    const SizedBox(width: 12),
-                    const Column(
+                    SizedBox(width: 12),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -165,34 +165,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ).animate().fadeIn(duration: 400.ms),
 
-                const SizedBox(height: 36),
+                SizedBox(height: 36),
 
-                const Text(
+                Text(
                   AppStrings.loginTitle,
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                 ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
 
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
 
-                const Text(
+                Text(
                   AppStrings.loginSubtitle,
                   style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ).animate().fadeIn(delay: 200.ms),
 
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
 
                 // GitHub SSO Button
                 SGButton(
                   label: AppStrings.githubLogin,
                   variant: SGButtonVariant.github,
                   isLoading: isLoading,
-                  icon: const Icon(Icons.code_rounded, color: Colors.white, size: 22),
+                  icon: Icon(Icons.code_rounded, color: Colors.white, size: 22),
                   onPressed: _handleGithubLogin,
                 ).animate().fadeIn(delay: 300.ms),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
-                const Row(
+                Row(
                   children: [
                     Expanded(child: Divider(color: AppColors.cardBorder)),
                     Padding(
@@ -203,7 +203,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ).animate().fadeIn(delay: 400.ms),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Corporate Email Input
                 SGTextField(
@@ -211,11 +211,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   hintText: 'analyst@company.com',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: Icon(Icons.email_outlined),
                   validator: (v) => v == null || v.isEmpty ? 'Email is required' : null,
                 ).animate().fadeIn(delay: 450.ms),
 
-                const SizedBox(height: 18),
+                SizedBox(height: 18),
 
                 // Password Input
                 SGTextField(
@@ -223,11 +223,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   hintText: '••••••••••••',
                   controller: _passwordController,
                   isPassword: true,
-                  prefixIcon: const Icon(Icons.lock_outline_rounded),
+                  prefixIcon: Icon(Icons.lock_outline_rounded),
                   validator: (v) => v == null || v.isEmpty ? 'Password is required' : null,
                 ).animate().fadeIn(delay: 500.ms),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // Remember Me & Forgot Password
                 Row(
@@ -241,7 +241,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: Checkbox(
                             value: _rememberMe,
                             activeColor: AppColors.primary,
-                            side: const BorderSide(color: AppColors.cardBorder, width: 1.5),
+                            side: BorderSide(color: AppColors.cardBorder, width: 1.5),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                             onChanged: (val) {
                               setState(() {
@@ -250,8 +250,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Text(
+                        SizedBox(width: 8),
+                        Text(
                           AppStrings.rememberMe,
                           style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
                         ),
@@ -263,7 +263,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SnackBar(content: Text('Password reset instructions dispatched.')),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         AppStrings.forgotPassword,
                         style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold),
                       ),
@@ -271,7 +271,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ).animate().fadeIn(delay: 550.ms),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Submit Button
                 SGButton(
@@ -280,7 +280,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: _handleEmailLogin,
                 ).animate().fadeIn(delay: 600.ms),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Offline & Biometric Buttons Row
                 Row(
@@ -293,7 +293,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: _handleOfflineLogin,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     InkWell(
                       onTap: _handleBiometricAuth,
                       borderRadius: AppColors.cardBorderRadius,
@@ -305,13 +305,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           borderRadius: AppColors.cardBorderRadius,
                           border: Border.all(color: AppColors.cardBorder),
                         ),
-                        child: const Icon(Icons.fingerprint_rounded, color: AppColors.primary, size: 26),
+                        child: Icon(Icons.fingerprint_rounded, color: AppColors.primary, size: 26),
                       ),
                     ),
                   ],
                 ).animate().fadeIn(delay: 650.ms),
 
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
               ],
             ),
           ),

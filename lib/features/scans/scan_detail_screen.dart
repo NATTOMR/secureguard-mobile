@@ -24,7 +24,7 @@ class ScanDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SGCard(
+            SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -55,13 +55,13 @@ class ScanDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
+            Text(
               'Scan Execution Output Logs',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Container(
               width: double.infinity,

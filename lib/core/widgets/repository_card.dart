@@ -31,9 +31,9 @@ class RepositoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.cardBorder),
               ),
-              child: const Icon(Icons.folder_special_rounded, color: AppColors.primary, size: 22),
+              child: Icon(Icons.folder_special_rounded, color: AppColors.primary, size: 22),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class RepositoryCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           repository.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
@@ -51,39 +51,39 @@ class RepositoryCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      const SGChip(label: 'PRIVATE', variant: SGChipVariant.info),
+                      SizedBox(width: 6),
+                      SGChip(label: 'PRIVATE', variant: SGChipVariant.info),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Container(
                         width: 8,
                         height: 8,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Color(0xFF38BDF8),
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Text(
                         repository.primaryLanguage,
-                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
                       ),
-                      const SizedBox(width: 12),
-                      const Icon(Icons.schedule_rounded, size: 12, color: AppColors.textMuted),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 12),
+                      Icon(Icons.schedule_rounded, size: 12, color: AppColors.textMuted),
+                      SizedBox(width: 4),
                       Text(
                         'Scanned ${AppFormatters.formatShortDate(repository.lastScannedAt)}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                        style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class RepositoryCard extends StatelessWidget {
               ),
               child: Text(
                 'RISK ${repository.securityHealthScore}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 11,
                   color: AppColors.primary,

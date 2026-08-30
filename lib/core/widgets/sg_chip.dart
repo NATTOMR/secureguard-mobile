@@ -8,7 +8,7 @@ class SGChip extends StatelessWidget {
   final SGChipVariant variant;
   final IconData? icon;
 
-  const SGChip({
+  SGChip({
     super.key,
     required this.label,
     this.variant = SGChipVariant.info,
@@ -52,7 +52,7 @@ class SGChip extends StatelessWidget {
         children: [
           if (icon != null) ...[
             Icon(icon, size: 13, color: color),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
           ],
           Text(
             label.toUpperCase(),

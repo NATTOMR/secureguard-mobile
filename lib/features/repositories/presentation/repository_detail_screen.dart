@@ -25,7 +25,7 @@ class RepositoryDetailScreen extends ConsumerWidget {
         statusType: StatusType.normal,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
+            icon: Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
             onPressed: () => ref.invalidate(repositoriesDataProvider),
           ),
         ],
@@ -61,34 +61,34 @@ class RepositoryDetailScreen extends ConsumerWidget {
                               color: AppColors.primary.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.folder_special_rounded, color: AppColors.primary, size: 24),
+                            child: Icon(Icons.folder_special_rounded, color: AppColors.primary, size: 24),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   repo.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textPrimary,
                                   ),
                                 ),
-                                const SizedBox(height: 2),
+                                SizedBox(height: 2),
                                 Text(
                                   'Owner: ${repo.owner} • Branch: ${repo.branch}',
-                                  style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                                  style: TextStyle(fontSize: 12, color: AppColors.textMuted),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      const Divider(color: AppColors.cardBorder, height: 1),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.cardBorder, height: 1),
+                      SizedBox(height: 14),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -101,14 +101,14 @@ class RepositoryDetailScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Findings Breakdown
-                const Text(
+                Text(
                   'Identified Security Vulnerabilities',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -120,7 +120,7 @@ class RepositoryDetailScreen extends ConsumerWidget {
                         onTap: () => context.push(AppRouter.findings),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: SGStatisticCard(
                         title: 'High',
@@ -132,7 +132,7 @@ class RepositoryDetailScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -144,7 +144,7 @@ class RepositoryDetailScreen extends ConsumerWidget {
                         onTap: () => context.push(AppRouter.findings),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: SGStatisticCard(
                         title: 'SAST Issues',
@@ -157,12 +157,12 @@ class RepositoryDetailScreen extends ConsumerWidget {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Action Buttons
                 SGButton(
                   label: 'Trigger Immediate SAST Scan',
-                  icon: const Icon(Icons.radar_rounded, color: Colors.white, size: 20),
+                  icon: Icon(Icons.radar_rounded, color: Colors.white, size: 20),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -173,12 +173,12 @@ class RepositoryDetailScreen extends ConsumerWidget {
                   },
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 SGButton(
                   label: 'Ask AI Remediation Copilot',
                   variant: SGButtonVariant.outline,
-                  icon: const Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 20),
+                  icon: Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 20),
                   onPressed: () {
                     context.go(AppRouter.aiAssistant);
                   },
@@ -187,7 +187,7 @@ class RepositoryDetailScreen extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(child: SGLoading(message: 'Loading repository telemetry...')),
+        loading: () => Center(child: SGLoading(message: 'Loading repository telemetry...')),
         error: (err, _) => SGErrorView(message: 'Error loading repository: $err'),
       ),
     );
@@ -197,8 +197,8 @@ class RepositoryDetailScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
-        const SizedBox(height: 4),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+        SizedBox(height: 4),
         Text(
           value,
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color),

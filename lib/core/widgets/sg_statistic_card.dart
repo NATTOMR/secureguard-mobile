@@ -12,7 +12,7 @@ class SGStatisticCard extends StatelessWidget {
   final bool isTrendPositive;
   final VoidCallback? onTap;
 
-  const SGStatisticCard({
+  SGStatisticCard({
     super.key,
     required this.title,
     required this.value,
@@ -60,7 +60,7 @@ class SGStatisticCard extends StatelessWidget {
                         size: 14,
                         color: isTrendPositive ? AppColors.success : AppColors.critical,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         trendText!,
                         style: TextStyle(
@@ -74,20 +74,20 @@ class SGStatisticCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12.5,
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,

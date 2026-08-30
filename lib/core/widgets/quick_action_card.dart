@@ -41,20 +41,20 @@ class QuickActionCard extends StatelessWidget {
             ),
             child: Icon(icon, color: effectiveColor, size: 20),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               subtitle!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10,
                 color: AppColors.textMuted,
               ),

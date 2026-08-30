@@ -14,7 +14,7 @@ class SGTextField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final bool enabled;
 
-  const SGTextField({
+  SGTextField({
     super.key,
     this.label,
     required this.hintText,
@@ -45,20 +45,20 @@ class _SGTextFieldState extends State<SGTextField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
         TextFormField(
           controller: widget.controller,
           obscureText: widget.isPassword ? _obscureText : false,
           keyboardType: widget.keyboardType,
           enabled: widget.enabled,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 15,
           ),
@@ -68,7 +68,7 @@ class _SGTextFieldState extends State<SGTextField> {
             hintText: widget.hintText,
             prefixIcon: widget.prefixIcon != null
                 ? IconTheme(
-                    data: const IconThemeData(color: AppColors.textSecondary),
+                    data: IconThemeData(color: AppColors.textSecondary),
                     child: widget.prefixIcon!,
                   )
                 : null,

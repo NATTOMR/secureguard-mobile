@@ -6,7 +6,7 @@ class SGBottomNavigation extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  const SGBottomNavigation({
+  SGBottomNavigation({
     super.key,
     required this.currentIndex,
     required this.onTap,
@@ -15,7 +15,7 @@ class SGBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border(
           top: BorderSide(color: AppColors.cardBorder, width: 1.0),
@@ -93,7 +93,7 @@ class SGBottomNavigation extends StatelessWidget {
               color: isSelected ? AppColors.primary : AppColors.textMuted,
               size: 22,
             ),
-            const SizedBox(height: 3),
+            SizedBox(height: 3),
             Text(
               label,
               style: TextStyle(

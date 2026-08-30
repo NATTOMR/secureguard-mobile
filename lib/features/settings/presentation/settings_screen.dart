@@ -112,8 +112,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         SnackBar(
           content: Row(
             children: [
-              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-              const SizedBox(width: 8),
+              Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+              SizedBox(width: 8),
               Expanded(child: Text('FastAPI Endpoint updated: $newUrl')),
             ],
           ),
@@ -153,13 +153,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 color: Colors.white,
                 size: 18,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Text(
                   result.isReachable
                       ? 'FastAPI Server Reachable • Latency: ${result.latencyMs}ms'
                       : 'Backend Offline at $targetUrl. Switch to Demo Mode if offline.',
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12),
                 ),
               ),
             ],
@@ -195,23 +195,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: AppColors.cardBorderRadius,
-          side: const BorderSide(color: AppColors.cardBorder),
+          side: BorderSide(color: AppColors.cardBorder),
         ),
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.warning_amber_rounded, color: AppColors.critical, size: 24),
             SizedBox(width: 10),
             Text('End Enterprise Session?', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
-        content: const Text(
+        content: Text(
           'You will be signed out of the SecureGuard SOC platform. Any unsaved triage state will be cleared.',
           style: TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.4),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(ctx).pop(true),
@@ -219,7 +219,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               backgroundColor: AppColors.critical,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-            child: const Text('Sign Out', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text('Sign Out', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -267,56 +267,56 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             // 1. Account & Organization Profile Card
             _buildAccountCard(user),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 2. Backend / API Live Connection Status & Demo Switch Card
             _buildSectionHeader('FastAPI Backend & API Connectivity'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildBackendConnectionCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 3. API Base URL Configuration Card
             _buildSectionHeader('API Base URL Configuration'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildBackendUrlConfigCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 4. SIEM & External Integrations (GitHub & Wazuh)
             _buildSectionHeader('SOC & SIEM Connector Integrations'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildExternalIntegrationsCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 5. Security, Biometrics & Cryptography
             _buildSectionHeader('Authentication & Cryptography'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildSecuritySettingsCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 7. Incident Notifications & Dispatch
             _buildSectionHeader('Notifications & Incident Dispatch'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildNotificationSettingsCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 8. Theme & Display Mode
             _buildSectionHeader('Appearance & Theme'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildThemeCard(),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // 9. About SecureGuard & Platform Specs
             _buildSectionHeader('Platform Information & Compliance'),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildAboutCard(),
 
-            const SizedBox(height: 28),
+            SizedBox(height: 28),
 
             // 10. Logout Button
             SizedBox(
@@ -325,18 +325,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: OutlinedButton.icon(
                 onPressed: _handleLogoutConfirmation,
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.critical, width: 1.5),
+                  side: BorderSide(color: AppColors.critical, width: 1.5),
                   shape: RoundedRectangleBorder(borderRadius: AppColors.cardBorderRadius),
                 ),
-                icon: const Icon(Icons.logout_rounded, color: AppColors.critical, size: 20),
-                label: const Text(
+                icon: Icon(Icons.logout_rounded, color: AppColors.critical, size: 20),
+                label: Text(
                   'Sign Out of Enterprise Session',
                   style: TextStyle(color: AppColors.critical, fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
             ),
 
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
           ],
         ),
       ),
@@ -354,10 +354,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             borderRadius: BorderRadius.circular(2),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           title.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11.5,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
@@ -401,32 +401,32 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 radius: 26,
                 isOnline: true,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       role,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       email,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         color: AppColors.textMuted,
                       ),
@@ -436,17 +436,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 12),
+          SizedBox(height: 14),
+          Divider(color: AppColors.cardBorder, height: 1),
+          SizedBox(height: 12),
           Row(
             children: [
-              const Icon(Icons.business_rounded, color: AppColors.textMuted, size: 14),
-              const SizedBox(width: 6),
+              Icon(Icons.business_rounded, color: AppColors.textMuted, size: 14),
+              SizedBox(width: 6),
               Expanded(
                 child: Text(
                   organization,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11.5,
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
@@ -454,8 +454,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 8),
-              const SGChip(
+              SizedBox(width: 8),
+              SGChip(
                 label: 'MFA ENFORCED',
                 variant: SGChipVariant.success,
                 icon: Icons.shield_rounded,
@@ -506,14 +506,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   size: 22,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Text(
+                        Text(
                           'Backend: ',
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                         ),
@@ -530,19 +530,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       _connectionStatusText,
-                      style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               if (_isTestingConnection)
-                const SizedBox(
+                SizedBox(
                   width: 20,
                   height: 20,
                   child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
@@ -566,9 +566,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
+          Divider(color: AppColors.cardBorder, height: 1),
+          SizedBox(height: 12),
           // Target URL & Test Ping Action
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -576,11 +576,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               Expanded(
                 child: Text(
                   'Target: ${_backendUrlController.text.trim()}',
-                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               InkWell(
                 onTap: _isTestingConnection ? null : _testBackendConnection,
                 borderRadius: BorderRadius.circular(8),
@@ -591,7 +591,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.refresh_rounded, color: AppColors.primary, size: 14),
@@ -603,7 +603,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           // Real-Time WebSocket Stream Status
           Consumer(
             builder: (context, ref, _) {
@@ -624,7 +624,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.stream_rounded, size: 14, color: AppColors.textMuted),
                       SizedBox(width: 6),
@@ -639,9 +639,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               );
             },
           ),
-          const SizedBox(height: 12),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
+          Divider(color: AppColors.cardBorder, height: 1),
+          SizedBox(height: 12),
           // Demo / Offline Mode Switch
           Row(
             children: [
@@ -664,14 +664,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Flexible(
+                        Flexible(
                           child: Text(
                             'Demo / Offline Mode',
                             style: TextStyle(
@@ -682,19 +682,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         SGStatusBadge(
                           label: _isDemoMode ? 'DEMO ACTIVE' : 'LIVE API',
                           type: _isDemoMode ? StatusType.warning : StatusType.normal,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       _isDemoMode
                           ? 'Operating with offline mock SOC telemetry'
                           : 'Connected to live FastAPI REST backend engine',
-                      style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                      style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -721,13 +721,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               color: Colors.white,
                               size: 18,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 val
                                     ? 'Offline Demo Simulation Mode Enabled.'
                                     : 'Live FastAPI Backend Mode Enabled.',
-                                style: const TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 12),
                               ),
                             ),
                           ],
@@ -759,46 +759,46 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'FastAPI REST Engine URL',
             style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
           ),
-          const SizedBox(height: 4),
-          const Text(
+          SizedBox(height: 4),
+          Text(
             'Target host URL for live vulnerability scanning, Semgrep SAST telemetry, and SOC SIEM logs.',
             style: TextStyle(fontSize: 11, color: AppColors.textMuted, height: 1.3),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextField(
             controller: _backendUrlController,
-            style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
+            style: TextStyle(fontSize: 13, color: AppColors.textPrimary),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
               filled: true,
               fillColor: AppColors.card,
               hintText: 'http://10.0.2.2:8000',
-              hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 12),
-              prefixIcon: const Icon(Icons.link_rounded, color: AppColors.textSecondary, size: 18),
+              hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 12),
+              prefixIcon: Icon(Icons.link_rounded, color: AppColors.textSecondary, size: 18),
               suffixIcon: IconButton(
-                icon: const Icon(Icons.save_rounded, color: AppColors.primary, size: 20),
+                icon: Icon(Icons.save_rounded, color: AppColors.primary, size: 20),
                 onPressed: _saveBackendUrl,
                 tooltip: 'Save URL',
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.cardBorder),
+                borderSide: BorderSide(color: AppColors.cardBorder),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.cardBorder),
+                borderSide: BorderSide(color: AppColors.cardBorder),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.primary),
+                borderSide: BorderSide(color: AppColors.primary),
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -867,10 +867,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: const Color(0xFF444C56)),
                   ),
-                  child: const Icon(Icons.code_rounded, color: Colors.white, size: 20),
+                  child: Icon(Icons.code_rounded, color: Colors.white, size: 20),
                 ),
-                const SizedBox(width: 12),
-                const Expanded(
+                SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -907,7 +907,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
             ),
           ),
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
           // Wazuh SIEM Tile
           Padding(
             padding: const EdgeInsets.all(14.0),
@@ -920,10 +920,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                   ),
-                  child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
+                  child: Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
                 ),
-                const SizedBox(width: 12),
-                const Expanded(
+                SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -983,7 +983,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             value: _biometricsEnabled,
             onChanged: _handleBiometricToggle,
           ),
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
           _buildToggleRow(
             title: 'Encrypted Local Hive Cache (AES-256)',
             subtitle: 'Hardware Keystore-backed master encryption keys',
@@ -993,7 +993,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await _persistSettings();
             },
           ),
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
           InkWell(
             onTap: () async {
               await ref.read(settingsRepositoryProvider).clearLocalCache();
@@ -1007,7 +1007,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 );
               }
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Row(
                 children: [
@@ -1052,7 +1052,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await _persistSettings();
             },
           ),
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
           _buildToggleRow(
             title: 'Critical Severity Only (CVSS >= 9.0)',
             subtitle: 'Filter push notifications to critical zero-day vulnerabilities only',
@@ -1062,7 +1062,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await _persistSettings();
             },
           ),
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
           _buildToggleRow(
             title: 'Daily Executive Security Digest',
             subtitle: 'Receive a daily 08:00 AM summary of vulnerability posture',
@@ -1093,17 +1093,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Switch(
             value: value,
             activeThumbColor: AppColors.primary,
@@ -1116,6 +1116,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   // 8. Theme Card
   Widget _buildThemeCard() {
+    final currentThemeMode = ref.watch(themeModeProvider);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1129,53 +1131,130 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.dark_mode_rounded, color: AppColors.primary, size: 20),
-              const SizedBox(width: 10),
-              const Expanded(
+              Icon(Icons.palette_rounded, color: AppColors.primary, size: 20),
+              SizedBox(width: 10),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Enterprise SOC Dark Theme',
+                      'App Theme & Appearance',
                       style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                     ),
                     Text(
-                      'Ultra-dark contrast palette (#020817 / #0F172A) for low eye-strain SOC triage',
+                      'Select your preferred workspace visual contrast mode',
                       style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+            ],
+          ),
+          SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: _buildThemeOptionButton(
+                  title: 'Dark',
+                  icon: Icons.dark_mode_rounded,
+                  isSelected: currentThemeMode == ThemeMode.dark,
+                  onTap: () {
+                    setState(() => _themeMode = 'dark');
+                    ref.read(themeModeProvider.notifier).setThemeMode(ThemeMode.dark);
+                    _persistSettings();
+                  },
                 ),
-                child: const Text('ENFORCED', style: TextStyle(color: AppColors.primary, fontSize: 10.5, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: _buildThemeOptionButton(
+                  title: 'Light',
+                  icon: Icons.light_mode_rounded,
+                  isSelected: currentThemeMode == ThemeMode.light,
+                  onTap: () {
+                    setState(() => _themeMode = 'light');
+                    ref.read(themeModeProvider.notifier).setThemeMode(ThemeMode.light);
+                    _persistSettings();
+                  },
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: _buildThemeOptionButton(
+                  title: 'System',
+                  icon: Icons.brightness_auto_rounded,
+                  isSelected: currentThemeMode == ThemeMode.system,
+                  onTap: () {
+                    setState(() => _themeMode = 'system');
+                    ref.read(themeModeProvider.notifier).setThemeMode(ThemeMode.system);
+                    _persistSettings();
+                  },
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 10),
+          SizedBox(height: 12),
+          Divider(color: AppColors.cardBorder, height: 1),
+          SizedBox(height: 10),
           Row(
             children: [
-              const Text('Theme Palette:', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
-              const SizedBox(width: 8),
+              Text('Theme Palette:', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+              SizedBox(width: 8),
               _buildColorDot(AppColors.primary),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               _buildColorDot(AppColors.surface),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               _buildColorDot(AppColors.success),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               _buildColorDot(AppColors.critical),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               _buildColorDot(AppColors.warning),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildThemeOptionButton({
+    required String title,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.card,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : AppColors.cardBorder,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 20,
+              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+            ),
+            SizedBox(height: 6),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? AppColors.primary : AppColors.textPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1213,10 +1292,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   color: AppColors.primary.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.shield_rounded, color: AppColors.primary, size: 20),
+                child: Icon(Icons.shield_rounded, color: AppColors.primary, size: 20),
               ),
-              const SizedBox(width: 10),
-              const Expanded(
+              SizedBox(width: 10),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1238,22 +1317,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: AppColors.cardBorder),
                 ),
-                child: const Text(
+                child: Text(
                   AppStrings.appVersion,
                   style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          const Text(
+          SizedBox(height: 12),
+          Text(
             'Enterprise security orchestration platform with Semgrep SAST continuous scanning, GitHub App CI/CD integration, and Wazuh SOC SIEM event streaming.',
             style: TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.4),
           ),
-          const SizedBox(height: 12),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 10),
-          const Row(
+          SizedBox(height: 12),
+          Divider(color: AppColors.cardBorder, height: 1),
+          SizedBox(height: 10),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Security Standard', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),

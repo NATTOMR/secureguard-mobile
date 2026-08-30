@@ -8,7 +8,7 @@ class SGErrorView extends StatelessWidget {
   final String? message;
   final VoidCallback? onRetry;
 
-  const SGErrorView({
+  SGErrorView({
     super.key,
     this.title = 'Security Telemetry Error',
     this.errorMessage,
@@ -33,33 +33,33 @@ class SGErrorView extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.critical.withValues(alpha: 0.4)),
               ),
-              child: const Icon(Icons.gpp_maybe_rounded, size: 44, color: AppColors.critical),
+              child: Icon(Icons.gpp_maybe_rounded, size: 44, color: AppColors.critical),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               effectiveMessage,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 color: AppColors.textSecondary,
               ),
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               SGButton(
                 label: 'Retry Connection',
                 onPressed: onRetry,
-                width: 170,
+                width: 200,
                 height: 42,
                 variant: SGButtonVariant.secondary,
               ),

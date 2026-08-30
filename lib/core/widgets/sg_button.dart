@@ -12,7 +12,7 @@ class SGButton extends StatelessWidget {
   final double? width;
   final double height;
 
-  const SGButton({
+  SGButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -37,12 +37,12 @@ class SGButton extends StatelessWidget {
       case SGButtonVariant.secondary:
         bgColor = AppColors.surface;
         fgColor = AppColors.textPrimary;
-        borderSide = const BorderSide(color: AppColors.cardBorder);
+        borderSide = BorderSide(color: AppColors.cardBorder);
         break;
       case SGButtonVariant.outline:
         bgColor = Colors.transparent;
         fgColor = AppColors.textPrimary;
-        borderSide = const BorderSide(color: AppColors.cardBorder, width: 1.5);
+        borderSide = BorderSide(color: AppColors.cardBorder, width: 1.5);
         break;
       case SGButtonVariant.danger:
         bgColor = AppColors.critical;
@@ -51,7 +51,7 @@ class SGButton extends StatelessWidget {
       case SGButtonVariant.github:
         bgColor = const Color(0xFF24292F);
         fgColor = Colors.white;
-        borderSide = const BorderSide(color: Color(0xFF444C56));
+        borderSide = BorderSide(color: Color(0xFF444C56));
         break;
     }
 
@@ -72,7 +72,7 @@ class SGButton extends StatelessWidget {
         children: [
           if (icon != null) ...[
             icon!,
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
           ],
           Text(
             label,

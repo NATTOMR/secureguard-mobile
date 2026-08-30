@@ -11,7 +11,7 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String statusText;
   final StatusType statusType;
 
-  const SGAppBar({
+  SGAppBar({
     super.key,
     required this.title,
     this.subtitle,
@@ -30,7 +30,7 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       leading: showBackButton && Navigator.canPop(context)
           ? IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: AppColors.textPrimary),
+              icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: AppColors.textPrimary),
               onPressed: () => Navigator.maybePop(context),
             )
           : null,
@@ -44,7 +44,7 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
               Flexible(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
@@ -54,16 +54,16 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               if (showStatusBadge) ...[
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 SGStatusBadge(label: statusText, type: statusType),
               ],
             ],
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               subtitle!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
                 color: AppColors.textSecondary,

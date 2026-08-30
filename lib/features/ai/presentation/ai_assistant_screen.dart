@@ -88,7 +88,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const SGAppBar(
+      appBar: SGAppBar(
         title: AppStrings.aiTitle,
         subtitle: AppStrings.aiSubtitle,
         showStatusBadge: true,
@@ -104,17 +104,17 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
             child: Row(
               children: [
                 _buildPresetChip('Fix CVE-2024-3094 in XZ Utils'),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _buildPresetChip('Remediate SQL Injection in FastAPI'),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _buildPresetChip('Rotate Hardcoded AWS Secret'),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _buildPresetChip('Generate Semgrep SAST Rule'),
               ],
             ),
           ),
 
-          const Divider(color: AppColors.cardBorder, height: 1),
+          Divider(color: AppColors.cardBorder, height: 1),
 
           // Chat Messages List
           Expanded(
@@ -133,7 +133,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           if (_isGenerating)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
@@ -165,17 +165,17 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline_rounded, color: AppColors.critical, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(Icons.error_outline_rounded, color: AppColors.critical, size: 20),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: const TextStyle(fontSize: 12, color: AppColors.critical),
+                      style: TextStyle(fontSize: 12, color: AppColors.critical),
                     ),
                   ),
                   TextButton(
                     onPressed: () => _sendPrompt(_messages.last.content),
-                    child: const Text('Retry', style: TextStyle(color: AppColors.primary, fontSize: 12)),
+                    child: Text('Retry', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                   ),
                 ],
               ),
@@ -184,7 +184,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           // Bottom Input Bar
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.surface,
               border: Border(top: BorderSide(color: AppColors.cardBorder)),
             ),
@@ -194,32 +194,32 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                   Expanded(
                     child: TextField(
                       controller: _promptController,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
                       decoration: InputDecoration(
                         hintText: 'Ask SecureGuard AI (e.g. "Remediate SQL injection")...',
-                        hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                        hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         filled: true,
                         fillColor: AppColors.card,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
+                          borderSide: BorderSide(color: AppColors.cardBorder),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
+                          borderSide: BorderSide(color: AppColors.cardBorder),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(color: AppColors.primary),
+                          borderSide: BorderSide(color: AppColors.primary),
                         ),
                       ),
                       onSubmitted: _sendPrompt,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   IconButton.filled(
-                    icon: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+                    icon: Icon(Icons.send_rounded, color: Colors.white, size: 20),
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.all(12),
@@ -249,11 +249,11 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.auto_awesome_rounded, size: 14, color: AppColors.primary),
-            const SizedBox(width: 6),
+            Icon(Icons.auto_awesome_rounded, size: 14, color: AppColors.primary),
+            SizedBox(width: 6),
             Text(
               prompt,
-              style: const TextStyle(fontSize: 12, color: AppColors.textPrimary, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 12, color: AppColors.textPrimary, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -284,7 +284,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (!isUser) ...[
-              const Row(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.shield_rounded, size: 14, color: AppColors.primary),
@@ -300,7 +300,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
             ],
             SelectableText(
               msg.content,
@@ -310,7 +310,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                 height: 1.45,
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Align(
               alignment: Alignment.bottomRight,
               child: Text(

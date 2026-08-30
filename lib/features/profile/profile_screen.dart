@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const SGAppBar(
+      appBar: SGAppBar(
         title: 'Analyst Profile',
         showBackButton: false,
         showStatusBadge: true,
@@ -31,19 +31,19 @@ class ProfileScreen extends ConsumerWidget {
             SGCard(
               child: Column(
                 children: [
-                  const SGAvatar(initials: 'AV', radius: 42),
-                  const SizedBox(height: 16),
+                  SGAvatar(initials: 'AV', radius: 42),
+                  SizedBox(height: 16),
                   Text(
                     userState?.name ?? 'Alex Vance',
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     userState?.email ?? 'analyst@secureguard.enterprise',
-                    style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                    style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  const SizedBox(height: 12),
-                  const Row(
+                  SizedBox(height: 12),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SGChip(label: 'Lead Security Architect', variant: SGChipVariant.info),
@@ -55,34 +55,34 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Credentials & Security Keys Card
             SGCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Security Credentials & MFA',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _buildProfileRow('Hardware YubiKey MFA', 'ENFORCED', Icons.vpn_key_rounded),
-                  const Divider(color: AppColors.cardBorder),
+                  Divider(color: AppColors.cardBorder),
                   _buildProfileRow('Active Session Token', 'EXPIRES IN 8H', Icons.timer_rounded),
-                  const Divider(color: AppColors.cardBorder),
+                  Divider(color: AppColors.cardBorder),
                   _buildProfileRow('API Security Scope', 'READ/WRITE/TRIAGE', Icons.admin_panel_settings_rounded),
                 ],
               ),
             ).animate().fadeIn(delay: 200.ms),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Logout Button
             SGButton(
               label: 'Sign Out of SecureGuard Platform',
               variant: SGButtonVariant.danger,
-              icon: const Icon(Icons.logout_rounded, color: Colors.white),
+              icon: Icon(Icons.logout_rounded, color: Colors.white),
               onPressed: () {
                 ref.read(authStateProvider.notifier).logout();
                 context.go(AppRouter.login);
@@ -100,11 +100,11 @@ class ProfileScreen extends ConsumerWidget {
       child: Row(
         children: [
           Icon(icon, color: AppColors.primary, size: 20),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
-            child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textPrimary)),
+            child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textPrimary)),
           ),
-          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+          Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
         ],
       ),
     );

@@ -57,7 +57,7 @@ class StatisticCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           // Animated counter
           TweenAnimationBuilder<int>(
             tween: IntTween(begin: 0, end: count),
@@ -66,7 +66,7 @@ class StatisticCard extends StatelessWidget {
             builder: (context, value, child) {
               return Text(
                 '$value',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -77,7 +77,7 @@ class StatisticCard extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
