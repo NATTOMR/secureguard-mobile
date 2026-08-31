@@ -552,46 +552,424 @@ Render Cloud Web Service specifications, containerization parameters, and enviro
 ## CHAPTER 4 — SYSTEM ARCHITECTURE
 
 ### 4.1 Overall Architecture
-Complete client-server topology linking Flutter presentation layers, Riverpod state models, Dio networking, and FastAPI cloud services.
+The architecture of **SecurePulse** is designed as a distributed, decoupled, and multi-tier cybersecurity operations platform. It bridges enterprise security telemetry sources with mobile incident responders through an asynchronous cloud backend and a reactive cross-platform mobile client.
+
+```mermaid
+graph TD
+    subgraph Threat Sources & Toolchains [Enterprise Security Infrastructure]
+        Wazuh["Wazuh SIEM / XDR Agents"]
+        GitHub["GitHub Repositories & Webhooks"]
+        Semgrep["Semgrep SAST Engine"]
+        CloudTrail["AWS CloudTrail / Sentinel [PLANNED]"]
+    end
+
+    subgraph SecurePulse Cloud Gateway [FastAPI Microservices on Render]
+        Ingest["Telemetry Ingestion & Normalization Layer"]
+        AuthService["JWT Stateless Authentication Service"]
+        DB[(PostgreSQL Database)]
+        ScanOrchestrator["SAST Scan Dispatcher & Broker"]
+        LLMBridge["AI Security Copilot Cloud Bridge"]
+        WSServer["WebSocket Streaming Hub (/ws/alerts)"]
+        RESTRouter["FastAPI REST Router (/v1/*)"]
+    end
+
+    subgraph Network Transport Tier
+        HTTPS_REST["HTTPS REST Transport (TLS 1.3)"]
+        WSS_Stream["WSS WebSocket Stream (Full-Duplex)"]
+    end
+
+    subgraph SecurePulse Mobile Client [Flutter 3.x / Dart 3.x Application]
+        NetLayer["Dio ApiClient + WebSocketService"]
+        ModeGate{"AppConfig.isDemoMode Dispatcher"}
+        MockEngine["Deterministic Offline Mock Repository"]
+        RiverpodState["Riverpod 2.6.1 Reactive State Providers"]
+        BioAuth["Hardware Biometrics (local_auth)"]
+        KeyStore["FlutterSecureStorage (AES-256 / RSA)"]
+        HiveDB["Hive Local Cache (securepulse_cache)"]
+        VectorPDF["ReportPdfService (SHA256 Audit Stamped)"]
+        UIPresentation["5-Tab Shell UI (Dashboard / Repos / AI / Alerts / Settings)"]
+    end
+
+    Wazuh --> Ingest
+    GitHub --> Ingest
+    Semgrep --> Ingest
+    CloudTrail -.-> Ingest
+
+    Ingest --> DB
+    DB --> RESTRouter
+    DB --> WSServer
+    ScanOrchestrator --> RESTRouter
+    LLMBridge --> RESTRouter
+    AuthService --> RESTRouter
+
+    RESTRouter --> HTTPS_REST
+    WSServer --> WSS_Stream
+
+    HTTPS_REST --> NetLayer
+    WSS_Stream --> NetLayer
+
+    NetLayer --> ModeGate
+    ModeGate -- Live Mode --> RiverpodState
+    ModeGate -- Demo Mode --> MockEngine --> RiverpodState
+
+    RiverpodState --> BioAuth & KeyStore & HiveDB & VectorPDF
+    RiverpodState --> UIPresentation
+```
+
+[ARCHITECTURE SCREENSHOT]
+Description: High-level architectural diagram of SecurePulse showing telemetry pipeline from Wazuh/GitHub/Semgrep through FastAPI to the Flutter mobile application.
+Suggested filename: fig_4_1_overall_architecture_topology.png
+
+---
 
 ### 4.2 High-Level Architecture
-Layered architecture model separating presentation, domain, data, and transport tiers.
+The system is logically partitioned into four distinct functional tiers:
+1. **Telemetry Producer Tier**: External sensors, host agents, and CI/CD pipelines producing security events.
+2. **Cloud Orchestration Tier**: The FastAPI gateway handling data normalization, persistence, scan scheduling, and AI routing.
+3. **Transport Tier**: Encrypted HTTPS and WSS protocols guaranteeing data confidentiality and integrity in transit.
+4. **Mobile Presentation & Local Security Tier**: The Flutter client managing local cryptography, reactive state, user interaction, and offline autonomy.
+
+---
 
 ### 4.3 Mobile Architecture
-Clean / Feature-first Flutter structure utilizing Riverpod notifiers and GoRouter navigation shells.
+The mobile application is structured following the **Feature-First Clean Architecture** pattern. Code is modularized into `core/` (shared services, network clients, storage, themes) and `features/` (encapsulated domains: `auth`, `dashboard`, `repositories`, `alerts`, `ai`, `reports`, `settings`).
+
+```mermaid
+graph TD
+    subgraph Presentation Layer
+        UI_Screens["Screen Widgets (Dashboard, Repos, Alerts, AI, Settings)"]
+        UI_Components["Custom Widgets (PostureGauge, FlChartDonut, AlertCards)"]
+        Nav["GoRouter Declarative Shell (AppRouter)"]
+    end
+
+    subgraph State Management Tier [Riverpod 2.6.1]
+        AuthNotifier["authNotifierProvider"]
+        DashboardProvider["dashboardSummaryProvider"]
+        AlertsNotifier["alertsProvider"]
+        RepoProvider["repositoriesProvider"]
+        AIProvider["aiChatProvider"]
+        WSStreamProvider["webSocketAlertStreamProvider"]
+    end
+
+    subgraph Domain Tier
+        Models["Domain Models (UserModel, AlertModel, RepositoryModel, FindingModel)"]
+    end
+
+    subgraph Data & Repository Tier
+        AuthRepo["AuthRepositoryImpl"]
+        DashboardRepo["DashboardRepositoryImpl"]
+        AlertsRepo["AlertsRepositoryImpl"]
+        RepoRepo["RepositoryRepositoryImpl"]
+        AIRepo["AiRepositoryImpl"]
+    end
+
+    subgraph Infrastructure Services
+        ApiClient["ApiClient (Dio 5.4.1)"]
+        WSService["WebSocketService"]
+        SecureStorage["SecureStorageService (Keystore)"]
+        HiveStorage["HiveStorageService (Cache)"]
+        BioService["BiometricService (local_auth)"]
+        PDFService["ReportPdfService (pdf)"]
+    end
+
+    UI_Screens --> Nav
+    UI_Screens --> UI_Components
+    UI_Screens --> RiverpodState
+    Nav --> RiverpodState
+    RiverpodState --> Models
+    RiverpodState --> DataRepositories
+    DataRepositories --> InfrastructureServices
+```
+
+[MOBILE SCREENSHOT]
+Description: SecurePulse Mobile 5-Tab Navigation Shell and Component Hierarchy.
+Suggested filename: fig_4_2_mobile_clean_architecture.png
+
+---
 
 ### 4.4 Backend Architecture
-Asynchronous FastAPI routing, dependency injection, and worker execution models.
+The cloud backend leverages FastAPI's asynchronous event loop (`asyncio`) to serve high-concurrency requests with minimal resource overhead.
+
+```mermaid
+graph TD
+    subgraph Cloud Gateway Infrastructure
+        Uvicorn["Uvicorn ASGI Worker"]
+        FastAPIApp["FastAPI Application (main.py)"]
+        CORSMiddleware["CORS Middleware"]
+        AuthMiddleware["JWT Bearer Authentication Dependency"]
+    end
+
+    subgraph Router Modules
+        AuthRouter["/v1/auth Router"]
+        DashboardRouter["/v1/dashboard Router"]
+        ReposRouter["/v1/repositories Router"]
+        AlertsRouter["/v1/soc Router"]
+        AIRouter["/v1/ai Router"]
+        ReportsRouter["/v1/reports Router"]
+        WSRouter["/ws/alerts WebSocket Handler"]
+    end
+
+    subgraph Service & Task Layer
+        ScanWorker["Semgrep Scan Execution Worker"]
+        AIProxy["OpenAI / Anthropic LLM Gateway"]
+        AlertBroadcaster["WebSocket In-Memory Event Broadcaster"]
+        CeleryQueue["Celery / Redis Distributed Queue [PLANNED]"]
+    end
+
+    subgraph Database Layer
+        PostgreSQL[(PostgreSQL Relational DB)]
+        RedisCache[(Redis Cache & Pub/Sub [PLANNED])]
+    end
+
+    Uvicorn --> FastAPIApp
+    FastAPIApp --> CORSMiddleware --> AuthMiddleware
+    AuthMiddleware --> RouterModules
+    RouterModules --> ServiceLayer
+    ServiceLayer --> DatabaseLayer
+```
+
+[BACKEND SCREENSHOT]
+Description: FastAPI Swagger OpenAPI Interactive Documentation Interface running on Render.
+Suggested filename: fig_4_3_fastapi_openapi_backend.png
+
+---
 
 ### 4.5 REST API Architecture
-Standardized JSON schema request/response patterns with classified HTTP error codes.
+The REST API client in the mobile application is engineered around `ApiClient` (powered by Dio 5.4.1). It encapsulates request interceptors, global timeout policies (12 seconds), and structured exception handling.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as Flutter Screen
+    participant Repo as Repository Layer
+    participant Client as ApiClient (Dio)
+    participant SecStore as SecureStorageService
+    participant Backend as FastAPI Server
+
+    UI->>Repo: Request Data (e.g. getRepositories())
+    Repo->>SecStore: Retrieve Saved JWT Token
+    SecStore-->>Repo: Return Bearer Token
+    Repo->>Client: GET /v1/repositories (with Auth Token)
+    Client->>Client: Inject Authorization: Bearer <Token>
+    Client->>Backend: HTTPS Request (12s Timeout Gate)
+    alt Server Responds 200 OK
+        Backend-->>Client: JSON Response Body
+        Client-->>Repo: Map to Strongly-Typed Models
+        Repo-->>UI: Return List<RepositoryModel>
+        UI->>UI: Render Active Repository Cards
+    else Server Responds 401 Unauthorized
+        Backend-->>Client: 401 Unauthorized
+        Client-->>Repo: Throw ApiException(unauthorized)
+        Repo->>SecStore: Clear Stale Token
+        Repo-->>UI: Navigate to LoginScreen
+    else Connection Timeout / Offline
+        Backend--xClient: Connection Timed Out
+        Client-->>Repo: Throw ApiException(networkError)
+        Repo-->>UI: Return Cached / Fallback Data
+    end
+```
+
+---
 
 ### 4.6 WebSocket Architecture
-Bidirectional stream management, channel state broadcasting, and heartbeat keepalive protocols.
+Real-time incident delivery relies on `WebSocketService`. The service automatically inspects the active backend URL and dynamically computes the corresponding WebSocket endpoint (`http://` ➔ `ws://`, `https://` ➔ `wss://`).
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as App Initialization
+    participant WS as WebSocketService
+    participant Backend as FastAPI /ws/alerts Hub
+    participant UI as AlertsScreen / Dashboard
+
+    App->>WS: initialize(baseUrl, token)
+    WS->>WS: Convert HTTPS to WSS (wss://.../ws/alerts?token=JWT)
+    WS->>Backend: Initiate WSS Handshake
+    alt Handshake Accepted
+        Backend-->>WS: 101 Switching Protocols (Connected)
+        WS->>WS: Broadcast WebSocketStatus.connected
+        loop Real-Time Threat Stream
+            Backend->>WS: Push JSON Alert Payload
+            WS->>WS: Parse AlertModel & Append to Stream
+            WS-->>UI: Emit Reactive Stream Event
+            UI->>UI: Animate New Alert Banner (Vibrate & Beep)
+        end
+    else Connection Blocked / Dropped
+        Backend--xWS: Socket Closed / Disconnected
+        WS->>WS: Broadcast WebSocketStatus.reconnecting
+        WS->>WS: Schedule Exponential Backoff Reconnect
+        WS->>Backend: Fallback: Periodic HTTP Polling (GET /v1/soc/alerts)
+    end
+```
+
+---
 
 ### 4.7 Authentication Architecture
-Biometric challenge gate, JWT token lifecycle, and secure device storage persistence.
+SecurePulse implements a multi-layer authentication pipeline combining hardware biometrics, encrypted token persistence, and stateless backend verification.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User as Security Analyst
+    participant App as Mobile App Launch
+    participant Bio as BiometricService (local_auth)
+    participant Store as SecureStorageService (Keystore)
+    participant API as ApiClient
+    participant Server as FastAPI /v1/auth
+
+    App->>Bio: Check Sensor Availability
+    alt Biometrics Enrolled & Enabled
+        Bio->>User: Display OS Fingerprint / Face ID Prompt
+        User-->>Bio: Provide Biometric Scan
+        alt Scan Validated
+            Bio-->>App: Authentication Success
+            App->>Store: Read 'auth_token'
+            alt Valid JWT Found
+                Store-->>API: Set Bearer Token
+                API->>Server: GET /v1/auth/me
+                Server-->>API: 200 OK (User Profile JSON)
+                API-->>App: Session Active ➔ Navigate to Dashboard
+            else No Token / Expired
+                App->>User: Display LoginScreen
+            end
+        else Scan Cancelled / Failed
+            App->>User: Fallback to Password LoginScreen
+        end
+    else Biometrics Unavailable
+        App->>User: Display LoginScreen
+    end
+```
+
+---
 
 ### 4.8 Security Event Processing
-Ingestion, severity categorization, and distribution of SIEM incident events.
+When host intrusion events occur, they traverse a standardized ingestion and triage pipeline:
+
+1. **Host Event Generation**: Wazuh agent detects an event (e.g., 48 failed SSH logins in 60 seconds).
+2. **Ingestion & Normalization**: Event is ingested by the FastAPI backend, assigned a unique ID (`alt_001`), mapped to a severity level (`critical`), and timestamped.
+3. **Distribution**: FastAPI broadcasts the event across all active `/ws/alerts` WebSocket connections and logs the incident to PostgreSQL.
+4. **Mobile Delivery**: `WebSocketService` on the mobile device parses the payload into `AlertModel`, alerts the user via haptic vibration, and prepends the incident to the top of `alertsProvider`.
+
+---
 
 ### 4.9 External Integrations
-Integration patterns for Wazuh SIEM, GitHub App webhooks, Semgrep SAST, and Firebase FCM.
+SecurePulse integrates with four major external systems:
 
-### 4.10 Data Flow
-End-to-end data flow tracing user actions from UI interaction through network dispatch and storage caching.
+* **Wazuh SIEM**: Ingests syslogs, rootcheck alarms, and SSH brute-force triggers.
+* **GitHub**: Synchronizes repository metadata, commit histories, and primary language indicators.
+* **Semgrep SAST**: Ingests static code audit results, CWE classifications, and affected line ranges.
+* **Firebase Cloud Messaging (FCM)**: Provides background push notification channels (`soc_critical`, `wazuh_alerts`).
+
+---
+
+### 4.10 Data Flow Pipeline
+The end-to-end data flow ensures consistent data synchronization between cloud databases and on-device reactive caches:
+
+```mermaid
+flowchart LR
+    A[Security Threat Event] --> B[FastAPI Gateway]
+    B --> C[(PostgreSQL DB)]
+    B --> D[WebSocket Broadcaster]
+    D -->|WSS Stream| E[Mobile WebSocketService]
+    E --> F[Riverpod State Provider]
+    F --> G[Encrypted Hive Cache]
+    F --> H[Reactive UI Widgets]
+```
+
+---
 
 ### 4.11 Alert Lifecycle
-State progression of security alerts: `active` ➔ `investigating` ➔ `resolved`.
+The state of each security incident progresses through a formal three-stage state machine:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Active: Incident Ingested (Severity: Critical/High/Med/Low)
+    Active --> Investigating: Analyst Taps "Investigate" / Inspects Payload
+    Investigating --> Resolved: Analyst Taps "Acknowledge" / "Quarantine IP"
+    Active --> Resolved: Fast-track Dismissal
+    Resolved --> [*]: Incident Archived in Compliance Audit Log
+```
+
+---
 
 ### 4.12 AI Copilot Data Flow
-Contextual query processing, rule-based fallback generation, and cloud LLM proxying.
+The AI Cybersecurity Assistant provides contextual analysis using a dual-engine architecture:
 
-### 4.13 Demo vs Live Architecture
-Isolation boundaries ensuring deterministic offline execution without network dependency.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Analyst as Security Analyst
+    participant UI as AiAssistantScreen
+    participant Repo as AiRepositoryImpl
+    participant Mode as AppConfig.isDemoMode
+    participant Mock as Local Heuristic Engine
+    participant Cloud as Cloud LLM Gateway (/v1/ai/chat)
 
-### 4.14 Cloud Architecture
-Render cloud hosting configuration, container routing, and TLS certificate termination.
+    Analyst->>UI: Enter Query (e.g., "How to fix CVE-2024-3094?")
+    UI->>Repo: sendSecurityPrompt(prompt)
+    Repo->>Mode: Evaluate Active Operation Mode
+    alt Demo Mode (Offline Simulation)
+        Mode-->>Mock: Dispatch to Heuristic Regex Matcher
+        Mock->>Mock: Generate CVE-2024-3094 Markdown Patch
+        Mock-->>UI: Return Formatted Markdown Response
+    else Live API Mode (Online Cloud)
+        Mode-->>Cloud: POST /v1/ai/chat (Prompt + Mobile Context)
+        Cloud-->>Cloud: Execute LLM Inference
+        Cloud-->>UI: Stream AI Response Tokens
+    end
+    UI->>Analyst: Render Rich Text & Copyable Code Blocks
+```
+
+---
+
+### 4.13 Demo Mode vs. Live Mode Architecture
+To guarantee 100% operational resilience during offline demonstrations, field training, and disconnected operations, SecurePulse implements an architectural separation between its data providers and transport layer:
+
+* **Demo Simulation Mode (`isDemoMode = true`)**:
+  * Bypasses network sockets completely (0ms latency).
+  * Returns pre-configured, realistic cybersecurity datasets (Alex Vance session, 28 repositories, 6 Wazuh alerts, CVE-2024-3094 remediation playbooks, 88% posture score).
+  * Prevents accidental state mutation on production cloud servers.
+* **Live FastAPI Mode (`isDemoMode = false`)**:
+  * Activates Dio HTTP client and WebSocket streaming connections.
+  * Dispatches real network requests to the configured target backend URL (`https://secureguard-backend-7eqm.onrender.com` or local emulator `10.0.2.2:8000`).
+  * Enforces JWT authentication and live exception boundaries.
+
+---
+
+### 4.14 Cloud Deployment Architecture
+The production cloud architecture is deployed on the Render cloud infrastructure:
+
+```mermaid
+graph TD
+    subgraph Internet & Clients
+        MobileApp["SecurePulse Mobile Client (Android / iOS)"]
+        WebClient["SecurePulse Flutter Web (Nginx Docker Container)"]
+    end
+
+    subgraph Render Cloud Infrastructure
+        ReverseProxy["Render Cloud Edge / Reverse Proxy (SSL Termination)"]
+        FastAPIService["FastAPI Web Service Container (Python 3.11)"]
+        CloudDB[(PostgreSQL Managed Database)]
+        CloudRedis[(Redis Cache Instance [PLANNED])]
+    end
+
+    subgraph External Cloud APIs
+        GitHubAPI["GitHub REST & Webhook APIs"]
+        WazuhCluster["Wazuh Manager SIEM Cluster"]
+        LLMProvider["OpenAI / Anthropic Cloud APIs"]
+        FirebaseCloud["Google Firebase FCM Cloud Gateway"]
+    end
+
+    MobileApp -->|HTTPS / WSS| ReverseProxy
+    WebClient -->|HTTPS / WSS| ReverseProxy
+    ReverseProxy --> FastAPIService
+    FastAPIService --> CloudDB
+    FastAPIService -.-> CloudRedis
+    FastAPIService --> GitHubAPI
+    FastAPIService --> WazuhCluster
+    FastAPIService --> LLMProvider
+    FastAPIService --> FirebaseCloud
+```
 
 ---
 
