@@ -19,7 +19,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'analyst@secureguard.enterprise');
+  final _emailController = TextEditingController(text: 'analyst@securepulse.enterprise');
   final _passwordController = TextEditingController(text: 'EnterprisePass123!');
   bool _rememberMe = true;
   final _biometricService = BiometricService();

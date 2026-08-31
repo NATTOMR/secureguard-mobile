@@ -19,7 +19,7 @@
             tools:node="remove" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="secureguard_soc_alerts" />
+            android:value="securepulse_soc_alerts" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

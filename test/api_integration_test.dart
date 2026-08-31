@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:secureguard_mobile/core/config/app_config.dart';
-import 'package:secureguard_mobile/core/error/api_exception.dart';
-import 'package:secureguard_mobile/core/network/api_client.dart';
-import 'package:secureguard_mobile/core/network/api_endpoints.dart';
-import 'package:secureguard_mobile/core/network/websocket_service.dart';
-import 'package:secureguard_mobile/features/ai/data/ai_repository.dart';
-import 'package:secureguard_mobile/features/alerts/data/alerts_repository.dart';
-import 'package:secureguard_mobile/features/auth/data/auth_repository.dart';
-import 'package:secureguard_mobile/features/dashboard/data/dashboard_repository.dart';
-import 'package:secureguard_mobile/features/repositories/data/repository_repository.dart';
+import 'package:securepulse_mobile/core/config/app_config.dart';
+import 'package:securepulse_mobile/core/error/api_exception.dart';
+import 'package:securepulse_mobile/core/network/api_client.dart';
+import 'package:securepulse_mobile/core/network/api_endpoints.dart';
+import 'package:securepulse_mobile/core/network/websocket_service.dart';
+import 'package:securepulse_mobile/features/ai/data/ai_repository.dart';
+import 'package:securepulse_mobile/features/alerts/data/alerts_repository.dart';
+import 'package:securepulse_mobile/features/auth/data/auth_repository.dart';
+import 'package:securepulse_mobile/features/dashboard/data/dashboard_repository.dart';
+import 'package:securepulse_mobile/features/repositories/data/repository_repository.dart';
 
 void main() {
   group('ApiClient & Network Architecture Tests', () {
@@ -32,8 +32,8 @@ void main() {
     });
 
     test('Base URL can be dynamically updated for environment switching', () {
-      apiClient.updateBaseUrl('https://api.secureguard.enterprise');
-      expect(apiClient.baseUrl, equals('https://api.secureguard.enterprise'));
+      apiClient.updateBaseUrl('https://api.securepulse.enterprise');
+      expect(apiClient.baseUrl, equals('https://api.securepulse.enterprise'));
     });
 
     test('ApiEndpoints contract verification', () {
@@ -80,7 +80,7 @@ void main() {
       final authRepo = AuthRepositoryImpl(apiClient: apiClient);
 
       final user = await authRepo.login(
-        email: 'analyst@secureguard.enterprise',
+        email: 'analyst@securepulse.enterprise',
         password: 'Password123!',
       );
 

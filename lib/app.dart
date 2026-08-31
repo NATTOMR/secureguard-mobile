@@ -6,8 +6,8 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'providers/app_providers.dart';
 
-class SecureGuardApp extends ConsumerWidget {
-  const SecureGuardApp({super.key});
+class SecurePulseApp extends ConsumerWidget {
+  const SecurePulseApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -30,7 +30,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
           final res = await apiClient.post(
             ApiEndpoints.login,
             data: {
-              'email': 'analyst@secureguard.enterprise',
+              'email': 'analyst@securepulse.enterprise',
               'password': 'EnterprisePass123!',
             },
           );

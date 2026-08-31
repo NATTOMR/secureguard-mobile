@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveStorageService {
-  static const String appBoxName = 'secureguard_cache';
+  static const String appBoxName = 'securepulse_cache';
 
   static Future<void> init() async {
     await Hive.initFlutter();

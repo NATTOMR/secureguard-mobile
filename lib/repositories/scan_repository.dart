@@ -57,7 +57,7 @@ class ScanRepository {
       ),
       ScanModel(
         id: 'scan_104',
-        targetName: 'api.secureguard.enterprise',
+        targetName: 'api.securepulse.enterprise',
         type: ScanType.dast,
         status: ScanStatus.completed,
         findingsCount: 3,

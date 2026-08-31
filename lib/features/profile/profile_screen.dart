@@ -39,7 +39,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    userState?.email ?? 'analyst@secureguard.enterprise',
+                    userState?.email ?? 'analyst@securepulse.enterprise',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 12),

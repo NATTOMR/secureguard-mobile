@@ -1,6 +1,6 @@
 {
-    "name": "secureguard_mobile",
-    "short_name": "secureguard_mobile",
+    "name": "securepulse_mobile",
+    "short_name": "securepulse_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

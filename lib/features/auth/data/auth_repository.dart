@@ -82,7 +82,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<UserModel> getDemoUser() async {
     return const UserModel(
       id: 'usr_sec_01',
-      email: 'analyst@secureguard.enterprise',
+      email: 'analyst@securepulse.enterprise',
       name: 'Alex Vance',
       role: 'Principal Security Analyst',
       organization: 'Global Cybersecurity Ops',

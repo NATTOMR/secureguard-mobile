@@ -82,7 +82,7 @@ class WebSocketService {
         final res = await client.post(
           '/v1/auth/login',
           data: {
-            'email': 'analyst@secureguard.enterprise',
+            'email': 'analyst@securepulse.enterprise',
             'password': 'EnterprisePass123!',
           },
         );

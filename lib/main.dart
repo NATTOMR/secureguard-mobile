@@ -59,7 +59,7 @@ void main() async {
 
   runApp(
     const ProviderScope(
-      child: SecureGuardApp(),
+      child: SecurePulseApp(),
     ),
   );
 }

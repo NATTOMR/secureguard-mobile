@@ -381,7 +381,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget _buildAccountCard(dynamic user) {
     final String name = user?.name ?? 'Alex Vance';
     final String role = user?.role ?? 'Principal Security Analyst';
-    final String email = user?.email ?? 'analyst@secureguard.enterprise';
+    final String email = user?.email ?? 'analyst@securepulse.enterprise';
     final String organization = user?.organization ?? 'Global Cybersecurity Ops';
     final String initials = name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join();
 
@@ -822,7 +822,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             children: [
               _buildPresetChip('Emulator (10.0.2.2:8000)', AppConfig.emulatorApiBaseUrl),
               _buildPresetChip('Localhost (127.0.0.1:8000)', AppConfig.localhostApiBaseUrl),
-              _buildPresetChip('Cloud API (api.secureguard.enterprise)', AppConfig.productionApiBaseUrl),
+              _buildPresetChip('Cloud API (api.securepulse.enterprise)', AppConfig.productionApiBaseUrl),
             ],
           ),
         ],
