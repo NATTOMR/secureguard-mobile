@@ -2,10 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/services/report_pdf_service.dart';
 import '../../core/widgets/widgets.dart';
 
-class ReportsScreen extends StatelessWidget {
+class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
+
+  @override
+  State<ReportsScreen> createState() => _ReportsScreenState();
+}
+
+class _ReportsScreenState extends State<ReportsScreen> {
+  String _selectedFramework = 'SOC 2 Type II';
+  bool _isGenerating = false;
+
+  final List<String> _frameworks = [
+    'SOC 2 Type II',
+    'ISO 27001',
+    'HIPAA Compliance',
+    'PCI-DSS v4.0',
+  ];
+
+  Future<void> _handleExportPdf({String? framework, String? title}) async {
+    final targetFramework = framework ?? _selectedFramework;
+    final targetTitle = title ?? 'Executive Security Audit ($targetFramework)';
+
+    setState(() => _isGenerating = true);
+    try {
+      await ReportPdfService.exportAndPreviewReport(
+        framework: targetFramework,
+        reportTitle: targetTitle,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error generating report: $e'),
+            backgroundColor: AppColors.critical,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isGenerating = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +77,44 @@ class ReportsScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 12),
-                  const Wrap(
+                  Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: [
-                      SGChip(label: 'SOC 2 Type II', variant: SGChipVariant.info),
-                      SGChip(label: 'ISO 27001', variant: SGChipVariant.success),
-                      SGChip(label: 'HIPAA Compliance', variant: SGChipVariant.medium),
-                      SGChip(label: 'PCI-DSS v4.0', variant: SGChipVariant.low),
-                    ],
+                    children: _frameworks.map((fw) {
+                      final isSelected = _selectedFramework == fw;
+                      return ChoiceChip(
+                        label: Text(fw),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          if (selected) {
+                            setState(() => _selectedFramework = fw);
+                          }
+                        },
+                        selectedColor: AppColors.primary.withValues(alpha: 0.25),
+                        backgroundColor: AppColors.surface,
+                        labelStyle: TextStyle(
+                          color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontSize: 12,
+                        ),
+                        side: BorderSide(
+                          color: isSelected ? AppColors.primary : AppColors.cardBorder,
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 20),
                   SGButton(
-                    label: 'Export PDF Audit Summary',
-                    icon: const Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Generating PDF Report... Download will start automatically.')),
-                      );
-                    },
+                    label: _isGenerating ? 'Rendering Vector PDF...' : 'Export PDF Audit Summary',
+                    icon: _isGenerating
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
+                        : const Icon(Icons.picture_as_pdf_rounded, color: Colors.white, size: 20),
+                    onPressed: _isGenerating ? null : () => _handleExportPdf(),
                   ),
                 ],
               ),
@@ -67,24 +128,57 @@ class ReportsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            _buildReportTile(context, 'Q3 Executive Security Audit', 'SOC 2 Type II', 'PDF', '4.2 MB'),
-            _buildReportTile(context, 'Weekly Vulnerability CVE Audit', 'Vulnerabilities', 'CSV', '1.1 MB'),
-            _buildReportTile(context, 'Container Infrastructure Compliance', 'ISO 27001', 'JSON', '840 KB'),
+            _buildReportTile(
+              context,
+              'Q3 Executive Security Audit',
+              'SOC 2 Type II',
+              'PDF',
+              '4.2 MB',
+              onTap: () => _handleExportPdf(
+                framework: 'SOC 2 Type II',
+                title: 'Q3 Executive Security Audit',
+              ),
+            ),
+            _buildReportTile(
+              context,
+              'Weekly Vulnerability CVE Audit',
+              'ISO 27001',
+              'PDF',
+              '1.8 MB',
+              onTap: () => _handleExportPdf(
+                framework: 'ISO 27001',
+                title: 'Weekly Vulnerability CVE Audit',
+              ),
+            ),
+            _buildReportTile(
+              context,
+              'Cloud Infrastructure Compliance',
+              'PCI-DSS v4.0',
+              'PDF',
+              '2.4 MB',
+              onTap: () => _handleExportPdf(
+                framework: 'PCI-DSS v4.0',
+                title: 'Cloud Infrastructure Compliance',
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildReportTile(BuildContext context, String title, String category, String format, String size) {
+  Widget _buildReportTile(
+    BuildContext context,
+    String title,
+    String category,
+    String format,
+    String size, {
+    required VoidCallback onTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: SGCard(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Downloading $title ($format)...')),
-          );
-        },
+        onTap: onTap,
         child: Row(
           children: [
             Container(
@@ -94,7 +188,7 @@ class ReportsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.cardBorder),
               ),
-              child: const Icon(Icons.description_rounded, color: AppColors.primary, size: 24),
+              child: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -103,11 +197,11 @@ class ReportsScreen extends StatelessWidget {
                 children: [
                   Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 2),
-                  Text('$category • $size', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                  Text('$category • Tap to Open / Share', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
                 ],
               ),
             ),
-            SGChip(label: format, variant: SGChipVariant.info),
+            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
           ],
         ),
       ),
