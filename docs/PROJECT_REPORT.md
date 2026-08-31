@@ -973,40 +973,144 @@ graph TD
 
 ---
 
-## CHAPTER 5 — METHODOLOGY
+## CHAPTER 5 — DEVELOPMENT METHODOLOGY
 
 ### 5.1 Development Methodology
-Agile iterative development workflow combined with test-driven validation.
+The engineering of **SecurePulse** followed an **Iterative Agile DevSecOps Methodology** combined with **Test-Driven Design (TDD)** principles. Cybersecurity applications demand rigorous verification at every phase to ensure that transport encryption, authentication tokens, and threat telemetry maintain strict integrity and confidentiality.
+
+The development lifecycle progressed sequentially through ten distinct phases:
+
+```
+Requirements Analysis
+       ↓
+Architecture & Interface Definition
+       ↓
+Backend & Database Schemas
+       ↓
+Security & External Toolchain Integration
+       ↓
+Mobile Presentation & State Tier
+       ↓
+Real-Time WebSocket Transport Engine
+       ↓
+AI Copilot Prompt & Rule Engineering
+       ↓
+Cryptographic PDF Engine Design
+       ↓
+Multi-Tier Automated Test Verification
+       ↓
+Cloud & Android Release Deployment
+```
+
+---
 
 ### 5.2 Requirement Analysis
-Translating SOC analyst operational needs into technical mobile specifications.
+The requirement engineering phase translated operational pain points identified in enterprise SOC workflows into concrete technical specifications:
+
+1. **Latency Constraints**: Telemetry updates must reflect on the mobile interface within sub-second thresholds (<500ms over broadband/5G; graceful fallback on lossy cellular).
+2. **Offline Autonomy**: Security analysts operating in disconnected environments or conducting air-gapped field training must have access to a deterministic, zero-latency simulation environment.
+3. **Zero-Trust Client Storage**: No authentication credentials or unencrypted incident logs may reside in plaintext device storage.
+4. **Regulatory Audit Readiness**: Compliance reports must be generated on-device with verifiable cryptographic signatures without third-party SaaS dependencies.
+
+---
 
 ### 5.3 Architecture Design
-Defining decoupled interfaces and provider contracts before implementation.
+The architecture was formulated using a **Feature-First Clean Architecture** approach, decoupling presentation widgets, Riverpod state notifiers, domain models, and infrastructure network clients into strictly isolated layers:
+
+* **Presentation Layer**: Stateless and Stateful Flutter widgets bound reactively to Riverpod providers.
+* **State & Business Logic Layer**: Riverpod 2.6.1 `Notifier` and `FutureProvider` classes managing caching, invalidation, and optimistic state updates.
+* **Domain Layer**: Immutable Dart data models with robust `fromJson` / `toJson` serialization methods.
+* **Data & Repository Layer**: Abstract repository contracts with concrete implementations that dynamically route data requests between local mock generators and live network transports based on `AppConfig.isDemoMode`.
+* **Infrastructure Layer**: Low-level services for Dio HTTP networking, WebSocket streaming, hardware biometrics, encrypted keychain access, and PDF compilation.
+
+---
 
 ### 5.4 Backend Development
-Designing REST endpoints, WebSocket handlers, and authentication schemas.
+The cloud backend was developed using **FastAPI (Python 3.11)** to leverage native asynchronous I/O (`asyncio`) and automatic OpenAPI contract generation.
+
+* **Endpoint Routing**: Structured into modular APIRouters (`/v1/auth`, `/v1/dashboard`, `/v1/repositories`, `/v1/soc/alerts`, `/v1/ai`, `/v1/reports`, `/ws/alerts`).
+* **Schema Validation**: Pydantic models enforcing strict request payload typing and response serialization.
+* **Middleware Pipeline**: CORS middleware with whitelisted origins, global exception handlers mapping unhandled errors to standard JSON error envelopes, and JWT authentication dependencies validating bearer tokens.
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/network/api_endpoints.dart`
+Purpose: Centralized REST and WebSocket endpoint contract definitions.
+Suggested lines: Lines 1–29
+
+---
 
 ### 5.5 Database Development
-Configuring encrypted local caches (`Hive`) and device keychains (`FlutterSecureStorage`).
+The database methodology addressed both server-side persistence and client-side offline storage:
+
+1. **Cloud PostgreSQL Database**: Relational schema storing user accounts, hashed credentials (bcrypt), monitored repository metadata, historical scan outputs, and triage audit logs.
+2. **Client-Side Hardware Keychain (`FlutterSecureStorage`)**: AES-256 / RSA hardware keystore on Android and Keychain on iOS storing sensitive JWT bearer tokens (`auth_token`) and custom backend URL overrides.
+3. **Client-Side Offline Cache (`Hive`)**: High-performance, lightweight key-value database box (`securepulse_cache`) caching dashboard summaries and recent scan findings for instant startup rendering.
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/storage/secure_storage_service.dart`
+Purpose: Hardware-backed keystore token persistence and retrieval methods.
+Suggested lines: Lines 1–36
+
+---
 
 ### 5.6 Mobile Development
-Component-based UI development using custom Material 3 Cyber theme tokens.
+The mobile application was built using **Flutter 3.x** and **Dart 3.x**:
 
-### 5.7 Security Integration
-Implementing biometric gates, token auto-injection, and transport security.
+* **Design System**: A bespoke Material 3 Cyber theme was engineered in `AppTheme`, featuring a deep Dark Obsidian palette (`#0A0E1A` background, `#0284C7` cyber cyan primary, `#10B981` security green, `#EF4444` critical threat red) and a Clean Light theme (`#F8FAFC`). Typography is powered by Google Fonts Inter.
+* **Navigation Shell**: Declarative routing via `GoRouter` configuring a persistent `StatefulShellRoute` with 5 bottom tabs (`Dashboard`, `Repositories`, `AI Assistant`, `SOC Alerts`, `Settings`) and modal subroutes for detailed incident drilldowns.
+* **Micro-Animations**: Smooth visual transitions implemented using `flutter_animate` and shimmering skeleton loaders (`shimmer` package) to prevent visual layout shifts during data fetching.
 
-### 5.8 Real-Time Communication
-Developing resilient WebSocket channels with automatic reconnect logic.
+---
 
-### 5.9 AI Integration
-Designing cybersecurity prompts, CVE rule generators, and chat response streamers.
+### 5.7 Security & Toolchain Integration
+Integration methodology established standardized interfaces for enterprise security toolchains:
+
+* **Wazuh SIEM Integration**: Ingestion of host intrusion detection events, syslog records, and rootkit triggers into strongly-typed `AlertModel` entities with severity classification.
+* **GitHub Repository Sync**: Synchronization of monitored repository metadata, branch names, commit hashes, and SAST finding counts.
+* **Semgrep SAST Integration**: Integration of static code analysis results, linking vulnerabilities to specific file paths, line numbers, and CWE identifiers.
+* **Biometric Hardware Integration**: Integration of `local_auth` providing hardware biometric challenges (Face ID / Fingerprint) before granting access to the security console.
+* **Firebase Cloud Messaging (FCM)**: Push notification service implementation subscribing to critical enterprise topics (`soc_critical`, `wazuh_alerts`, `semgrep_findings`).
+
+---
+
+### 5.8 Real-Time Communication Methodology
+To eliminate polling overhead and enable sub-second incident alerts, a reactive WebSocket pipeline was engineered:
+
+1. **Dynamic URL Scheme Mapping**: `WebSocketService` inspects the active backend HTTP/HTTPS address and dynamically converts the protocol scheme (`http://` ➔ `ws://`, `https://` ➔ `wss://`).
+2. **Connection Lifecycle Broadcasting**: A dedicated `StreamController<WebSocketStatus>` broadcasts connection states (`disconnected`, `connecting`, `connected`, `reconnecting`, `failed`) to the UI, enabling live visual status badges.
+3. **Resilient Reconnection & HTTP Fallback**: If a WebSocket drops or is blocked by corporate firewall proxies, the service automatically initiates an exponential backoff reconnect loop while falling back to periodic REST polling (`GET /v1/soc/alerts`).
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/network/websocket_service.dart`
+Purpose: WebSocket connection lifecycle, scheme conversion, and stream controllers.
+Suggested lines: Lines 60–115
+
+---
+
+### 5.9 AI Integration Methodology
+The AI Cybersecurity Copilot was designed using a **Dual-Engine Architecture**:
+
+* **Offline Heuristic Rule Engine (Demo Mode)**: Regex-based pattern matching evaluating queries against known high-severity vulnerability playbooks (CVE-2024-3094 XZ Utils backdoor remediation, parameterized SQLAlchemy SQL injection mitigations, and AWS IAM secret rotation protocols).
+* **Live Cloud Proxy Engine (Live Mode)**: Dispatches user prompts and mobile session context to the cloud backend (`POST /v1/ai/chat`), proxying requests to state-of-the-art LLMs (OpenAI / Anthropic) with streaming response parsing.
+
+---
 
 ### 5.10 Testing Methodology
-Unit testing, integration testing, contract verification, and widget pump tests.
+Testing followed a multi-tier automated validation strategy executed using `flutter_test`:
+
+* **Unit Testing**: Validating domain model serialization, helper utilities, and configuration defaults.
+* **Network Contract & Isolation Testing**: Verifying that `ApiClient` properly injects JWT bearer tokens, sets 12s timeout gates, maps `ApiException` errors, and isolates Demo Mode from Live Mode network I/O.
+* **WebSocket Scheme Testing**: Testing URI transformations across local emulator (`10.0.2.2`), desktop (`127.0.0.1`), and production cloud (`Render`) URLs.
+* **Widget Pump Testing**: Pumping `SecurePulseApp` to verify that the root widget tree, theme provider, and router initialize without throwing unhandled exceptions.
+
+---
 
 ### 5.11 Deployment Methodology
-Containerization with Docker and Android release compilation (`APK`).
+The deployment methodology encompassed containerization, cloud hosting, and mobile binary compilation:
+
+1. **Web Deployment**: Multi-stage `Dockerfile` building the Flutter web production bundle and serving it via `nginx:alpine` on port 80.
+2. **Cloud Deployment (Render)**: Managed Web Service running the FastAPI Python container with SSL termination, environment variable injection, and automated CI/CD deployment on Git push.
+3. **Android Release Engineering**: Compiling a standalone, optimized release APK (`flutter build apk --release`) producing `securepulse-release.apk` (63.6 MB) with ProGuard shrinking and Android Manifest security permissions.
 
 ---
 
