@@ -147,13 +147,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      width: 48,
+                      height: 48,
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.cardBorder),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
-                      child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset('assets/images/app_icon.png', fit: BoxFit.cover),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Column(

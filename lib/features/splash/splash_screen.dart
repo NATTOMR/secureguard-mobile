@@ -55,25 +55,29 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Animated Shield Logo
+                // Animated Shield Logo with Cyber Glow
                 Container(
-                  padding: const EdgeInsets.all(24),
+                  width: 110,
+                  height: 110,
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 2),
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.6), width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 30,
-                        spreadRadius: 5,
+                        color: AppColors.primary.withValues(alpha: 0.45),
+                        blurRadius: 36,
+                        spreadRadius: 6,
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.shield_outlined,
-                    size: 64,
-                    color: AppColors.primary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.asset(
+                      'assets/images/app_icon.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
                     .animate()
