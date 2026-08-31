@@ -108,15 +108,16 @@ secureguard-mobile/
 
 ## 📚 Complete Documentation Suite
 
-Comprehensive technical, architectural, and operational documentation is available in the [`docs/`](docs/) directory:
+Comprehensive technical, architectural, and operational documentation is available in the [`docs/`](docs/) directory and compiled to high-fidelity PDF dossiers:
 
-| Document | Description |
-| :--- | :--- |
-| 📋 [**Project Technical Report**](docs/PROJECT_REPORT.md) | Executive project dossier, problem matrix, test coverage, and security audit. |
-| 🧠 [**Architecture Mindmap**](docs/MINDMAP.md) | Visual Mermaid system architecture, dual mode dataflows, and navigation graphs. |
-| 📖 [**Operations Walkthrough**](docs/WALKTHROUGH.md) | End-to-end screen workflows, triage steps, and developer user manual. |
-| 🗺️ [**Product Roadmap**](docs/ROADMAP.md) | Strategic evolution phases, milestone timelines, and feature deliverables. |
-| ⚡ [**API Integration Guide**](docs/API_INTEGRATION.md) | FastAPI endpoint contracts, WebSocket streaming, and deployment guides. |
+| Document | PDF Dossier | Description |
+| :--- | :---: | :--- |
+| 📋 [**Project Technical Report**](docs/PROJECT_REPORT.md) | [📄 PDF](docs/PROJECT_REPORT.pdf) | Master academic & technical report covering all 12 chapters, STRIDE threat model, and test results. |
+| 🔍 [**Documentation Status & Master Audit**](docs/DOCUMENTATION_STATUS.md) | [📄 PDF](docs/DOCUMENTATION_STATUS.pdf) | Ground-truth engineering audit validating all 16 components against the actual codebase. |
+| 📋 [**Evidence Index & Register**](docs/EVIDENCE_INDEX.md) | [📄 PDF](docs/EVIDENCE_INDEX.pdf) | Master checklist indexing 48 evidence items (screenshots, code snippets, logs, videos, diagrams). |
+| 📖 [**Technical Walkthrough & Operations**](docs/WALKTHROUGH.md) | [📄 PDF](docs/WALKTHROUGH.pdf) | 30-section step-by-step engineering deployment and analyst operations manual. |
+| 🗺️ [**Product & Engineering Roadmap**](docs/ROADMAP.md) | [📄 PDF](docs/ROADMAP.pdf) | Authoritative 17-phase development lifecycle and status delivery matrix. |
+| 🧠 [**Master Architecture Mindmap**](docs/MINDMAP.md) | [📄 PDF](docs/MINDMAP.pdf) | Visual 8-branch Mermaid mindmap, component hierarchy topology, and verification matrix. |
 
 ---
 
