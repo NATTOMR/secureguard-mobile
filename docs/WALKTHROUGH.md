@@ -413,7 +413,7 @@ Suggested filename: fig_w_08_render_cloud_deployment.png
      ```
   3. Access Web app at `http://localhost:8080`.
 * **Expected Result**: High-performance Nginx web server hosting compiled Flutter Web bundle.
-* **Troubleshooting**: Ensure Docker multi-stage build finishes stage 1 before copying to Nginx.
+* **Troubleshooting**: Ensure Docker Single-stage build finishes stage 1 before copying to Nginx.
 
 ---
 

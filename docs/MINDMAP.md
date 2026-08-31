@@ -53,7 +53,7 @@ mindmap
         /ws/alerts (Real-Time Threat Stream)
         Dynamic Scheme Conversion (http->ws, https->wss)
         Query Token Authentication Handshake
-        Exponential Backoff Reconnect Loop
+        fixed 15-second retry Reconnect Loop
       Authentication Tier
         Stateless JWT HS256 Tokens
         Password bcrypt Hashing
@@ -153,11 +153,11 @@ graph TD
         REPOS["Monitored Repositories<br>• Health Grades A-F<br>• Branch Tracking<br>• Trigger SAST Scan"]
         ALERTS["SOC Alert Triage<br>• Severity Filtering<br>• Syslog Inspection<br>• Quarantine IP Action"]
         AI["AI Security Copilot<br>• Streaming Chat UI<br>• CVE-2024-3094 Patches<br>• SQLi / Secret Rotation"]
-        REPORTS["Compliance PDF Engine<br>• SOC 2 / ISO 27001<br>• SHA256 Audit Stamp<br>• Pure-Dart Vector PDF"]
+        REPORTS["Compliance PDF Engine<br>• SOC 2 / ISO 27001<br>• Time-Stamped Audit ID<br>• Pure-Dart Vector PDF"]
         SETT["Settings & Diagnostics<br>• Environment Switcher<br>• Server Ping Tester<br>• Biometric Lock Toggle"]
     end
 
-    subgraph "STATE & DOMAIN TIER (Riverpod 2.6.1)"
+    subgraph "STATE & DOMAIN TIER (Riverpod 2.5.1)"
         AUTH_P["AuthStateNotifier<br>• JWT Bearer Token<br>• Biometric Session Gate"]
         DASH_P["DashboardStreamProvider<br>• Telemetry Polling<br>• Cached State Hydration"]
         ALERT_P["WebSocketAlertProvider<br>• Full-Duplex Threat Stream<br>• Event Filtering State"]
@@ -166,7 +166,7 @@ graph TD
 
     subgraph "DATA & TRANSPORT TIER"
         API_C["ApiClient (Dio 5.4.1)<br>• 12s Timeout Gates<br>• ApiException Mapping<br>• Dynamic Base URL"]
-        WS_C["WebSocketService<br>• http->ws / https->wss<br>• Token Handshake<br>• Exponential Backoff"]
+        WS_C["WebSocketService<br>• http->ws / https->wss<br>• Token Handshake<br>• fixed 15-second retry"]
         SEC_S["SecureStorageService<br>• Android Keystore (AES-256)<br>• Apple Keychain"]
         HIVE_S["HiveStorageService<br>• securepulse_cache Box<br>• Zero-Latency Offline Read"]
     end

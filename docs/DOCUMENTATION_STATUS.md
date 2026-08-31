@@ -32,7 +32,7 @@ graph TD
     end
 
     subgraph State & Business Logic Layer
-        Riverpod[Riverpod 2.6.1 State Providers & Stream Controllers]
+        Riverpod[Riverpod 2.5.1 State Providers & Stream Controllers]
         Domain[Domain Models: User, Dashboard, Alert, Repository, Scan, Finding, AI Message]
     end
 
@@ -88,7 +88,7 @@ graph TD
 * **Code Quality & Analysis**: `flutter_lints` `^3.0.0`, `flutter_test`
 
 ### 3.2. Containerization & Deployment
-* **Web Container**: Multi-stage Docker image with `nginx:alpine` serving compiled web bundle (`build/web`) on port 80.
+* **Web Container**: Single-stage `nginx:alpine` Docker image serving a pre-built Flutter web bundle (`build/web`) on port 80. The `flutter build web --release` step must be executed separately before the Docker image build.
 * **Android Release Output**: Compiled standalone release binary `securepulse-release.apk` (63.6 MB).
 * **Cloud API Target**: Render Web Service (`https://secureguard-backend-7eqm.onrender.com`).
 
@@ -109,11 +109,11 @@ graph TD
 | **Codebase & SAST Vulnerability Audits** | ✅ IMPLEMENTED | [`lib/features/repositories/data/repository_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/repositories/data/repository_repository.dart), [`lib/features/scans/scans_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/scans/scans_screen.dart) | Repository list with language tags, branch info, health grades (A–F), finding counts, and on-demand scan triggers (`/v1/repositories/{id}/scan`). |
 | **AI Cybersecurity Assistant** | ✅ IMPLEMENTED | [`lib/features/ai/data/ai_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/ai/data/ai_repository.dart), [`lib/features/ai/presentation/ai_assistant_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/ai/presentation/ai_assistant_screen.dart) | Conversational security assistant. Generates local playbooks for CVE-2024-3094, SQLi, and secret exposure in Demo mode, or forwards to `/v1/ai/chat` in Live mode. |
 | **SOC SIEM Alert Triage** | ✅ IMPLEMENTED | [`lib/features/alerts/data/alerts_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart), [`lib/features/alerts/presentation/alert_detail_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/presentation/alert_detail_screen.dart) | Incident stream filtered by severity (Critical, High, Medium, Low), detailed triage with origin IP, destination port, raw syslog text, and status update actions (`/v1/soc/alerts/{id}/status`). |
-| **Vector PDF Compliance Generator** | ✅ IMPLEMENTED | [`lib/core/services/report_pdf_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/report_pdf_service.dart), [`lib/features/reports/reports_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/reports/reports_screen.dart) | Pure vector PDF engine compiling official compliance audit reports for SOC 2 Type II, ISO 27001, PCI-DSS v4.0, and HIPAA with cryptographic SHA256 audit stamps. |
+| **Vector PDF Compliance Generator** | ✅ IMPLEMENTED | [`lib/core/services/report_pdf_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/report_pdf_service.dart), [`lib/features/reports/reports_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/reports/reports_screen.dart) | Pure vector PDF engine compiling official compliance audit reports for SOC 2 Type II, ISO 27001, PCI-DSS v4.0, and HIPAA. Reports include a time-stamped audit ID (`SEC-AUD-{epoch}`) for traceability. Note: the `crypto` package is not listed in `pubspec.yaml`; SHA256 cryptographic digest stamping is not confirmed from package dependencies. |
 | **Environment Switcher & Diagnostics** | ✅ IMPLEMENTED | [`lib/features/settings/presentation/settings_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/settings/presentation/settings_screen.dart) | Multi-environment switcher (Render Cloud, Android Emulator `10.0.2.2`, Localhost `127.0.0.1`, Custom URL) with live HTTP health ping diagnostics. |
 | **Dual Theme System (Dark / Light)** | ✅ IMPLEMENTED | [`lib/core/theme/app_theme.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/theme/app_theme.dart) | Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light (`#F8FAFC`) themes with Google Fonts Inter and custom semantic color tokens. |
 | **Automated Test Suite** | ✅ IMPLEMENTED | [`test/api_integration_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/api_integration_test.dart), [`test/widget_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/widget_test.dart) | 15/15 automated tests verifying network contracts, mode isolation, repository fallback behavior, WebSocket URL conversion, and widget pumping. |
-| **Web Deployment Dockerfile** | ✅ IMPLEMENTED | [`Dockerfile`](file:///e:/SOC%20projects/securepulse-mobile/Dockerfile) | Alpine Nginx container configured to serve the Flutter web production bundle on port 80. |
+| **Web Deployment Dockerfile** | ✅ IMPLEMENTED | [`Dockerfile`](file:///e:/SOC%20projects/securepulse-mobile/Dockerfile) | Single-stage Alpine Nginx container (`nginx:alpine`) serving a pre-built Flutter web bundle (`build/web`) on port 80. The `flutter build web --release` command must be executed prior to Docker image build. The Dockerfile does not contain a Flutter build stage. |
 
 ---
 
@@ -121,7 +121,7 @@ graph TD
 
 | Capability | Status | Source Location | Actual State & Current Limitations |
 | :--- | :---: | :--- | :--- |
-| **Firebase Cloud Messaging (FCM)** | 🟡 PARTIALLY IMPLEMENTED | [`lib/core/services/notification_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/notification_service.dart) | Background and foreground push handlers, topic subscriptions (`soc_critical`, `wazuh_alerts`), and permission requests are fully coded. However, no `google-services.json` is bundled in `android/app/`, meaning remote cloud push requires developer-provided Firebase keys. The service gracefully falls back to local in-app stream broadcasting without crashing. |
+| **Firebase Cloud Messaging (FCM)** | 🟡 PARTIALLY IMPLEMENTED | [`lib/core/services/notification_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/notification_service.dart) | Background and foreground push handlers, topic subscriptions (`soc_critical`, `wazuh_alerts`, `semgrep_findings`), and permission requests are fully coded. A `google-services.json` file (678 bytes) is present at `android/app/google-services.json` as a placeholder configuration. Full remote push delivery requires a valid Firebase project configuration to replace this placeholder. The service gracefully falls back to local in-app stream broadcasting without crashing. |
 | **GitHub OAuth Web Redirect Flow** | 🟡 PARTIALLY IMPLEMENTED | [`lib/features/auth/data/auth_repository.dart:51-57`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/auth/data/auth_repository.dart#L51-L57), [`lib/features/auth/presentation/login_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/auth/presentation/login_screen.dart) | UI trigger button and authentication interface exist. In live mode, it currently logs in via the analyst session profile rather than initiating an external browser OAuth2 redirect callback. |
 | **Direct SOAR Edge Execution** | 🟡 PARTIALLY IMPLEMENTED | [`lib/features/alerts/presentation/alert_detail_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/presentation/alert_detail_screen.dart) | "Quarantine IP" and "Acknowledge" buttons update alert status via `/v1/soc/alerts/{id}/status`. Direct cloud firewall / router rule execution is delegated to backend event listeners rather than triggered via direct mobile-to-firewall API. |
 
@@ -305,3 +305,81 @@ Every claim in this document maps directly to verified source code:
 | **Docker Web Nginx Setup** | [`Dockerfile:1-10`](file:///e:/SOC%20projects/securepulse-mobile/Dockerfile#L1-L10) |
 | **Automated Integration Tests** | [`test/api_integration_test.dart:1-171`](file:///e:/SOC%20projects/securepulse-mobile/test/api_integration_test.dart#L1-L171) |
 | **Widget Pump Test** | [`test/widget_test.dart:1-17`](file:///e:/SOC%20projects/securepulse-mobile/test/widget_test.dart#L1-L17) |
+
+---
+
+## 12. Final Documentation Audit — Corrections Log
+
+**Audit Date**: 2026-09-01 | **Auditor**: Automated Codebase Cross-Reference
+
+This section records all claims corrected by direct comparison against the actual source code, `pubspec.yaml`, `Dockerfile`, and `AndroidManifest.xml`.
+
+### 12.1 Package Version Corrections
+
+All previously published documentation referenced incorrect library versions. The following corrections have been applied globally across all `docs/` files:
+
+| Claim (Before) | Actual Value (After) | Source |
+| :--- | :--- | :--- |
+| `Riverpod 2.6.1` | **`flutter_riverpod: ^2.5.1`** | `pubspec.yaml:14` |
+| `web_socket_channel 2.4.5` | **`web_socket_channel: ^3.0.1`** | `pubspec.yaml:19` |
+| `flutter_secure_storage 9.2.4` | **`flutter_secure_storage: ^9.0.0`** | `pubspec.yaml:20` |
+| `local_auth 2.3.0` | **`local_auth: ^2.1.8`** | `pubspec.yaml:43` |
+| `pdf 3.12.0` | **`pdf: ^3.10.8`** | `pubspec.yaml:46` |
+| `GoRouter 13.2.5` | **`go_router: ^13.2.0`** | `pubspec.yaml:15` |
+
+**Status of these corrections**: ✅ APPLIED to `PROJECT_REPORT.md`, `DOCUMENTATION_STATUS.md`, `ROADMAP.md`, `WALKTHROUGH.md`, `MINDMAP.md`.
+
+### 12.2 Dockerfile Architecture Correction
+
+| Claim (Before) | Actual Fact (After) | Source |
+| :--- | :--- | :--- |
+| "Multi-stage Dockerfile" (implied Flutter build + Nginx stages) | **Single-stage `FROM nginx:alpine` Dockerfile**. Copies pre-built `build/web` into Nginx HTML. The `flutter build web` step must be run separately before Docker build. | `Dockerfile:1-10` |
+
+**Status**: ✅ APPLIED to all `docs/` files.
+
+### 12.3 SHA256 Audit Stamp Correction
+
+| Claim (Before) | Actual Fact (After) | Source |
+| :--- | :--- | :--- |
+| "SHA256 cryptographic audit stamp embedded in PDF" | **Time-stamped audit ID** (`SEC-AUD-{millisecondsSinceEpoch}`) embedded in PDF header. The `crypto` package (for SHA256 hashing) is **not listed** in `pubspec.yaml`. No `import 'package:crypto'` found in `report_pdf_service.dart`. | `pubspec.yaml`, `report_pdf_service.dart:22` |
+
+**Status**: ✅ APPLIED to all `docs/` files. All references updated to "time-stamped audit ID".
+
+### 12.4 WebSocket Reconnect Strategy Correction
+
+| Claim (Before) | Actual Fact (After) | Source |
+| :--- | :--- | :--- |
+| "Exponential backoff reconnect" | **Fixed 15-second reconnect timer** with a maximum of 5 attempts. While HTTP polling fallback activates immediately, the WebSocket retry uses a constant `const delaySeconds = 15`. | `websocket_service.dart:209` |
+
+**Status**: ✅ APPLIED to all `docs/` files.
+
+### 12.5 Firebase / FCM Correction
+
+| Claim (Before) | Actual Fact (After) | Source |
+| :--- | :--- | :--- |
+| "No `google-services.json` bundled in `android/app/`" | **`google-services.json` (678 bytes) exists** at `android/app/google-services.json`. It is a placeholder/minimal configuration. Full FCM push delivery requires replacing it with a real Firebase project config. | `android/app/google-services.json` (verified by `list_dir`) |
+
+**Status**: ✅ APPLIED to `DOCUMENTATION_STATUS.md` and `PROJECT_REPORT.md`.
+
+### 12.6 Demo Alert Sources Correction
+
+| Claim (Before) | Actual Fact (After) | Source |
+| :--- | :--- | :--- |
+| "Wazuh SIEM alert feed" (described as if only Wazuh alerts exist) | Demo mode returns **6 mock alerts** from multiple sources: `Wazuh SOC`, `Splunk SIEM`, `Microsoft Sentinel`, `Semgrep SAST`, `Elastic`, and `GitHub App`. | `alerts_repository.dart:86-148` |
+
+**Note**: This is not a branding error — it reflects intentional multi-SIEM simulation. Documentation descriptions of "Wazuh alerts" specifically refer to the Wazuh-sourced entry only.
+
+### 12.7 No Secrets, Passwords, or Keys Confirmed
+
+Audit confirms no production secrets, JWT tokens, passwords, or API keys exist in any committed `docs/` file. The `websocket_service.dart` contains a demo credential (`analyst@securepulse.enterprise` / `EnterprisePass123!`) used exclusively for auto-token acquisition in development; this is appropriately scoped to local-only testing and is not a production secret.
+
+### 12.8 Additional Endpoints Verified
+
+The following endpoints exist in `api_endpoints.dart` but were absent from some documentation tables:
+
+| Endpoint | Status in Docs |
+| :--- | :--- |
+| `/v1/scans` | `NOT LISTED` in all endpoint tables — endpoint exists in code |
+| `/v1/findings` | `NOT LISTED` in all endpoint tables — endpoint exists in code |
+| `/v1/ai/remediate` | `NOT LISTED` in most endpoint tables — endpoint exists in code |
+

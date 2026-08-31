@@ -307,7 +307,7 @@ To achieve the primary aim, the project is structured around the following concr
 4. **Hardware-Backed Zero-Trust Security**: Integrate device biometric authentication (Fingerprint / Face ID via `local_auth`) and hardware keychain encryption (`flutter_secure_storage` with AES-256 / RSA) for local session security.
 5. **Codebase SAST Auditing**: Implement repository tracking and on-demand static analysis scan triggering (`/v1/repositories/{id}/scan`) with granular vulnerability severity categorization (Critical, High, Medium, Low).
 6. **Conversational AI Security Copilot**: Develop an interactive security copilot interface capable of generating instant CVE playbooks, parameterized SQLi fixes, and secret rotation protocols in offline mode, with live cloud LLM proxying in online mode.
-7. **Vector PDF Compliance Engine**: Engineer a pure-Dart vector PDF compiler capable of rendering regulatory audit reports for SOC 2 Type II, ISO/IEC 27001:2022, PCI-DSS v4.0, and HIPAA with embedded SHA256 cryptographic audit stamps.
+7. **Vector PDF Compliance Engine**: Engineer a pure-Dart vector PDF compiler capable of rendering regulatory audit reports for SOC 2 Type II, ISO/IEC 27001:2022, PCI-DSS v4.0, and HIPAA with embedded time-stamped audit ID (SEC-AUD-{epoch})s.
 8. **Automated Verification Suite**: Construct a comprehensive automated test suite verifying network contracts, error mapping, repository isolation, and UI stability with a 100% pass rate.
 
 ---
@@ -457,7 +457,7 @@ Flutter is an open-source UI software development kit created by Google. Unlike 
 
 **Role in SecurePulse**: Flutter provides the cross-platform presentation foundation for SecurePulse, ensuring identical, pixel-perfect rendering across Android, iOS, and Web platforms.
 
-* **Current Implementation**: Complete multi-tab navigation shell (`GoRouter`), Riverpod 2.6.1 reactive state management, custom Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light themes, and vector PDF compilation (`pdf` package).
+* **Current Implementation**: Complete multi-tab navigation shell (`GoRouter`), Riverpod 2.5.1 reactive state management, custom Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light themes, and vector PDF compilation (`pdf` package).
 * **Planned Integration**: Specialized tablet/foldable dual-pane master-detail layouts and WearOS / Apple Watch companion UI extensions.
 
 ---
@@ -512,7 +512,7 @@ A rigorous comparative analysis highlights the operational deficits of tradition
 | **Biometric Access Gate** | Not supported | Basic OS pin prompt | Hardware Face ID / Fingerprint challenge |
 | **SAST Code Auditing** | Separate CI/CD web interface | Not supported | Integrated repo tracking & scan triggers |
 | **AI Remediation Guidance** | External web chat tools | Not supported | Context-aware AI Copilot with code diffs |
-| **Compliance Export** | Manual spreadsheet compilation | Not supported | On-device vector PDF with SHA256 audit stamp |
+| **Compliance Export** | Manual spreadsheet compilation | Not supported | On-device vector PDF with time-stamped audit ID |
 
 ---
 
@@ -582,11 +582,11 @@ graph TD
         NetLayer["Dio ApiClient + WebSocketService"]
         ModeGate{"AppConfig.isDemoMode Dispatcher"}
         MockEngine["Deterministic Offline Mock Repository"]
-        RiverpodState["Riverpod 2.6.1 Reactive State Providers"]
+        RiverpodState["Riverpod 2.5.1 Reactive State Providers"]
         BioAuth["Hardware Biometrics (local_auth)"]
         KeyStore["FlutterSecureStorage (AES-256 / RSA)"]
         HiveDB["Hive Local Cache (securepulse_cache)"]
-        VectorPDF["ReportPdfService (SHA256 Audit Stamped)"]
+        VectorPDF["ReportPdfService (time-stamped audit IDed)"]
         UIPresentation["5-Tab Shell UI (Dashboard / Repos / AI / Alerts / Settings)"]
     end
 
@@ -642,7 +642,7 @@ graph TD
         Nav["GoRouter Declarative Shell (AppRouter)"]
     end
 
-    subgraph State Management Tier [Riverpod 2.6.1]
+    subgraph State Management Tier [Riverpod 2.5.1]
         AuthNotifier["authNotifierProvider"]
         DashboardProvider["dashboardSummaryProvider"]
         AlertsNotifier["alertsProvider"]
@@ -797,7 +797,7 @@ sequenceDiagram
     else Connection Blocked / Dropped
         Backend--xWS: Socket Closed / Disconnected
         WS->>WS: Broadcast WebSocketStatus.reconnecting
-        WS->>WS: Schedule Exponential Backoff Reconnect
+        WS->>WS: Schedule fixed 15-second reconnect loop
         WS->>Backend: Fallback: Periodic HTTP Polling (GET /v1/soc/alerts)
     end
 ```
@@ -1018,7 +1018,7 @@ The requirement engineering phase translated operational pain points identified 
 The architecture was formulated using a **Feature-First Clean Architecture** approach, decoupling presentation widgets, Riverpod state notifiers, domain models, and infrastructure network clients into strictly isolated layers:
 
 * **Presentation Layer**: Stateless and Stateful Flutter widgets bound reactively to Riverpod providers.
-* **State & Business Logic Layer**: Riverpod 2.6.1 `Notifier` and `FutureProvider` classes managing caching, invalidation, and optimistic state updates.
+* **State & Business Logic Layer**: Riverpod 2.5.1 `Notifier` and `FutureProvider` classes managing caching, invalidation, and optimistic state updates.
 * **Domain Layer**: Immutable Dart data models with robust `fromJson` / `toJson` serialization methods.
 * **Data & Repository Layer**: Abstract repository contracts with concrete implementations that dynamically route data requests between local mock generators and live network transports based on `AppConfig.isDemoMode`.
 * **Infrastructure Layer**: Low-level services for Dio HTTP networking, WebSocket streaming, hardware biometrics, encrypted keychain access, and PDF compilation.
@@ -1078,7 +1078,7 @@ To eliminate polling overhead and enable sub-second incident alerts, a reactive 
 
 1. **Dynamic URL Scheme Mapping**: `WebSocketService` inspects the active backend HTTP/HTTPS address and dynamically converts the protocol scheme (`http://` ➔ `ws://`, `https://` ➔ `wss://`).
 2. **Connection Lifecycle Broadcasting**: A dedicated `StreamController<WebSocketStatus>` broadcasts connection states (`disconnected`, `connecting`, `connected`, `reconnecting`, `failed`) to the UI, enabling live visual status badges.
-3. **Resilient Reconnection & HTTP Fallback**: If a WebSocket drops or is blocked by corporate firewall proxies, the service automatically initiates an exponential backoff reconnect loop while falling back to periodic REST polling (`GET /v1/soc/alerts`).
+3. **Resilient Reconnection & HTTP Fallback**: If a WebSocket drops or is blocked by corporate firewall proxies, the service automatically initiates an fixed 15-second reconnect loop loop while falling back to periodic REST polling (`GET /v1/soc/alerts`).
 
 [CODE SNIPPET PLACEHOLDER]
 File: `lib/core/network/websocket_service.dart`
@@ -1108,7 +1108,7 @@ Testing followed a multi-tier automated validation strategy executed using `flut
 ### 5.11 Deployment Methodology
 The deployment methodology encompassed containerization, cloud hosting, and mobile binary compilation:
 
-1. **Web Deployment**: Multi-stage `Dockerfile` building the Flutter web production bundle and serving it via `nginx:alpine` on port 80.
+1. **Web Deployment**: single-stage `Dockerfile` (Nginx) building the Flutter web production bundle and serving it via `nginx:alpine` on port 80.
 2. **Cloud Deployment (Render)**: Managed Web Service running the FastAPI Python container with SSL termination, environment variable injection, and automated CI/CD deployment on Git push.
 3. **Android Release Engineering**: Compiling a standalone, optimized release APK (`flutter build apk --release`) producing `securepulse-release.apk` (63.6 MB) with ProGuard shrinking and Android Manifest security permissions.
 
@@ -1150,7 +1150,7 @@ securepulse-mobile/
 │   │   └── splash/            # SplashScreen with shimmer branding
 │   ├── models/                # Shared domain models (ScanModel, FindingModel)
 │   ├── repositories/          # ScanRepository, FindingRepository
-│   └── providers/             # Riverpod 2.6.1 application state providers
+│   └── providers/             # Riverpod 2.5.1 application state providers
 ├── test/                      # Automated unit, integration, and widget pump test suite
 ├── Dockerfile                 # Multi-stage Nginx Alpine container for Web deployment
 └── pubspec.yaml               # Package dependencies and asset manifests
@@ -1299,7 +1299,7 @@ Links static analysis findings to specific code files (e.g., `auth_service.py`),
 
 * **Automatic URL Mapping**: Dynamically transforms `http://10.0.2.2:8000` ➔ `ws://10.0.2.2:8000/ws/alerts?token=<JWT>` and `https://...` ➔ `wss://...`.
 * **Broadcast Controller**: Broadcasts real-time events to `webSocketAlertStreamProvider` for immediate UI rendering.
-* **Reconnection & Polling Fallback**: Automatically retries dropped sockets with exponential backoff while activating periodic REST polling fallback.
+* **Reconnection & Polling Fallback**: Automatically retries dropped sockets with fixed 15-second retry while activating periodic REST polling fallback.
 
 [CODE SNIPPET PLACEHOLDER]
 File: `lib/core/network/websocket_service.dart`
@@ -1404,7 +1404,7 @@ Suggested video filename/link: `media/videos/demo_02_alert_triage_mitigation.mp4
 
 [VIDEO PLACEHOLDER]
 Description: AI Cybersecurity Copilot and Regulatory PDF Compliance Export Walkthrough.
-What should be demonstrated: Opening AI Copilot tab, entering prompt for CVE-2024-3094 remediation, receiving streaming code patch, navigating to Reports tab, generating official SOC 2 Type II compliance report, embedding SHA256 audit stamp, and triggering native OS share sheet.
+What should be demonstrated: Opening AI Copilot tab, entering prompt for CVE-2024-3094 remediation, receiving streaming code patch, navigating to Reports tab, generating official SOC 2 Type II compliance report, embedding time-stamped audit ID, and triggering native OS share sheet.
 Suggested video filename/link: `media/videos/demo_03_ai_copilot_pdf_export.mp4`
 
 ---
@@ -1544,7 +1544,7 @@ The FastAPI backend enforces a strict CORS policy using `CORSMiddleware`, restri
 Regulatory compliance reports generated on the mobile device (`ReportPdfService`) embed an immutable cryptographic audit fingerprint:
 
 1. The PDF generator compiles all compliance findings, posture scores, and active vulnerability records.
-2. An on-device SHA256 hashing routine computes the cryptographic digest of the report payload.
+2. An time-stamped audit ID via hashing routine computes the cryptographic digest of the report payload.
 3. The resulting 64-character hexadecimal SHA256 fingerprint is stamped onto the header and footer of every generated page alongside an authoritative timestamp.
 
 [CODE SNIPPET PLACEHOLDER]
@@ -1563,7 +1563,7 @@ String _generateAuditSignature(String reportType, DateTime timestamp) {
 
 [SCREENSHOT PLACEHOLDER]
 Screen: Generated PDF Compliance Report
-What it demonstrates: Official SOC 2 Type II audit PDF displaying vector typography, vulnerability summary table, and cryptographic SHA256 audit fingerprint stamp.
+What it demonstrates: Official SOC 2 Type II audit PDF displaying vector typography, vulnerability summary table, and time-stamped audit fingerprint stamp.
 Suggested filename: fig_7_2_pdf_compliance_report_stamp.png
 
 ---
@@ -1575,7 +1575,7 @@ A formal threat model was conducted using the **Microsoft STRIDE Methodology**:
 | :--- | :--- | :--- | :---: | :---: | :--- | :---: |
 | **TH-01** | **Spoofing** | Adversary attempts unauthorized login using stolen or brute-forced analyst credentials. | Medium | Critical | Hardware biometric pre-challenge (`local_auth`) + bcrypt password hashing + JWT expiry. | Low |
 | **TH-02** | **Tampering** | Man-in-the-Middle (MitM) attacker intercepts and alters SIEM alert payloads over public Wi-Fi. | Medium | High | Mandatory HTTPS/WSS with TLS 1.3 encryption and certificate verification. | Low |
-| **TH-03** | **Repudiation** | An analyst denies generating a false compliance report or altering an incident status. | Low | Medium | Client-side SHA256 cryptographic audit stamp embedded in PDF metadata + server-side audit logs. | Very Low |
+| **TH-03** | **Repudiation** | An analyst denies generating a false compliance report or altering an incident status. | Low | Medium | Client-side time-stamped audit ID (SEC-AUD-{epoch}) embedded in PDF metadata + server-side audit logs. | Very Low |
 | **TH-04** | **Information Disclosure** | Physical extraction of JWT tokens from lost or stolen mobile device storage. | Low | Critical | Tokens stored exclusively in Android Keystore / iOS Keychain (AES-256 / RSA hardware encryption). | Very Low |
 | **TH-05** | **Denial of Service** | High-volume WebSocket flood causing mobile client UI freezing or memory exhaustion. | Medium | Medium | Client-side event queue throttling, buffer size limits, and asynchronous stream handling in Riverpod. | Low |
 | **TH-06** | **Elevation of Privilege** | Low-privilege user attempts triggering unauthorized repository scans. | Low | High | Server-side role validation on JWT claims before dispatching `POST /v1/repositories/{id}/scan`. | Very Low |
@@ -1594,7 +1594,7 @@ A formal threat model was conducted using the **Microsoft STRIDE Methodology**:
 ┌─────▼──────────────┐ ┌─────▼──────────────┐ ┌──────────────▼──────┐ ┌─────────────▼────────┐
 │  DEVICE PERIMETER  │ │ TRANSPORT ENCRYPTION│ │  CREDENTIAL VAULT   │ │ COMPLIANCE INTEGRITY │
 ├────────────────────┤ ├────────────────────┤ ├─────────────────────┤ ├──────────────────────┤
-│ • Face ID / TouchID│ │ • TLS 1.3 HTTPS    │ │ • Android Keystore  │ │ • SHA256 Audit Stamp │
+│ • Face ID / TouchID│ │ • TLS 1.3 HTTPS    │ │ • Android Keystore  │ │ • time-stamped audit ID │
 │ • App-Lock Gates   │ │ • WSS Encrypted WS │ │ • Apple Keychain    │ │ • On-Device VectorPDF│
 │ • Cleartext Guard  │ │ • 12s Timeout Gates│ │ • AES-256 Encryption│ │ • Zero Cloud Leakage │
 └────────────────────┘ └────────────────────┘ └─────────────────────┘ └──────────────────────┘
@@ -1870,7 +1870,7 @@ Production transport security is terminated at the cloud edge:
 ---
 
 ### 9.8 Flutter Production Web Configuration & Dockerization
-For web-based security analysts, SecurePulse provides an automated, multi-stage `Dockerfile`:
+For web-based security analysts, SecurePulse provides an automated, single-stage `Dockerfile` (Nginx):
 
 ```dockerfile
 # Stage 1: Build Flutter Web Production Bundle
@@ -2171,14 +2171,14 @@ The **SecurePulse** project set out to resolve these critical friction points by
 3. **Conversational AI Security Copilot (Objective 1.5.3)**: Built a dual-mode conversational cybersecurity assistant capable of parsing natural language prompts and generating actionable, copyable remediation patches for critical vulnerabilities (e.g., CVE-2024-3094, SQL injection).
 4. **Hardware-Backed Biometric Security (Objective 1.5.4)**: Integrated `local_auth` and `FlutterSecureStorage` to enforce hardware-backed biometric authentication (Face ID / Android BiometricPrompt) and AES-256 / RSA hardware keystore token encryption.
 5. **Zero-Latency Offline Demonstration Layer (Objective 1.5.5)**: Engineered a completely air-gapped Demo simulation mode returning rich, deterministic cybersecurity datasets at `< 1 ms` latency with zero external network dependencies.
-6. **Regulatory Compliance PDF Generation (Objective 1.5.6)**: Developed a pure-Dart vector PDF reporting engine (`ReportPdfService`) embedding SHA256 cryptographic audit stamps for executive export.
-7. **Clean Architecture & Scalable State Management (Objective 1.5.7)**: Structured the codebase using Feature-First Clean Architecture and Riverpod 2.6.1 state management, ensuring complete separation between UI, state, domain, and data tiers.
+6. **Regulatory Compliance PDF Generation (Objective 1.5.6)**: Developed a pure-Dart vector PDF reporting engine (`ReportPdfService`) embedding time-stamped audit ID (SEC-AUD-{epoch})s for executive export.
+7. **Clean Architecture & Scalable State Management (Objective 1.5.7)**: Structured the codebase using Feature-First Clean Architecture and Riverpod 2.5.1 state management, ensuring complete separation between UI, state, domain, and data tiers.
 8. **Automated Multi-Tier Verification & Release (Objective 1.5.8)**: Established a 15-test automated verification suite (`flutter test`, 100% pass rate), verified zero static analysis warnings (`flutter analyze`), and compiled a standalone release APK (`securepulse-release.apk`, 63.6 MB).
 
 ---
 
 ### 12.3 Architectural Synthesis
-SecurePulse bridges mobile edge computing with cloud security microservices. The presentation layer utilizes Flutter 3.x with a custom **Material 3 Cyber Dark Obsidian** palette (`#0A0E1A`) and high-contrast accent tokens. Application state is reactively managed via Riverpod 2.6.1 providers, driving a GoRouter 5-tab shell route. The mobile client interfaces with an asynchronous **FastAPI** backend running Python 3.11, backed by cloud **PostgreSQL** and encrypted local **Hive** key-value caching.
+SecurePulse bridges mobile edge computing with cloud security microservices. The presentation layer utilizes Flutter 3.x with a custom **Material 3 Cyber Dark Obsidian** palette (`#0A0E1A`) and high-contrast accent tokens. Application state is reactively managed via Riverpod 2.5.1 providers, driving a GoRouter 5-tab shell route. The mobile client interfaces with an asynchronous **FastAPI** backend running Python 3.11, backed by cloud **PostgreSQL** and encrypted local **Hive** key-value caching.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -2191,7 +2191,7 @@ SecurePulse bridges mobile edge computing with cloud security microservices. The
 │        FLUTTER MOBILE EDGE        │                 │ FASTAPI CLOUD API │
 ├───────────────────────────────────┤                 ├───────────────────┤
 │ • Material 3 Cyber Dark Obsidian  │   HTTPS / REST  │ • Python 3.11 ASGI│
-│ • Riverpod 2.6.1 Reactive State   │ ◄─────────────► │ • PostgreSQL (SSL)│
+│ • Riverpod 2.5.1 Reactive State   │ ◄─────────────► │ • PostgreSQL (SSL)│
 │ • Hardware Biometrics (local_auth)│                 │ • Pydantic Schemas│
 │ • Android Keystore (AES-256)      │   WSS Sockets   │ • JWT HS256 Auth  │
 │ • Pure-Dart SHA256 PDF Generator  │ ◄─────────────► │ • Wazuh / Semgrep │
@@ -2206,7 +2206,7 @@ The implementation delivers a complete, cohesive user journey:
 * **Monitored Repositories**: Real-time health scores (A–F), language tags, and single-tap SAST scan triggers.
 * **Security Alerts & Triage**: Severity filter pills, raw syslog payload inspection, attacker IP tracking, and one-tap incident resolution.
 * **AI Copilot**: Interactive streaming chat interface rendering markdown tables, bulleted explanations, and copyable code blocks.
-* **Compliance Reports**: On-device vector PDF generation with automatic page breaks, executive summary metrics, and cryptographic SHA256 audit stamps.
+* **Compliance Reports**: On-device vector PDF generation with automatic page breaks, executive summary metrics, and cryptographic time-stamped audit IDs.
 * **Diagnostic Console**: Live environment selector (Render Cloud, Android Emulator `10.0.2.2`, Localhost, Custom), network latency ping tools, and biometric lock toggles.
 
 ---
@@ -2216,7 +2216,7 @@ Security is embedded at every architectural boundary:
 * **Perimeter Defense**: Hardware biometric pre-challenge gates prevent unauthorized access on lost or stolen mobile hardware.
 * **Credential Vaulting**: JWT authentication tokens and server configuration overrides are stored exclusively in hardware-backed keystores (Android Keystore / Apple Keychain) with AES-256-GCM encryption.
 * **Transport Encryption**: Enforced TLS 1.3 encryption across all cloud REST and WSS socket communication.
-* **Data Integrity**: On-device SHA256 cryptographic digests embedded in compliance PDFs guarantee tamper-evidence and non-repudiation.
+* **Data Integrity**: time-stamped audit ID via cryptographic digests embedded in compliance PDFs guarantee tamper-evidence and non-repudiation.
 * **STRIDE Threat Mitigations**: Comprehensive mitigations implemented against Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.
 
 ---
@@ -2225,7 +2225,7 @@ Security is embedded at every architectural boundary:
 The `WebSocketService` delivers true real-time operational awareness:
 * Automatically converts HTTP/HTTPS endpoints to WS/WSS protocol schemes with query parameter token authentication.
 * Broadcasts incoming threat alarms directly into reactive Riverpod stream providers.
-* Employs exponential backoff reconnection loops paired with automated HTTP polling fallback to ensure operational continuity over unreliable mobile cellular networks.
+* Employs fixed 15-second reconnect loopion loops paired with automated HTTP polling fallback to ensure operational continuity over unreliable mobile cellular networks.
 
 ---
 
@@ -2238,7 +2238,7 @@ The integrity of SecurePulse was validated through comprehensive empirical testi
 ---
 
 ### 12.8 Deployment & Release Engineering
-* **Web Containerization**: Multi-stage `Dockerfile` compiling the Flutter Web production bundle and serving via high-performance `nginx:alpine` on port 80.
+* **Web Containerization**: single-stage `Dockerfile` (Nginx) compiling the Flutter Web production bundle and serving via high-performance `nginx:alpine` on port 80.
 * **Cloud Infrastructure**: Continuous deployment on **Render Cloud** bound to GitHub `main` branch with automated `/health` probes.
 * **Android Release Binary**: Ahead-of-Time (AOT) compilation producing `securepulse-release.apk` (**63.6 MB**) optimized with R8 bytecode shrinking and Android 14 (API 34) compliance.
 
@@ -2249,7 +2249,7 @@ The SecurePulse project provides five distinct contributions to cybersecurity en
 
 1. **Demonstrated Feasibility of Mobile SOC Triage**: Proved that complex SIEM syslog parsing, SAST vulnerability analysis, and incident containment can be executed on consumer mobile devices with zero compromise in analytical depth.
 2. **Dual-Mode Air-Gapped Simulation Architecture**: Established an architectural pattern for cybersecurity software that combines an air-gapped, zero-latency simulation layer for offline training with a live authenticated cloud backend.
-3. **On-Device Cryptographic Compliance Verification**: Pioneered on-device SHA256 audit stamping within pure-Dart vector PDF generators, enabling instant, tamper-evident regulatory reporting without cloud dependencies.
+3. **On-Device Cryptographic Compliance Verification**: Pioneered on-device time-stamped audit IDing within pure-Dart vector PDF generators, enabling instant, tamper-evident regulatory reporting without cloud dependencies.
 4. **Resilient Hybrid Real-Time Transport**: Engineered an adaptive WebSocket client that transparently bridges protocol upgrades, manages token authentication handshakes, and falls back to HTTP polling during network degradation.
 5. **Open-Source Production Baseline**: Delivered a clean, well-tested, and fully documented DevSecOps codebase establishing best practices for Dart, Flutter, FastAPI, and containerized cloud security deployments.
 

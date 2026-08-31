@@ -58,7 +58,7 @@ graph TD
 * **Objective**: Formulate the multi-tier Clean Architecture, reactive state management model, and containerized cloud deployment topology.
 * **Tasks**:
   * Design 4-layer Feature-First Clean Architecture (Presentation, State, Domain, Data).
-  * Establish Riverpod 2.6.1 provider dependencies and GoRouter 5-tab shell navigation.
+  * Establish Riverpod 2.5.1 provider dependencies and GoRouter 5-tab shell navigation.
   * Design dual-mode repository dispatching architecture (Demo Mode vs. Live Network Mode).
 * **Technology**: Flutter/Dart, Mermaid Diagrams, Clean Architecture Design Patterns.
 * **Deliverables**: `docs/MINDMAP.md`, Architecture Specification in `docs/PROJECT_REPORT.md`.
@@ -151,7 +151,7 @@ graph TD
   * Implement Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light themes in `AppTheme`.
   * Build 5-tab shell navigation with animated navbar transitions (`SGNavbar`).
   * Implement executive dashboard with interactive posture gauge and `fl_chart` donut breakdown.
-* **Technology**: Flutter 3.x, Dart 3.x, GoRouter 13.2.5, fl_chart 0.66.2, Google Fonts.
+* **Technology**: Flutter 3.x, Dart 3.x, GoRouter 13.2.0, fl_chart 0.66.2, Google Fonts.
 * **Deliverables**: Complete `lib/` codebase, `SecurePulseApp` root widget.
 * **Validation**: Widget pump testing (`TC-15`) and 60.0–120.0 fps frame rate profiling.
 * **Status**: ✅ COMPLETED
