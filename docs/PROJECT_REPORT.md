@@ -2262,16 +2262,43 @@ As cyber threats continue to accelerate in speed and sophistication, the require
 
 ## REFERENCES
 
-1. Google Flutter Team, *"Flutter Documentation and Architectural Overview,"* Google LLC, 2026. [Online]. Available: https://docs.flutter.dev
-2. Tiangolo, S., *"FastAPI: Modern, High-Performance Web Framework for Python,"* 2026. [Online]. Available: https://fastapi.tiangolo.com
-3. Wazuh Inc., *"Wazuh: Open Source Security Monitoring Architecture & Documentation,"* 2026. [Online]. Available: https://documentation.wazuh.com
-4. Semgrep Team, *"Semgrep: Lightweight Static Analysis for Security Vulnerabilities,"* r2c / Semgrep Inc., 2026. [Online]. Available: https://semgrep.dev
-5. Remi Rousselet, *"Riverpod: A Reactive Caching and Data-Binding Framework for Dart & Flutter,"* 2026. [Online]. Available: https://riverpod.dev
-6. Internet Engineering Task Force (IETF), *"RFC 7519: JSON Web Token (JWT),"* May 2015. [Online]. Available: https://datatracker.ietf.org/doc/html/rfc7519
-7. Internet Engineering Task Force (IETF), *"RFC 6455: The WebSocket Protocol,"* Dec 2011. [Online]. Available: https://datatracker.ietf.org/doc/html/rfc6455
-8. National Institute of Standards and Technology (NIST), *"Framework for Improving Critical Infrastructure Cybersecurity (NIST CSF v2.0),"* U.S. Department of Commerce, 2024.
-9. American Institute of Certified Public Accountants (AICPA), *"SOC 2® — SOC for Service Organizations: Trust Services Criteria,"* AICPA, 2022.
-10. International Organization for Standardization, *"ISO/IEC 27001:2022 Information Security Management Systems,"* ISO, Geneva, Switzerland, 2022.
+[1] Google LLC, *"Flutter Documentation and Architectural Overview,"* Flutter Open Source Project, 2026. [Online]. Available: https://docs.flutter.dev
+
+[2] Dart Language Team, *"Dart Programming Language Specification and Core Libraries,"* Google LLC, 2026. [Online]. Available: https://dart.dev
+
+[3] S. Ramírez, *"FastAPI: Modern, High-Performance Web Framework for Python,"* FastAPI Project, 2026. [Online]. Available: https://fastapi.tiangolo.com
+
+[4] Python Software Foundation, *"Python 3.11 Documentation and Asynchronous I/O Support,"* PSF, 2024. [Online]. Available: https://docs.python.org/3/
+
+[5] The PostgreSQL Global Development Group, *"PostgreSQL 16 Relational Database Management System Documentation,"* PostgreSQL Org, 2024. [Online]. Available: https://www.postgresql.org/docs/
+
+[6] Wazuh Inc., *"Wazuh: Open Source Security Monitoring and SIEM Architecture,"* Wazuh Documentation, 2026. [Online]. Available: https://documentation.wazuh.com
+
+[7] GitHub Inc., *"GitHub REST API and Repository Telemetry Documentation,"* GitHub Docs, 2026. [Online]. Available: https://docs.github.com/en/rest
+
+[8] GitHub Inc., *"Securing Webhooks with HMAC SHA-256 Signatures,"* GitHub Security Guide, 2026. [Online]. Available: https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
+
+[9] Semgrep Inc. / r2c, *"Semgrep Static Application Security Testing (SAST) Rule Guide and Engine Architecture,"* Semgrep Docs, 2026. [Online]. Available: https://semgrep.dev/docs/
+
+[10] I. Fette and A. Melnikov, *"The WebSocket Protocol,"* RFC 6455, Internet Engineering Task Force (IETF), Dec. 2011. [Online]. Available: https://datatracker.ietf.org/doc/html/rfc6455
+
+[11] M. Jones, J. Bradley, and N. Sakimura, *"JSON Web Token (JWT),"* RFC 7519, Internet Engineering Task Force (IETF), May 2015. [Online]. Available: https://datatracker.ietf.org/doc/html/rfc7519
+
+[12] OWASP Foundation, *"OWASP Mobile Application Security Verification Standard (MASVS) v2.0,"* Open Web Application Security Project, 2024. [Online]. Available: https://mas.owasp.org/MASVS/
+
+[13] OWASP Foundation, *"OWASP API Security Top 10 2023,"* Open Web Application Security Project, 2023. [Online]. Available: https://owasp.org/API-Security/
+
+[14] Google Android Open Source Project, *"Android Keystore System and Hardware-Backed Cryptographic Keys,"* Android Developers Guide, 2026. [Online]. Available: https://developer.android.com/privacy-and-security/keystore
+
+[15] Render Services Inc., *"Render Cloud Web Services, Docker Deployments, and Environment Configuration,"* Render Documentation, 2026. [Online]. Available: https://render.com/docs
+
+[16] R. Rousselet, *"Riverpod: Reactive State Management and Dependency Injection for Dart & Flutter,"* Riverpod Guide, 2026. [Online]. Available: https://riverpod.dev
+
+[17] National Institute of Standards and Technology (NIST), *"Framework for Improving Critical Infrastructure Cybersecurity (NIST CSF v2.0),"* U.S. Department of Commerce, 2024. [Online]. Available: https://www.nist.gov/cyberframework
+
+[18] American Institute of Certified Public Accountants (AICPA), *"SOC 2® — SOC for Service Organizations: Trust Services Criteria,"* AICPA, 2022.
+
+[19] International Organization for Standardization (ISO), *"ISO/IEC 27001:2022 Information Security, Cybersecurity and Privacy Protection,"* ISO/IEC, Geneva, Switzerland, 2022.
 
 ---
 
