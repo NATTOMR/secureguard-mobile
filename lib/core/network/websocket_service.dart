@@ -21,7 +21,6 @@ class WebSocketService {
 
   bool _isManuallyClosed = false;
   int _reconnectAttempts = 0;
-  static const int _maxReconnectDelaySeconds = 30;
 
   final _statusController = StreamController<WebSocketStatus>.broadcast();
   final _eventController = StreamController<Map<String, dynamic>>.broadcast();
@@ -207,10 +206,10 @@ class WebSocketService {
     _reconnectAttempts++;
 
     // Reconnect attempt every 15s in background while HTTP polling provides live updates
-    final delaySeconds = 15;
+    const delaySeconds = 15;
     debugPrint('[WebSocketService] Re-trying WebSocket transport in ${delaySeconds}s (live HTTP stream active)...');
 
-    _reconnectTimer = Timer(Duration(seconds: delaySeconds), () {
+    _reconnectTimer = Timer(const Duration(seconds: delaySeconds), () {
       if (!_isManuallyClosed && !AppConfig.isDemoMode) {
         connect();
       }
