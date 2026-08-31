@@ -1114,70 +1114,298 @@ The deployment methodology encompassed containerization, cloud hosting, and mobi
 
 ---
 
-## CHAPTER 6 — IMPLEMENTATION
+## CHAPTER 6 — SYSTEM IMPLEMENTATION
 
 ### 6.1 Project Structure
-Directory structure analysis covering `lib/core/`, `lib/features/`, `test/`, and `android/`.
+The SecurePulse mobile application codebase is organized following a strictly modular, feature-first Clean Architecture pattern. The directory hierarchy separates core cross-cutting infrastructure from encapsulated feature modules:
 
-### 6.2 Flutter Application
-Implementation of `SecurePulseApp`, theme providers, and lifecycle bindings.
+```
+securepulse-mobile/
+├── android/                   # Native Android manifest, build scripts, Gradle configs
+├── ios/                       # Native iOS workspace, Podfile, plist configs
+├── web/                       # Web entrypoint, manifest, favicons
+├── lib/
+│   ├── main.dart              # Application entrypoint & initialization sequence
+│   ├── app.dart               # SecurePulseApp root widget & theme binding
+│   ├── core/                  # Cross-cutting infrastructure
+│   │   ├── config/            # AppConfig (Environment URLs, timeouts, Demo flag)
+│   │   ├── error/             # ApiException error classification model
+│   │   ├── network/           # ApiClient (Dio), ApiEndpoints, WebSocketService
+│   │   ├── router/            # AppRouter (GoRouter 5-tab shell route)
+│   │   ├── services/          # BiometricService, NotificationService, ReportPdfService
+│   │   ├── storage/           # HiveStorageService (cache), SecureStorageService (keystore)
+│   │   ├── theme/             # AppTheme (Material 3 Cyber Dark & Light palettes)
+│   │   └── widgets/           # Reusable UI components (SGNavbar, PostureGauge, GlassCards)
+│   ├── features/              # Modular domain feature packages
+│   │   ├── auth/              # AuthRepository, UserModel, LoginScreen
+│   │   ├── dashboard/         # DashboardRepository, DashboardModel, DashboardScreen
+│   │   ├── repositories/      # RepositoryRepository, RepositoryModel, RepositoriesScreen
+│   │   ├── alerts/            # AlertsRepository, AlertModel, AlertsScreen, AlertDetailScreen
+│   │   ├── ai/                # AiRepository, AiMessageModel, AiAssistantScreen
+│   │   ├── reports/           # ReportsScreen, compliance PDF generation workflows
+│   │   ├── scans/             # ScansScreen, ScanDetailScreen
+│   │   ├── findings/          # FindingsScreen, FindingDetailScreen
+│   │   ├── profile/           # ProfileScreen
+│   │   ├── settings/          # SettingsRepository, SettingsScreen, Environment Switcher
+│   │   └── splash/            # SplashScreen with shimmer branding
+│   ├── models/                # Shared domain models (ScanModel, FindingModel)
+│   ├── repositories/          # ScanRepository, FindingRepository
+│   └── providers/             # Riverpod 2.6.1 application state providers
+├── test/                      # Automated unit, integration, and widget pump test suite
+├── Dockerfile                 # Multi-stage Nginx Alpine container for Web deployment
+└── pubspec.yaml               # Package dependencies and asset manifests
+```
 
-### 6.3 FastAPI Backend
-Client-side integration contracts with FastAPI routes.
+---
 
-### 6.4 Configuration
-`AppConfig` implementation managing environment URLs, timeouts, and demo mode flags.
+### 6.2 Flutter Application Entrypoint & Root Widget
+Application initialization occurs in `lib/main.dart`. The startup lifecycle initializes hardware bindings, configures system UI overlays for edge-to-edge rendering, initializes the encrypted Hive box, and boots `SecurePulseApp` wrapped inside a `ProviderScope`:
 
-### 6.5 Authentication
-`AuthRepositoryImpl` implementation with JWT token persistence and biometric bypass.
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/main.dart`
+Class/function: `main()`
+Purpose: Asynchronous startup sequence initializing Hive, NotificationService, and Riverpod ProviderScope.
 
-### 6.6 REST API
-`ApiClient` implementation with Dio interceptors, error mapping, and base URL updates.
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-### 6.7 Database
-`HiveStorageService` and `SecureStorageService` implementation details.
+  // 1. Initialize encrypted offline database caching
+  await HiveStorageService.init();
 
-### 6.8 Repository Monitoring
-`RepositoryRepositoryImpl` and monitored repository data models.
+  // 2. Initialize push notification listeners
+  await NotificationService().initialize();
 
-### 6.9 Security Alerts
-`AlertsRepositoryImpl` alert fetching, filtering, and status mutation logic.
+  // 3. Configure system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
-### 6.10 Wazuh
-Wazuh SIEM alert data structures and syslog parsing.
+  runApp(const ProviderScope(child: SecurePulseApp()));
+}
+```
 
-### 6.11 GitHub
-GitHub repository telemetry synchronization and commit tracking.
+[SCREENSHOT PLACEHOLDER]
+Screen: Splash Screen
+What it demonstrates: High-contrast cyber-defense branding shimmer and biometric initialization sequence.
+Suggested filename: fig_6_1_splash_screen_startup.png
 
-### 6.12 Semgrep
-SAST scan models, finding severities, and CWE categorizations.
+---
 
-### 6.13 WebSocket
-`WebSocketService` implementation with URI scheme conversion and stream controllers.
+### 6.3 FastAPI Backend Integration Contract
+The mobile client interfaces with an external asynchronous FastAPI backend deployed on Render Cloud (`https://secureguard-backend-7eqm.onrender.com`). Communication adheres to strict RESTful JSON schemas and WebSocket protocols defined in `ApiEndpoints`:
 
-### 6.14 AI Copilot
-`AiRepositoryImpl` and prompt evaluation rules for CVE-2024-3094, SQLi, and secret rotation.
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/network/api_endpoints.dart`
+Class/function: `ApiEndpoints`
+Purpose: Centralized endpoint constants mapping REST and WebSocket routes.
 
-### 6.15 Dashboard
-`DashboardScreen` posture calculations, `fl_chart` donut rendering, and quick actions.
+---
 
-### 6.16 Alerts
-`AlertsScreen` and `AlertDetailScreen` incident triage implementations.
+### 6.4 Configuration & Dynamic Environment Switching
+Runtime configuration is managed by `AppConfig` (`lib/core/config/app_config.dart`). The class maintains default environment URLs, request timeouts (12,000ms), and the global `isDemoMode` boolean flag.
 
-### 6.17 Settings
-`SettingsScreen` environment switcher, ping diagnostics, and biometric configuration.
+* **Render Cloud URL**: `https://secureguard-backend-7eqm.onrender.com`
+* **Android Emulator Loopback**: `http://10.0.2.2:8000`
+* **Localhost / Desktop**: `http://127.0.0.1:8000`
 
-### 6.18 Demo Mode
-Mock data generators and zero-latency simulation implementations.
+Analysts can dynamically override the active backend URL or switch between Demo and Live modes in the Settings UI without rebuilding the mobile binary.
 
-### 6.19 Live Mode
-Live cloud API execution with token authentication and cloud communication.
+---
 
-### 6.20 Error Handling
-`ApiException` categorization (unauthorized, timeout, network error, server error).
+### 6.5 Authentication Implementation
+Authentication is implemented in `AuthRepositoryImpl` (`lib/features/auth/data/auth_repository.dart`):
 
-### 6.21 Logging
-Structured debug logging and Flutter error boundary handlers.
+1. **Password Login**: Submits credentials via `POST /v1/auth/login`. On successful response, extracts the JWT access token, persists it via `SecureStorageService.saveToken(token)`, and updates `apiClient.setAuthToken(token)`.
+2. **Biometric Session Recovery**: `loginWithBiometrics()` queries `SecureStorageService.getToken()`. If a valid token exists, it sets the bearer token on `ApiClient` and verifies the session via `GET /v1/auth/me`.
+3. **Demo User Session**: In Demo Mode, `getDemoUser()` returns an analyst session (`Alex Vance`, `usr_sec_01`, Principal Security Analyst) with 0ms network latency.
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/features/auth/data/auth_repository.dart`
+Class/function: `AuthRepositoryImpl.loginWithBiometrics()`
+Purpose: Hardware biometric session recovery with encrypted token validation.
+
+---
+
+### 6.6 REST API Client & Interceptors
+The HTTP communication layer is encapsulated in `ApiClient` (`lib/core/network/api_client.dart`) using Dio 5.4.1:
+
+* **Header Management**: Injects `Content-Type: application/json` and dynamically sets `Authorization: Bearer <token>` when authenticated.
+* **Timeout Controls**: Configured with a strict 12-second `connectTimeout`, `receiveTimeout`, and `sendTimeout`.
+* **Error Mapping**: Translates Dio exceptions into structured [`ApiException`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/error/api_exception.dart) domain errors (`unauthorized`, `forbidden`, `notFound`, `serverError`, `networkError`, `timeout`, `unknown`).
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/network/api_client.dart`
+Class/function: `ApiClient._handleDioError()`
+Purpose: Classifies raw HTTP/TCP socket failures into typed domain exceptions.
+
+---
+
+### 6.7 Database & Local Storage Implementation
+* **Encrypted Token Keychain**: `SecureStorageService` uses `FlutterSecureStorage` (AES-256 / RSA hardware keystores) to store JWT tokens, protecting credentials against physical device extraction.
+* **Key-Value Offline Box**: `HiveStorageService` opens the `securepulse_cache` box during boot, allowing the mobile client to persist recent scans and dashboard metrics for offline review.
+
+---
+
+### 6.8 Repository Monitoring & SAST Scan Triggering
+The repository security module (`lib/features/repositories/`) enables security engineers to inspect codebases:
+
+* **Repository Model**: `RepositoryModel` tracks repository name, primary language (Python, Go, TypeScript, HCL, Vue), branch, privacy status, security health grade (A through F), critical/high/medium vulnerability counts, and last scanned timestamp.
+* **Scan Triggering**: Calling `triggerRepositoryScan(repoId)` dispatches `POST /v1/repositories/{id}/scan` to schedule on-demand Semgrep SAST scans.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: Repositories Screen
+What it demonstrates: Monitored codebases, health grade badges (A to F), and language tags.
+Suggested filename: fig_6_2_repository_list_screen.png
+
+---
+
+### 6.9 Security Alerts & Triage Implementation
+Incident triage is managed in `lib/features/alerts/`:
+
+* **Alert Model**: `AlertModel` represents SIEM security incidents with severity (`critical`, `high`, `medium`, `low`, `informational`), source system (`Wazuh SOC`, `Splunk SIEM`, `Microsoft Sentinel`, `Semgrep SAST`), origin IP, and remediation recommendations.
+* **Status Updates**: Analysts can transition alert states via `updateAlertStatus(id, newStatus)` which issues `PUT /v1/soc/alerts/{id}/status`.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: Alert Detail Screen
+What it demonstrates: Incident triage detail modal with raw syslog inspection, attacker IP, and "Quarantine IP" action button.
+Suggested filename: fig_6_3_alert_detail_screen.png
+
+---
+
+### 6.10 Wazuh SIEM Telemetry Processing
+Wazuh syslog events are ingested, normalized, and categorized:
+
+* **Demo Mode**: Realistic simulated intrusion datasets (e.g., *48 failed SSH root login attempts within 60 seconds from IP 185.220.101.5*).
+* **Live Mode**: Real-time event consumption from `/v1/soc/alerts` and WebSocket stream `/ws/alerts`.
+
+---
+
+### 6.11 GitHub Integration
+Monitors 28 enterprise repositories (in Demo Mode) and synchronizes commit metadata, active branches, and code review compliance status.
+
+---
+
+### 6.12 Semgrep SAST Engine Integration
+Links static analysis findings to specific code files (e.g., `auth_service.py`), line numbers, and CWE identifiers (e.g., CWE-89 SQL Injection, CWE-798 Hardcoded Secrets).
+
+---
+
+### 6.13 WebSocket Real-Time Engine Implementation
+`WebSocketService` (`lib/core/network/websocket_service.dart`) provides full-duplex incident streaming:
+
+* **Automatic URL Mapping**: Dynamically transforms `http://10.0.2.2:8000` ➔ `ws://10.0.2.2:8000/ws/alerts?token=<JWT>` and `https://...` ➔ `wss://...`.
+* **Broadcast Controller**: Broadcasts real-time events to `webSocketAlertStreamProvider` for immediate UI rendering.
+* **Reconnection & Polling Fallback**: Automatically retries dropped sockets with exponential backoff while activating periodic REST polling fallback.
+
+[CODE SNIPPET PLACEHOLDER]
+File: `lib/core/network/websocket_service.dart`
+Class/function: `WebSocketService.connect()`
+Purpose: Protocol scheme conversion, socket connection lifecycle, and stream broadcasting.
+
+---
+
+### 6.14 AI Copilot Implementation
+The AI Security Assistant (`lib/features/ai/`) provides conversational cybersecurity remediation:
+
+* **Offline Heuristic Matchers**: Evaluates prompts against known CVE patterns (CVE-2024-3094, SQL injection in SQLAlchemy, AWS IAM secret rotation) and formats copyable code patches.
+* **Cloud LLM Bridge**: In Live Mode, dispatches `POST /v1/ai/chat` with prompt and mobile context to cloud LLMs.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: AI Security Copilot Screen
+What it demonstrates: Interactive streaming chat interface rendering Markdown headers, bullet points, and Dockerfile/Python code snippets.
+Suggested filename: fig_6_4_ai_assistant_screen.png
+
+---
+
+### 6.15 Executive Dashboard Implementation
+The executive dashboard (`DashboardScreen`) serves as the primary home screen:
+
+* **Posture Gauge**: Circular gauge displaying overall enterprise posture (88–94%).
+* **Vulnerability Breakdown**: Donut chart powered by `fl_chart` categorizing critical, high, medium, and low vulnerabilities.
+* **Service Health Indicators**: Live latency ping indicators monitoring the FastAPI Backend, GitHub Webhooks, Semgrep SAST, Wazuh SOC Connector, and Splunk Bridge.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: Executive Dashboard Screen
+What it demonstrates: Posture gauge, fl_chart vulnerability donut, system health status badges, and quick-action cards.
+Suggested filename: fig_6_5_executive_dashboard_screen.png
+
+---
+
+### 6.16 SOC Alert Feed Implementation
+The alert feed (`AlertsScreen`) allows analysts to filter incoming incidents by severity, search by keyword, and perform one-tap incident acknowledgments.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: SOC Alerts Screen
+What it demonstrates: Severity filter pills (All, Critical, High, Medium, Low), incident cards, and live pulse indicator.
+Suggested filename: fig_6_6_soc_alerts_screen.png
+
+---
+
+### 6.17 Diagnostic & Settings Implementation
+The settings console (`SettingsScreen`) provides operational control:
+
+* **Environment Selector**: Radio list switching between Render Cloud, Android Emulator (`10.0.2.2`), Localhost (`127.0.0.1`), and Custom URLs.
+* **Live Ping Test**: Sends `GET /health` to measure backend round-trip latency in milliseconds.
+* **Biometric Lock Toggle**: Enables or disables hardware biometric challenge on launch.
+* **Theme Selector**: Switches between Cyber Dark Obsidian and Clean Light themes.
+
+[SCREENSHOT PLACEHOLDER]
+Screen: Settings & Diagnostics Screen
+What it demonstrates: Environment selector, custom URL input, latency ping test button, and biometric lock switches.
+Suggested filename: fig_6_7_settings_screen.png
+
+---
+
+### 6.18 Demo Mode Implementation
+Demo Mode (`AppConfig.isDemoMode = true`) operates as a completely self-contained offline simulator:
+
+* Returns pre-configured, realistic cybersecurity telemetry across all repositories.
+* Zero network I/O, guaranteeing 0ms latency and 100% reliability during offline demonstrations.
+
+---
+
+### 6.19 Live Mode Implementation
+Live Mode (`AppConfig.isDemoMode = false`) activates full network communication:
+
+* Dispatches live Dio HTTP requests and connects to WSS WebSocket feeds.
+* Enforces JWT authentication, timeout gates, and classified exception handling.
+
+---
+
+### 6.20 Error Handling Architecture
+Exceptions are caught at repository boundaries, mapped to `ApiException`, and presented to users via non-intrusive snackbars, retry views, or fallback cached states.
+
+---
+
+### 6.21 Structured Logging & Diagnostics
+All network dispatches, WebSocket connection state transitions, and biometric events are logged using `debugPrint` with structured prefixes (`[ApiClient]`, `[WebSocketService]`, `[NotificationService]`).
+
+---
+
+### 6.22 End-to-End Operational Walkthrough Videos
+
+[VIDEO PLACEHOLDER]
+Description: Complete Application Launch, Biometric Authentication, and Executive Dashboard Walkthrough.
+What should be demonstrated: Launching SecurePulse from app icon, Face ID / Fingerprint prompt, animated splash shimmer, landing on Executive Dashboard, interactive posture gauge, and fl_chart vulnerability donut rendering.
+Suggested video filename/link: `media/videos/demo_01_launch_dashboard.mp4`
+
+---
+
+[VIDEO PLACEHOLDER]
+Description: Real-Time Incident Streaming, SOC Alert Triage, and Mitigation Walkthrough.
+What should be demonstrated: Receiving incoming critical Wazuh SSH brute-force alert over WebSocket, haptic notification trigger, navigating to Alert Detail Screen, inspecting raw syslog payload and attacker IP, tapping "Quarantine IP", and observing status update transition to "Resolved".
+Suggested video filename/link: `media/videos/demo_02_alert_triage_mitigation.mp4`
+
+---
+
+[VIDEO PLACEHOLDER]
+Description: AI Cybersecurity Copilot and Regulatory PDF Compliance Export Walkthrough.
+What should be demonstrated: Opening AI Copilot tab, entering prompt for CVE-2024-3094 remediation, receiving streaming code patch, navigating to Reports tab, generating official SOC 2 Type II compliance report, embedding SHA256 audit stamp, and triggering native OS share sheet.
+Suggested video filename/link: `media/videos/demo_03_ai_copilot_pdf_export.mp4`
 
 ---
 
