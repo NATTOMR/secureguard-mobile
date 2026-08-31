@@ -2066,38 +2066,93 @@ Suggested video filename/link: `media/videos/demo_05_deployment_release.mp4`
 
 ## CHAPTER 11 — FUTURE WORK
 
-### 11.1 FCM
-Automated configuration assistant for enterprise Firebase push key provisioning.
+The architecture of **SecurePulse** is intentionally engineered for modular extensibility. The following roadmap outlines high-impact enhancements planned for subsequent product releases, categorized by capability domain:
 
-### 11.2 Advanced AI
-Multi-model reasoning agents capable of generating direct pull requests with remediation code.
+---
 
-### 11.3 Automated Response
-One-tap edge firewall rule execution directly dispatching IP bans to cloud firewalls.
+### 11.1 Zero-Touch FCM Provisioning & WebPush Gateway `[PLANNED]`
+* **Proposed Extension**: Implement an interactive, in-app enterprise push notification configuration wizard within the Settings console.
+* **Architectural Plan**: Enable enterprise administrators to dynamically upload Firebase service account JSON credentials or connect directly to a self-hosted, open-source WebPush/Gotify gateway. This will allow zero-touch push notification activation without requiring custom mobile binary recompilation.
 
-### 11.4 Multi-Tenancy
-Multi-organization account switching within a single mobile session.
+---
 
-### 11.5 Advanced SOC Analytics
-Heatmaps of intrusion attempts, geographic attack visualizations, and MTTR trend lines.
+### 11.2 Advanced Autonomous AI Copilot & On-Device SLM `[PLANNED]`
+* **Proposed Extension**: Evolve the AI Copilot from advisory recommendations to autonomous code remediation and air-gapped on-device neural reasoning.
+* **Architectural Plan**:
+  1. **Autonomous GitHub Pull Requests**: Enable the Copilot to formulate complete, validated code patches, fork the vulnerable repository branch, and submit an automated remediation Pull Request directly from the mobile UI.
+  2. **Quantized On-Device SLMs**: Bundle a lightweight, 4-bit quantized Small Language Model (e.g., **Google Gemma-2B** or **Llama-3-1B**) powered by ONNX Runtime / MediaPipe LLM Inference. This will enable complex natural language cybersecurity reasoning completely offline without transmitting proprietary source code to cloud LLMs.
 
-### 11.6 Threat Intelligence
-Direct integration with MITRE ATT&CK framework mapping and global IOC feeds.
+---
 
-### 11.7 Advanced Wazuh Integration
-Direct Wazuh Manager API querying and active agent status management.
+### 11.3 Automated Incident Response & Multi-Cloud SOAR Playbooks `[PLANNED]`
+* **Proposed Extension**: Expand the single-tap "Quarantine IP" action into a full-scale Security Orchestration, Automation, and Response (SOAR) command dispatch engine.
+* **Architectural Plan**: Direct bidirectional integration with cloud perimeter controllers and firewall APIs:
+  * **AWS Network ACLs / Security Groups**: Dispatching automated egress/ingress drop rules via AWS SDK.
+  * **Cloudflare WAF / Cloudflare Access**: Dynamically inserting malicious IPs into edge rate-limiting and IP block lists.
+  * **Palo Alto Cortex XSOAR / Ansible AWX**: Executing automated containment playbooks (e.g., isolate infected endpoint VM, revoke AWS IAM session keys).
 
-### 11.8 Advanced GitHub Security
-Full GitHub App OAuth2 consent web redirects and fine-grained repository permissions.
+---
 
-### 11.9 Advanced SAST/DAST
-In-app custom Semgrep rule editor with real-time syntax checking.
+### 11.4 Multi-Tenancy & Enterprise Organization Switching `[PLANNED]`
+* **Proposed Extension**: Enable multi-tenant managed security service provider (MSSP) and multi-organization enterprise workflows.
+* **Architectural Plan**: Introduce an organization selector dropdown in the navigation shell. The mobile client will maintain scoped JWT bearer tokens per organization, allowing MSSP security analysts to monitor and triage disparate client environments within a unified mobile interface.
 
-### 11.10 Scalability
-High-throughput WebSocket binary Protobuf serialization for high-volume enterprise SOCs.
+---
 
-### 11.11 High Availability
-Multi-region cloud backend failover and automated client endpoint discovery.
+### 11.5 Advanced SOC Analytics & Threat Telemetry Visualization `[PLANNED]`
+* **Proposed Extension**: Enhance the executive dashboard with rich, multi-dimensional cybersecurity telemetry visualizations.
+* **Architectural Plan**:
+  * **Geographic Threat Map**: Interactive vector globe/map rendering real-time incoming attacks by geographic origin (MaxMind GeoIP2 integration).
+  * **Intrusion Heatmaps**: Hour-by-day matrices visualizing brute-force login patterns and scanning activity spikes.
+  * **Operational Metrics**: Real-time tracking of Mean Time to Detect (MTTD) and Mean Time to Remediate (MTTR) across team shifts.
+
+---
+
+### 11.6 Global Threat Intelligence & MITRE ATT&CK Mapping `[PLANNED]`
+* **Proposed Extension**: Correlate incoming SIEM alerts and SAST vulnerabilities against authoritative global threat intelligence feeds.
+* **Architectural Plan**:
+  * **MITRE ATT&CK Matrix Correlation**: Automatically tag alerts with specific MITRE Tactics & Techniques (e.g., `T1110.001 - Password Guessing`, `T1190 - Exploit Public-Facing Application`).
+  * **Threat Feed Enrichment**: Query AlienVault OTX, AbuseIPDB, and VirusTotal APIs in real-time to display attacker reputation scores and known threat actor attributions.
+  * **NIST NVD Real-Time Sync**: Synchronize Common Vulnerabilities and Exposures (CVE) metadata, CVSS v3.1 vector scores, and EPSS exploit prediction metrics.
+
+---
+
+### 11.7 Advanced Wazuh Manager API Integration `[PLANNED]`
+* **Proposed Extension**: Deepen Wazuh integration from syslog stream consumption to bidirectional Wazuh Manager control.
+* **Architectural Plan**: Implement dedicated endpoints interfacing with the Wazuh RESTful API (`port 55000`), allowing analysts to query active agent connectivity status, inspect rootkit detector findings, initiate on-demand File Integrity Monitoring (FIM) scans, and restart remote agent daemons.
+
+---
+
+### 11.8 Advanced GitHub Security & Interactive OAuth2 Deep-Linking `[PLANNED]`
+* **Proposed Extension**: Implement full interactive GitHub App authorization with deep-linking callbacks.
+* **Architectural Plan**: Utilize Android App Links and iOS Universal Links (`securepulse://oauth/callback`) to handle user consent redirects seamlessly. Enable mobile inspection of GitHub Secret Scanning alerts and Push Protection bypass audits.
+
+---
+
+### 11.9 Dynamic Application Security Testing (DAST) Integration `[PLANNED]`
+* **Proposed Extension**: Expand vulnerability scanning capabilities beyond static analysis (SAST) to active web application penetration testing.
+* **Architectural Plan**: Interface with containerized OWASP ZAP and ProjectDiscovery Nuclei engines, allowing security engineers to schedule and monitor black-box DAST scans against staging URLs directly from the mobile device.
+
+---
+
+### 11.10 In-App Custom Semgrep Rule Engine `[PLANNED]`
+* **Proposed Extension**: Provide an in-app YAML rule authoring environment for custom Semgrep policy enforcement.
+* **Architectural Plan**: Build a syntax-highlighted code editor with real-time YAML schema validation and test-runner execution, enabling security architects to draft and test custom company-wide static analysis rules on mobile.
+
+---
+
+### 11.11 Enterprise Ticketing & Workflow Synchronization `[PLANNED]`
+* **Proposed Extension**: Synchronize incident lifecycles across enterprise collaboration and ticketing platforms.
+* **Architectural Plan**: Implement bidirectional webhooks and API connectors for **Jira Service Management**, **ServiceNow ITSM**, **PagerDuty**, and **Slack/Microsoft Teams** SOC war rooms, allowing analysts to create tracking tickets or trigger paging escalation directly from an alert card.
+
+---
+
+### 11.12 Cloud Scalability & High Availability Architecture `[PLANNED]`
+* **Proposed Extension**: Scale the cloud backend from a single-container deployment to a geographically distributed, highly available cluster.
+* **Architectural Plan**:
+  * **Redis Pub/Sub Message Bus**: Distribute WebSocket threat streams across horizontally auto-scaled FastAPI ASGI worker nodes.
+  * **Database Read Replicas**: Deploy read-only PostgreSQL replicas to offload heavy analytical reporting queries.
+  * **Global CDN Edge Routing**: Deploy Flutter Web assets across Cloudflare Edge networks to achieve sub-50ms initial load times globally.
 
 ---
 
