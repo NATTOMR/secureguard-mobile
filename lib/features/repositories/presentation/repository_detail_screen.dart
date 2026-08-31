@@ -163,13 +163,27 @@ class RepositoryDetailScreen extends ConsumerWidget {
                 SGButton(
                   label: 'Trigger Immediate SAST Scan',
                   icon: const Icon(Icons.radar_rounded, color: Colors.white, size: 20),
-                  onPressed: () {
+                  onPressed: () async {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Semgrep SAST scan dispatched for ${repo.name}...'),
+                        content: Row(
+                          children: [
+                            const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(child: Text('Semgrep SAST scan dispatched for ${repo.name}...')),
+                          ],
+                        ),
                         backgroundColor: AppColors.primary,
+                        duration: const Duration(seconds: 2),
                       ),
                     );
+                    await ref.read(repositoryRepositoryProvider).triggerRepositoryScan(repo.id);
+                    ref.invalidate(repositoriesDataProvider);
+                    ref.invalidate(liveDashboardNotifierProvider);
                   },
                 ),
 

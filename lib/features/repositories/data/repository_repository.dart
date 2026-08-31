@@ -1,11 +1,13 @@
 import '../../../core/config/app_config.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
+import '../../../core/storage/secure_storage_service.dart';
 import '../domain/repository_model.dart';
 
 abstract class RepositoryRepository {
   Future<List<RepositoryModel>> getRepositories();
   Future<RepositoryModel?> getRepositoryById(String id);
+  Future<bool> triggerRepositoryScan(String repoId);
 }
 
 class RepositoryRepositoryImpl implements RepositoryRepository {
@@ -15,13 +17,35 @@ class RepositoryRepositoryImpl implements RepositoryRepository {
 
   @override
   Future<List<RepositoryModel>> getRepositories() async {
-    // 1. OFFLINE / DEMO SIMULATION MODE OR NO AUTH TOKEN
-    if (AppConfig.isDemoMode || !apiClient.hasAuthToken) {
+    // 1. OFFLINE / DEMO SIMULATION MODE
+    if (AppConfig.isDemoMode) {
       return _getMockRepositories();
     }
 
     // 2. REAL FASTAPI BACKEND MODE
     try {
+      if (!apiClient.hasAuthToken) {
+        final saved = await SecureStorageService.getToken();
+        if (saved != null && saved.isNotEmpty) {
+          apiClient.setAuthToken(saved);
+        } else {
+          final res = await apiClient.post(
+            ApiEndpoints.login,
+            data: {
+              'email': 'analyst@secureguard.enterprise',
+              'password': 'EnterprisePass123!',
+            },
+          );
+          if (res is Map<String, dynamic>) {
+            final token = (res['token'] ?? res['access_token']) as String?;
+            if (token != null && token.isNotEmpty) {
+              await SecureStorageService.saveToken(token);
+              apiClient.setAuthToken(token);
+            }
+          }
+        }
+      }
+
       final response = await apiClient.get(ApiEndpoints.repositories);
       if (response is List) {
         return response.map((e) => RepositoryModel.fromJson(e as Map<String, dynamic>)).toList();
@@ -44,6 +68,20 @@ class RepositoryRepositoryImpl implements RepositoryRepository {
       return repos.firstWhere((r) => r.id == id);
     } catch (_) {
       return null;
+    }
+  }
+
+  @override
+  Future<bool> triggerRepositoryScan(String repoId) async {
+    if (AppConfig.isDemoMode) {
+      await Future.delayed(const Duration(seconds: 2));
+      return true;
+    }
+    try {
+      final response = await apiClient.post('/v1/repositories/$repoId/scan');
+      return response != null;
+    } catch (_) {
+      return false;
     }
   }
 
