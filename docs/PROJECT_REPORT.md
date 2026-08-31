@@ -1777,41 +1777,178 @@ The empirical results obtained from the testing suite provide several critical i
 
 ## CHAPTER 9 — DEPLOYMENT AND RELEASE
 
-### 9.1 Deployment Architecture
-Overview of cloud hosting, containerization, and mobile binary distribution.
+### 9.1 Deployment Architecture Overview
+The deployment topology of the **SecurePulse** enterprise ecosystem is designed around high availability, containerization, and platform-native binary distribution:
 
-### 9.2 Local Deployment
-Running the application locally using Flutter tooling and local emulators.
+```
+                                  ┌─────────────────────────────────────────┐
+                                  │            SOURCE REPOSITORY            │
+                                  │   GitHub: NATTOMR/securepulse-mobile    │
+                                  └────────────────────┬────────────────────┘
+                                                       │
+                     ┌─────────────────────────────────┴─────────────────────────────────┐
+                     │                                                                   │
+                     ▼                                                                   ▼
+       ┌───────────────────────────┐                                       ┌───────────────────────────┐
+       │     RENDER CLOUD CI/CD    │                                       │   FLUTTER RELEASE ENGINE  │
+       └─────────────┬─────────────┘                                       └─────────────┬─────────────┘
+                     │                                                                   │
+         ┌───────────┴───────────┐                                           ┌───────────┴───────────┐
+         ▼                       ▼                                           ▼                       ▼
+┌─────────────────┐     ┌─────────────────┐                         ┌─────────────────┐     ┌─────────────────┐
+│ FastAPI Backend │     │ PostgreSQL DB   │                         │  Android Release│     │ Docker Nginx Web│
+│ (Python 3.11)   │     │ (SSL Encrypted) │                         │ (Standalone APK)│     │  (Port 80/443)  │
+└─────────────────┘     └─────────────────┘                         └─────────────────┘     └─────────────────┘
+```
 
-### 9.3 Backend Deployment
-Deploying the FastAPI microservice on cloud infrastructure.
+---
 
-### 9.4 Database Deployment
-PostgreSQL and Redis cloud deployment configuration.
+### 9.2 Local Development Environment
+The local development environment provides zero-friction developer onboarding:
 
-### 9.5 Render Deployment
-Configuring Render Web Services, health checks, and build commands.
+1. **Flutter Mobile Execution**: Running `flutter run` with target devices:
+   * **Chrome Web**: `flutter run -d chrome`
+   * **Android Emulator**: `flutter run -d emulator-5554` (interfaces with local backend via `http://10.0.2.2:8000`)
+   * **Physical Android Hardware**: Connected via ADB (`flutter run -d <device_id>`)
+2. **FastAPI Local Microservice**: Executed via Uvicorn with hot-reloading:
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-### 9.6 Environment Configuration
-Managing runtime environment variables across development, staging, and production.
+---
 
-### 9.7 HTTPS/WSS
-SSL/TLS certificate management and reverse proxy routing.
+### 9.3 FastAPI Backend Cloud Deployment
+The backend API is containerized and hosted as a managed Web Service on **Render Cloud** (`https://secureguard-backend-7eqm.onrender.com`):
 
-### 9.8 Mobile Production Configuration
-Configuring production manifest properties, orientation locks, and system UI styling.
+* **Runtime**: Python 3.11.x asynchronous environment running Uvicorn ASGI workers.
+* **Health Check Probe**: Probes `GET /health` every 30 seconds to ensure high availability and automatic zero-downtime container restarts.
 
-### 9.9 Android Release
-Compiling the standalone release APK (`securepulse-release.apk`).
+[API HEALTH SCREENSHOT]
+Description: Live HTTP `GET /health` API JSON response returning status `healthy`, API version `1.0.0`, and server uptime timestamp.
+Suggested filename: fig_9_1_api_health_check.png
 
-### 9.10 Play Store Preparation
-App bundle generation (`AAB`), key signing, and privacy policy compliance.
+---
 
-### 9.11 Monitoring
-Monitoring API latency, error rates, and client connectivity.
+### 9.4 Cloud Database Deployment
+* **Managed PostgreSQL**: Relational store hosted on cloud infrastructure with enforced SSL connections (`sslmode=require`).
+* **Connection Pooling**: Managed connection pools prevent connection exhaustion during concurrent mobile client bursts.
 
-### 9.12 Backup and Recovery
-Disaster recovery procedures for cloud databases and configuration stores.
+---
+
+### 9.5 Render Cloud Infrastructure & CI/CD Automation
+Continuous integration and continuous deployment (CI/CD) pipelines are bound directly to the Git repository:
+
+1. A push to the `main` branch on GitHub automatically triggers a Render Cloud build webhook.
+2. Render provisions a clean Linux build environment, installs dependencies via `pip install -r requirements.txt`, executes automated unit checks, and deploys the new container image.
+3. Traffic is seamlessly routed to the new container once the health probe responds with HTTP 200 OK.
+
+[RENDER DASHBOARD SCREENSHOT]
+Description: Render Cloud management console showing the active `secureguard-backend` service status, auto-deploy Git webhook triggers, and resource utilization metrics.
+Suggested filename: fig_9_2_render_dashboard_service.png
+
+---
+
+### 9.6 Environment Variables & Configuration Management
+To guarantee strict secret segregation, configuration values are injected at runtime via encrypted Render Environment Variables:
+
+* `DATABASE_URL`: Cloud PostgreSQL connection string.
+* `JWT_SECRET_KEY`: High-entropy 256-bit cryptographic signing key for JSON Web Tokens.
+* `JWT_ALGORITHM`: `HS256` token signing algorithm.
+* `ACCESS_TOKEN_EXPIRE_MINUTES`: Expiration window (e.g., `1440` minutes).
+* `CORS_ORIGINS`: Comma-delimited list of authorized origin URLs.
+
+On the mobile client, `AppConfig` (`lib/core/config/app_config.dart`) manages target environment switching dynamically between Render Cloud, local emulator loopbacks, and custom analyst endpoints.
+
+---
+
+### 9.7 HTTPS & WSS Production Transport
+Production transport security is terminated at the cloud edge:
+
+* **Automatic SSL Provisioning**: Managed Let's Encrypt TLS 1.3 certificates provide end-to-end encryption.
+* **WebSocket Secure (WSS)**: Protocol upgrades from HTTPS to WSS are transparently proxied over port 443 with encrypted payload framing.
+
+---
+
+### 9.8 Flutter Production Web Configuration & Dockerization
+For web-based security analysts, SecurePulse provides an automated, multi-stage `Dockerfile`:
+
+```dockerfile
+# Stage 1: Build Flutter Web Production Bundle
+FROM ghcr.io/cirruslabs/flutter:stable AS build
+WORKDIR /app
+COPY . .
+RUN flutter config --enable-web
+RUN flutter pub get
+RUN flutter build web --release --pwa-strategy=none
+
+# Stage 2: Serve Bundle via High-Performance Nginx
+FROM nginx:alpine
+COPY --from=build /app/build/web /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+---
+
+### 9.9 Android Release Engineering & APK Compilation
+The standalone production Android binary is compiled using Flutter's optimized AOT release compiler:
+
+```bash
+flutter build apk --release
+```
+
+* **Output Artifact**: `build/app/outputs/flutter-apk/app-release.apk` (renamed to `securepulse-release.apk`, **63.6 MB**).
+* **Optimization Flags**: Ahead-of-Time (AOT) machine code compilation, tree-shaking of unused Dart libraries, asset minification, and ProGuard / R8 bytecode shrinking.
+* **Android Manifest Permissions**: Enforces hardware biometrics (`USE_BIOMETRIC`, `USE_FINGERPRINT`), network access (`INTERNET`, `ACCESS_NETWORK_STATE`), and push notification listeners (`POST_NOTIFICATIONS`).
+
+[ANDROID RELEASE SCREENSHOT]
+Description: Android device filesystem or build console showing the compiled `securepulse-release.apk` package properties and successful installation confirmation.
+Suggested filename: fig_9_3_android_release_apk.png
+
+---
+
+### 9.10 APK vs Android App Bundle (AAB) Packaging
+* **Standalone APK**: Generated for direct enterprise sideloading, offline SOC deployments, and direct analyst installation without requiring Google Play Services.
+* **Android App Bundle (AAB)**: Generated via `flutter build appbundle` for Google Play Store distribution, allowing Google Play's Dynamic Delivery to serve architecture-specific split binaries (`arm64-v8a`, `armeabi-v7a`, `x86_64`), reducing download sizes to under 25 MB.
+
+---
+
+### 9.11 Google Play Store Publishing Preparation
+Preparation for commercial store release adheres to Google Play Console compliance:
+
+1. **Production Keystore Generation**: Created a dedicated, encrypted Java KeyStore (JKS) using `keytool` for cryptographic app signing:
+   ```bash
+   keytool -genkey -v -keystore securepulse-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias securepulse
+   ```
+2. **Target API Level Compliance**: `targetSdkVersion` is set to **API 34 (Android 14)** in `android/app/build.gradle`.
+3. **Data Safety Declaration**: Documented data handling: zero collection of user personal data, all vulnerability scans processed on enterprise backends, credentials stored exclusively in local hardware keystores.
+
+[PLAY STORE SCREENSHOT]
+Description: Google Play Console release management dashboard displaying app version 1.0.0, release tracks (Internal Testing / Production), and Data Safety compliance checkmarks.
+Suggested filename: fig_9_4_play_store_console.png
+
+---
+
+### 9.12 Cloud & Application Health Monitoring
+Continuous operational visibility is maintained across all infrastructure layers:
+
+* **Backend Health Monitoring**: Periodic health probes to `/health` monitor CPU utilization, memory allocation, and active database connection pool health.
+* **Client Diagnostics**: The mobile Settings screen provides an integrated "Ping Server" diagnostic tool measuring live round-trip latency in milliseconds.
+
+---
+
+### 9.13 Backup, Disaster Recovery & High Availability
+* **Database Backup Strategy**: Automated continuous Write-Ahead Log (WAL) archiving on cloud PostgreSQL with 7-day point-in-time recovery (PITR).
+* **Client Offline Resilience**: In the event of backend network loss, the mobile client falls back to encrypted offline Hive caches (`securepulse_cache`), allowing uninterrupted read access to critical incident telemetry.
+
+---
+
+### 9.14 End-to-End Cloud Deployment Demonstration
+
+[VIDEO PLACEHOLDER]
+Description: Cloud CI/CD Deployment, Health Verification, and Standalone APK Sideload Demonstration.
+What should be demonstrated: Pushing a Git commit to GitHub `main` branch, observing automated Render Cloud build trigger, verifying successful deployment logs, performing `GET /health` probe via curl, downloading `securepulse-release.apk` to an Android device, sideloading the APK, and completing a live biometric login.
+Suggested video filename/link: `media/videos/demo_05_deployment_release.mp4`
 
 ---
 
