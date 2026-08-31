@@ -2,6 +2,7 @@ import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
 import '../config/app_config.dart';
 import '../error/api_exception.dart';
+import '../storage/secure_storage_service.dart';
 import 'api_endpoints.dart';
 
 class ApiClient {
@@ -22,10 +23,18 @@ class ApiClient {
       ),
     );
 
-    // Custom sanitized security logging interceptor
+    // Custom sanitized security logging and auto-token interceptor
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
+        onRequest: (options, handler) async {
+          if (!options.headers.containsKey('Authorization')) {
+            try {
+              final token = await SecureStorageService.getToken();
+              if (token != null && token.isNotEmpty) {
+                options.headers['Authorization'] = 'Bearer $token';
+              }
+            } catch (_) {}
+          }
           final sanitizedHeaders = Map<String, dynamic>.from(options.headers);
           if (sanitizedHeaders.containsKey('Authorization')) {
             sanitizedHeaders['Authorization'] = 'Bearer [REDACTED]';
@@ -53,6 +62,15 @@ class ApiClient {
         },
       ),
     );
+  }
+
+  Future<void> initToken() async {
+    try {
+      final token = await SecureStorageService.getToken();
+      if (token != null && token.isNotEmpty) {
+        setAuthToken(token);
+      }
+    } catch (_) {}
   }
 
   void updateBaseUrl(String newBaseUrl) {

@@ -57,7 +57,7 @@ class StatisticCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           // Animated counter
           TweenAnimationBuilder<int>(
             tween: IntTween(begin: 0, end: count),

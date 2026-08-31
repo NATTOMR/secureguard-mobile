@@ -11,7 +11,7 @@ class ReportsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: SGAppBar(
+      appBar: const SGAppBar(
         title: AppStrings.reports,
         showBackButton: true,
       ),
@@ -24,7 +24,7 @@ class ReportsScreen extends StatelessWidget {
               'Generate Executive Report',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             SGCard(
               child: Column(
@@ -34,8 +34,8 @@ class ReportsScreen extends StatelessWidget {
                     'Select Compliance Framework',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
                   ),
-                  SizedBox(height: 12),
-                  Wrap(
+                  const SizedBox(height: 12),
+                  const Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
@@ -45,10 +45,10 @@ class ReportsScreen extends StatelessWidget {
                       SGChip(label: 'PCI-DSS v4.0', variant: SGChipVariant.low),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SGButton(
                     label: 'Export PDF Audit Summary',
-                    icon: Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
+                    icon: const Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Generating PDF Report... Download will start automatically.')),
@@ -59,13 +59,13 @@ class ReportsScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            SizedBox(height: 28),
+            const SizedBox(height: 28),
 
             Text(
               'Recent Generated Audit Logs',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             _buildReportTile(context, 'Q3 Executive Security Audit', 'SOC 2 Type II', 'PDF', '4.2 MB'),
             _buildReportTile(context, 'Weekly Vulnerability CVE Audit', 'Vulnerabilities', 'CSV', '1.1 MB'),
@@ -94,15 +94,15 @@ class ReportsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.cardBorder),
               ),
-              child: Icon(Icons.description_rounded, color: AppColors.primary, size: 24),
+              child: const Icon(Icons.description_rounded, color: AppColors.primary, size: 24),
             ),
-            SizedBox(width: 14),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text('$category • $size', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
                 ],
               ),

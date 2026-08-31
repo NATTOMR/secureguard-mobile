@@ -41,7 +41,7 @@ class QuickActionCard extends StatelessWidget {
             ),
             child: Icon(icon, color: effectiveColor, size: 20),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             title,
             style: TextStyle(
@@ -51,7 +51,7 @@ class QuickActionCard extends StatelessWidget {
             ),
           ),
           if (subtitle != null) ...[
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subtitle!,
               style: TextStyle(

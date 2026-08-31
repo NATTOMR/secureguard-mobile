@@ -5,7 +5,7 @@ class SGLoading extends StatelessWidget {
   final String? message;
   final double size;
 
-  SGLoading({
+  const SGLoading({
     super.key,
     this.message,
     this.size = 48.0,
@@ -41,7 +41,7 @@ class SGLoading extends StatelessWidget {
             ),
           ),
           if (message != null) ...[
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               message!,
               style: TextStyle(

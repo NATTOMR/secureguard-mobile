@@ -10,7 +10,7 @@ class SGEmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
 
-  SGEmptyState({
+  const SGEmptyState({
     super.key,
     this.title = 'No Data Available',
     this.description,
@@ -39,7 +39,7 @@ class SGEmptyState extends StatelessWidget {
               ),
               child: Icon(icon, size: 44, color: AppColors.textMuted),
             ),
-            SizedBox(height: 18),
+            const SizedBox(height: 18),
             Text(
               title,
               textAlign: TextAlign.center,
@@ -49,7 +49,7 @@ class SGEmptyState extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               effectiveDescription,
               textAlign: TextAlign.center,
@@ -59,7 +59,7 @@ class SGEmptyState extends StatelessWidget {
               ),
             ),
             if (actionLabel != null && onAction != null) ...[
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SGButton(
                 label: actionLabel!,
                 onPressed: onAction,

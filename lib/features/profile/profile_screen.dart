@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: SGAppBar(
+      appBar: const SGAppBar(
         title: 'Analyst Profile',
         showBackButton: false,
         showStatusBadge: true,
@@ -31,19 +31,19 @@ class ProfileScreen extends ConsumerWidget {
             SGCard(
               child: Column(
                 children: [
-                  SGAvatar(initials: 'AV', radius: 42),
-                  SizedBox(height: 16),
+                  const SGAvatar(initials: 'AV', radius: 42),
+                  const SizedBox(height: 16),
                   Text(
                     userState?.name ?? 'Alex Vance',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     userState?.email ?? 'analyst@secureguard.enterprise',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  SizedBox(height: 12),
-                  Row(
+                  const SizedBox(height: 12),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SGChip(label: 'Lead Security Architect', variant: SGChipVariant.info),
@@ -55,7 +55,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Credentials & Security Keys Card
             SGCard(
@@ -66,7 +66,7 @@ class ProfileScreen extends ConsumerWidget {
                     'Security Credentials & MFA',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildProfileRow('Hardware YubiKey MFA', 'ENFORCED', Icons.vpn_key_rounded),
                   Divider(color: AppColors.cardBorder),
                   _buildProfileRow('Active Session Token', 'EXPIRES IN 8H', Icons.timer_rounded),
@@ -76,13 +76,13 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ).animate().fadeIn(delay: 200.ms),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Logout Button
             SGButton(
               label: 'Sign Out of SecureGuard Platform',
               variant: SGButtonVariant.danger,
-              icon: Icon(Icons.logout_rounded, color: Colors.white),
+              icon: const Icon(Icons.logout_rounded, color: Colors.white),
               onPressed: () {
                 ref.read(authStateProvider.notifier).logout();
                 context.go(AppRouter.login);
@@ -100,7 +100,7 @@ class ProfileScreen extends ConsumerWidget {
       child: Row(
         children: [
           Icon(icon, color: AppColors.primary, size: 20),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textPrimary)),
           ),

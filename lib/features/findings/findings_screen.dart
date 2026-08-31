@@ -24,7 +24,7 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: SGAppBar(
+      appBar: const SGAppBar(
         title: AppStrings.vulnerabilityFindings,
         showBackButton: true,
       ),
@@ -37,13 +37,13 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
             child: Row(
               children: [
                 _buildFilterChip('ALL', null),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('CRITICAL', SeverityLevel.critical),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('HIGH', SeverityLevel.high),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('MEDIUM', SeverityLevel.medium),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('LOW', SeverityLevel.low),
               ],
             ),
@@ -51,7 +51,7 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
 
           Expanded(
             child: findingsAsync.when(
-              loading: () => SGLoading(message: 'Querying Vulnerability DB...'),
+              loading: () => const SGLoading(message: 'Querying Vulnerability DB...'),
               error: (err, st) => SGErrorView(
                 errorMessage: err.toString(),
                 onRetry: () => ref.refresh(findingsListProvider),
@@ -62,7 +62,7 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
                     : findings.where((f) => f.severity == _selectedSeverity).toList();
 
                 if (filtered.isEmpty) {
-                  return SGEmptyState(
+                  return const SGEmptyState(
                     title: 'No Findings Detected',
                     description: 'No security findings match the selected severity filter.',
                     icon: Icons.verified_user_rounded,
@@ -135,7 +135,7 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
               children: [
                 Text(
                   finding.cveId,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
@@ -155,29 +155,29 @@ class _FindingsScreenState extends ConsumerState<FindingsScreen> {
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     SGChip(label: finding.severity.name, variant: chipVariant),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               finding.title,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(
               finding.description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Row(
               children: [
                 Icon(Icons.code_rounded, size: 14, color: AppColors.textMuted),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   '${finding.repositoryName} • ${finding.filePath}:${finding.lineNumber}',
                   style: TextStyle(fontSize: 11, color: AppColors.textMuted),

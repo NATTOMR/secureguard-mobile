@@ -6,7 +6,7 @@ class SGBottomNavigation extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  SGBottomNavigation({
+  const SGBottomNavigation({
     super.key,
     required this.currentIndex,
     required this.onTap,
@@ -93,7 +93,7 @@ class SGBottomNavigation extends StatelessWidget {
               color: isSelected ? AppColors.primary : AppColors.textMuted,
               size: 22,
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Text(
               label,
               style: TextStyle(

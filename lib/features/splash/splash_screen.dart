@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ],
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.shield_outlined,
                     size: 64,
                     color: AppColors.primary,
@@ -80,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     .scale(duration: 800.ms, curve: Curves.easeOutBack)
                     .shimmer(duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5)),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Platform Title
                 Text(
@@ -92,11 +92,11 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                 ).animate().fadeIn(delay: 200.ms, duration: 600.ms).slideY(begin: 0.2, end: 0),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 Text(
                   AppStrings.appTagline.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
 
-                SizedBox(height: 48),
+                const SizedBox(height: 48),
 
                 // Animated Progress Spinner
                 SizedBox(

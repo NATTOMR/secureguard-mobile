@@ -17,7 +17,7 @@ class AppTheme {
       scaffoldBackgroundColor: const Color(0xFFF8FAFC),
       primaryColor: AppColors.primary,
 
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: Colors.white,
@@ -54,7 +54,7 @@ class AppTheme {
         ),
       ),
 
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
@@ -72,30 +72,30 @@ class AppTheme {
         shadowColor: Colors.black.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: AppColors.cardBorderRadius,
-          side: BorderSide(color: lightCardBorder, width: 1),
+          side: const BorderSide(color: lightCardBorder, width: 1),
         ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFFF1F5F9),
-        hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+        hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         border: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: lightCardBorder),
+          borderSide: const BorderSide(color: lightCardBorder),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: lightCardBorder),
+          borderSide: const BorderSide(color: lightCardBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: AppColors.critical, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.critical, width: 1.5),
         ),
       ),
 
@@ -108,7 +108,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: AppColors.cardBorderRadius,
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.2,
@@ -120,18 +120,18 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: lightTextPrimary,
           minimumSize: const Size.fromHeight(54),
-          side: BorderSide(color: lightCardBorder, width: 1.5),
+          side: const BorderSide(color: lightCardBorder, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: AppColors.cardBorderRadius,
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
 
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
         selectedItemColor: AppColors.primary,
         unselectedItemColor: Color(0xFF64748B),
@@ -224,11 +224,11 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: AppColors.cardBorderRadius,
-          borderSide: BorderSide(color: AppColors.critical, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.critical, width: 1.5),
         ),
       ),
 
@@ -241,7 +241,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: AppColors.cardBorderRadius,
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.2,
@@ -257,7 +257,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: AppColors.cardBorderRadius,
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),

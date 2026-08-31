@@ -33,8 +33,8 @@ class StatusCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: 8),
-              Text(
+              const SizedBox(width: 8),
+              const Text(
                 'ALL SYSTEMS HEALTHY',
                 style: TextStyle(
                   fontSize: 10,
@@ -45,7 +45,7 @@ class StatusCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -78,7 +78,7 @@ class StatusCard extends StatelessWidget {
                             end: const Offset(1.3, 1.3),
                             duration: 1000.ms,
                           ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         status.name,
                         style: TextStyle(
@@ -87,7 +87,7 @@ class StatusCard extends StatelessWidget {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         '${status.latencyMs}ms',
                         style: TextStyle(

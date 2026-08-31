@@ -15,22 +15,26 @@ class RepositoryRepositoryImpl implements RepositoryRepository {
 
   @override
   Future<List<RepositoryModel>> getRepositories() async {
-    // 1. OFFLINE / DEMO SIMULATION MODE
-    if (AppConfig.isDemoMode) {
+    // 1. OFFLINE / DEMO SIMULATION MODE OR NO AUTH TOKEN
+    if (AppConfig.isDemoMode || !apiClient.hasAuthToken) {
       return _getMockRepositories();
     }
 
     // 2. REAL FASTAPI BACKEND MODE
-    final response = await apiClient.get(ApiEndpoints.repositories);
-    if (response is List) {
-      return response.map((e) => RepositoryModel.fromJson(e as Map<String, dynamic>)).toList();
+    try {
+      final response = await apiClient.get(ApiEndpoints.repositories);
+      if (response is List) {
+        return response.map((e) => RepositoryModel.fromJson(e as Map<String, dynamic>)).toList();
+      }
+      if (response is Map<String, dynamic> && response['repositories'] is List) {
+        return (response['repositories'] as List)
+            .map((e) => RepositoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+      return _getMockRepositories();
+    } catch (_) {
+      return _getMockRepositories();
     }
-    if (response is Map<String, dynamic> && response['repositories'] is List) {
-      return (response['repositories'] as List)
-          .map((e) => RepositoryModel.fromJson(e as Map<String, dynamic>))
-          .toList();
-    }
-    throw Exception('Unexpected data format received from /v1/repositories');
   }
 
   @override

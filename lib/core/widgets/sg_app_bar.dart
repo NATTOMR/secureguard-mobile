@@ -11,7 +11,7 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String statusText;
   final StatusType statusType;
 
-  SGAppBar({
+  const SGAppBar({
     super.key,
     required this.title,
     this.subtitle,
@@ -54,13 +54,13 @@ class SGAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               if (showStatusBadge) ...[
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 SGStatusBadge(label: statusText, type: statusType),
               ],
             ],
           ),
           if (subtitle != null) ...[
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subtitle!,
               style: TextStyle(

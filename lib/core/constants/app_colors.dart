@@ -29,25 +29,25 @@ class AppColors {
   static Color get textMuted => isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
 
   // Dynamic Gradients
-  static LinearGradient primaryGradient = LinearGradient(
+  static LinearGradient primaryGradient = const LinearGradient(
     colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  static LinearGradient criticalGradient = LinearGradient(
+  static LinearGradient criticalGradient = const LinearGradient(
     colors: [Color(0xFFEF4444), Color(0xFFB91C1C)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient get cardGlassGradient => isDark
-      ? LinearGradient(
+      ? const LinearGradient(
           colors: [Color(0x1A2563EB), Color(0x050F172A)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         )
-      : LinearGradient(
+      : const LinearGradient(
           colors: [Color(0x1A2563EB), Color(0x0A2563EB)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

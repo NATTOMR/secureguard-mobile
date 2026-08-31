@@ -26,20 +26,20 @@ class ScansScreen extends ConsumerWidget {
         statusType: StatusType.normal,
         actions: [
           IconButton(
-            icon: Icon(Icons.add_task_rounded, color: AppColors.primary),
+            icon: const Icon(Icons.add_task_rounded, color: AppColors.primary),
             onPressed: () => _showStartScanDialog(context),
           ),
         ],
       ),
       body: scansAsync.when(
-        loading: () => SGLoading(message: 'Loading Active Scan Pipeline...'),
+        loading: () => const SGLoading(message: 'Loading Active Scan Pipeline...'),
         error: (err, st) => SGErrorView(
           errorMessage: err.toString(),
           onRetry: () => ref.refresh(scansListProvider),
         ),
         data: (scans) {
           if (scans.isEmpty) {
-            return SGEmptyState(
+            return const SGEmptyState(
               title: 'No Active Scans',
               description: 'Start a new SAST or Container scan engine job.',
               icon: Icons.radar_rounded,
@@ -60,8 +60,8 @@ class ScansScreen extends ConsumerWidget {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         onPressed: () => _showStartScanDialog(context),
-        icon: Icon(Icons.play_arrow_rounded),
-        label: Text('Start New Scan', style: TextStyle(fontWeight: FontWeight.bold)),
+        icon: const Icon(Icons.play_arrow_rounded),
+        label: const Text('Start New Scan', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -122,7 +122,7 @@ class ScansScreen extends ConsumerWidget {
                   ),
                   child: Icon(typeIcon, color: statusColor, size: 22),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +135,7 @@ class ScansScreen extends ConsumerWidget {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
                         'Trigger: ${scan.triggerBy}',
                         style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
@@ -154,9 +154,9 @@ class ScansScreen extends ConsumerWidget {
               ],
             ),
 
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Divider(color: AppColors.cardBorder),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +164,7 @@ class ScansScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Icon(Icons.bug_report_outlined, size: 16, color: AppColors.textMuted),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
                       '${scan.findingsCount} Findings Detected',
                       style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
@@ -210,12 +210,12 @@ class ScansScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              SGTextField(
+              const SizedBox(height: 16),
+              const SGTextField(
                 label: 'Target Repository or Container Image',
                 hintText: 'e.g. secureguard-mobile:latest',
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SGButton(
                 label: 'Launch Scan Job Now',
                 onPressed: () {

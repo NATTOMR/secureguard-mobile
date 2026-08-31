@@ -7,7 +7,7 @@ class SGStatusBadge extends StatelessWidget {
   final String label;
   final StatusType type;
 
-  SGStatusBadge({
+  const SGStatusBadge({
     super.key,
     required this.label,
     this.type = StatusType.normal,
@@ -52,7 +52,7 @@ class SGStatusBadge extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           Text(
             label,
             style: TextStyle(

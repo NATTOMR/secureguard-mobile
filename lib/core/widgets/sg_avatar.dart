@@ -7,7 +7,7 @@ class SGAvatar extends StatelessWidget {
   final double radius;
   final bool isOnline;
 
-  SGAvatar({
+  const SGAvatar({
     super.key,
     this.imageUrl,
     this.initials = 'SG',

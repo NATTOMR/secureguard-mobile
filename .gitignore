@@ -35,6 +35,9 @@ android/app/debug/
 android/app/release/
 android/app/profile/
 android/local.properties
+android/key.properties
+*.jks
+*.keystore
 android/.gradle/
 
 # iOS

@@ -30,7 +30,7 @@ class FindingDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -40,19 +40,19 @@ class FindingDetailScreen extends StatelessWidget {
                       SGChip(label: 'CRITICAL 10.0', variant: SGChipVariant.critical),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
                     'XZ Utils Backdoor Vulnerability in SSHD Pipeline',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Malicious obfuscated code introduced in XZ Utils release builds allows remote attacker to bypass SSH authentication and execute arbitrary code.',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Divider(color: AppColors.cardBorder),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -64,13 +64,13 @@ class FindingDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             Text(
               'Remediation Steps & Fix Guide',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             SGCard(
               child: Column(
@@ -86,12 +86,12 @@ class FindingDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(delay: 200.ms),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             SGButton(
               label: 'Ask AI Copilot for Fix Code',
               variant: SGButtonVariant.primary,
-              icon: Icon(Icons.psychology_rounded, color: Colors.white),
+              icon: const Icon(Icons.psychology_rounded, color: Colors.white),
               onPressed: () => context.push(AppRouter.aiCopilot),
             ).animate().fadeIn(delay: 300.ms),
           ],

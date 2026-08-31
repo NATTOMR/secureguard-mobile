@@ -28,7 +28,7 @@ class DashboardScreen extends ConsumerWidget {
       ),
       body: dashboardAsync.when(
         data: (data) => _buildDashboardContent(context, ref, data),
-        loading: () => Center(
+        loading: () => const Center(
           child: SGLoading(message: 'Connecting to SecureGuard SOC engine...'),
         ),
         error: (err, stack) => SGErrorView(
@@ -53,37 +53,37 @@ class DashboardScreen extends ConsumerWidget {
             // 1. Security Posture Header Banner
             _buildPostureBanner(context, data),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // 2. Metrics Grid (Critical, High, Medium, Low, Repos, Alerts, Scans)
             _buildMetricsGrid(context, data),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 3. Quick Actions
             _buildQuickActions(context),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // 4. Vulnerability Distribution Chart
             _buildVulnerabilityChart(context, data),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // 5. Recent Security Events (Wazuh / SOC / GitHub)
             _buildRecentEvents(context, data),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // 6. Recent Scans (Semgrep SAST / Secrets / Container)
             _buildRecentScans(context, data),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // 7. System Infrastructure Health
             _buildInfrastructureStatus(context, data),
 
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -97,7 +97,7 @@ class DashboardScreen extends ConsumerWidget {
         color: AppColors.surface,
         borderRadius: AppColors.cardBorderRadius,
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0x262563EB), Color(0x0A0F172A)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -112,9 +112,9 @@ class DashboardScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
             ),
-            child: Icon(Icons.shield_rounded, color: AppColors.primary, size: 32),
+            child: const Icon(Icons.shield_rounded, color: AppColors.primary, size: 32),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +135,7 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                       child: Text(
                         '${data.postureScore}/100 • ${data.postureStatus}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.success,
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class DashboardScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Continuous Semgrep SAST & Wazuh SOC monitoring active across all endpoints.',
                   style: TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3),
@@ -165,7 +165,7 @@ class DashboardScreen extends ConsumerWidget {
           'Security Telemetry Overview',
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(
@@ -177,7 +177,7 @@ class DashboardScreen extends ConsumerWidget {
                 onTap: () => context.go(AppRouter.findings),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: SGStatisticCard(
                 title: 'High',
@@ -189,7 +189,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
@@ -201,7 +201,7 @@ class DashboardScreen extends ConsumerWidget {
                 onTap: () => context.go(AppRouter.findings),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: SGStatisticCard(
                 title: 'Low',
@@ -213,7 +213,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
@@ -225,7 +225,7 @@ class DashboardScreen extends ConsumerWidget {
                 onTap: () => context.go(AppRouter.repositories),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: SGStatisticCard(
                 title: 'Active Alerts',
@@ -249,7 +249,7 @@ class DashboardScreen extends ConsumerWidget {
           'Quick Security Actions',
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -261,7 +261,7 @@ class DashboardScreen extends ConsumerWidget {
                 accentColor: AppColors.primary,
                 onTap: () => context.push(AppRouter.scans),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               QuickActionCard(
                 title: 'Ask SecureGuard AI',
                 subtitle: 'Remediation Chat',
@@ -269,7 +269,7 @@ class DashboardScreen extends ConsumerWidget {
                 accentColor: const Color(0xFF8B5CF6),
                 onTap: () => context.go(AppRouter.aiAssistant),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               QuickActionCard(
                 title: 'Alert Triage',
                 subtitle: 'SOC Incidents',
@@ -277,7 +277,7 @@ class DashboardScreen extends ConsumerWidget {
                 accentColor: AppColors.critical,
                 onTap: () => context.go(AppRouter.alerts),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               QuickActionCard(
                 title: 'Export Report',
                 subtitle: 'PDF & Compliance',
@@ -316,16 +316,16 @@ class DashboardScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () => context.go(AppRouter.alerts),
-              child: Text('View All Alerts', style: TextStyle(color: AppColors.primary, fontSize: 12)),
+              child: const Text('View All Alerts', style: TextStyle(color: AppColors.primary, fontSize: 12)),
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.recentEvents.length,
-          separatorBuilder: (_, __) => SizedBox(height: 8),
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final evt = data.recentEvents[index];
             final Color sevColor = _getSeverityColor(evt.severity);
@@ -349,7 +349,7 @@ class DashboardScreen extends ConsumerWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,7 +363,7 @@ class DashboardScreen extends ConsumerWidget {
                             height: 1.3,
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Row(
                           children: [
                             Container(
@@ -410,16 +410,16 @@ class DashboardScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () => context.push(AppRouter.scans),
-              child: Text('All Scans', style: TextStyle(color: AppColors.primary, fontSize: 12)),
+              child: const Text('All Scans', style: TextStyle(color: AppColors.primary, fontSize: 12)),
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.recentScans.length,
-          separatorBuilder: (_, __) => SizedBox(height: 8),
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final scan = data.recentScans[index];
             final bool isPassed = scan.status.toLowerCase() == 'passed';
@@ -438,7 +438,7 @@ class DashboardScreen extends ConsumerWidget {
                     color: isPassed ? AppColors.success : AppColors.critical,
                     size: 24,
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,7 +451,7 @@ class DashboardScreen extends ConsumerWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        SizedBox(height: 3),
+                        const SizedBox(height: 3),
                         Text(
                           '${scan.scanType} • ${scan.duration} • ${scan.findingsCount} findings',
                           style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
@@ -480,12 +480,12 @@ class DashboardScreen extends ConsumerWidget {
           'SOC Connector Infrastructure Health',
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.systemStatuses.length,
-          separatorBuilder: (_, __) => SizedBox(height: 6),
+          separatorBuilder: (_, __) => const SizedBox(height: 6),
           itemBuilder: (context, index) {
             final sys = data.systemStatuses[index];
             return Container(
@@ -500,12 +500,12 @@ class DashboardScreen extends ConsumerWidget {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: AppColors.success,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       sys.name,

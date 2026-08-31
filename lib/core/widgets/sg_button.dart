@@ -12,7 +12,7 @@ class SGButton extends StatelessWidget {
   final double? width;
   final double height;
 
-  SGButton({
+  const SGButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -51,7 +51,7 @@ class SGButton extends StatelessWidget {
       case SGButtonVariant.github:
         bgColor = const Color(0xFF24292F);
         fgColor = Colors.white;
-        borderSide = BorderSide(color: Color(0xFF444C56));
+        borderSide = const BorderSide(color: Color(0xFF444C56));
         break;
     }
 
@@ -72,7 +72,7 @@ class SGButton extends StatelessWidget {
         children: [
           if (icon != null) ...[
             icon!,
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
           ],
           Text(
             label,

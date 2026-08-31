@@ -14,7 +14,7 @@ class SGTextField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final bool enabled;
 
-  SGTextField({
+  const SGTextField({
     super.key,
     this.label,
     required this.hintText,
@@ -51,7 +51,7 @@ class _SGTextFieldState extends State<SGTextField> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
         ],
         TextFormField(
           controller: widget.controller,

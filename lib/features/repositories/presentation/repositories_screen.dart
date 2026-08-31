@@ -25,7 +25,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: SGAppBar(
+      appBar: const SGAppBar(
         title: AppStrings.navRepositories,
         subtitle: 'Monitored Codebases & CI/CD Pipelines',
         showStatusBadge: true,
@@ -54,17 +54,17 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
             child: Row(
               children: [
                 _buildFilterChip('All'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('Critical Risk'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('Warning'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildFilterChip('Secure'),
               ],
             ),
           ),
 
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
 
           // Repositories List
           Expanded(
@@ -82,7 +82,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
                 }).toList();
 
                 if (filtered.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: SGEmptyState(
                       title: 'No Repositories Found',
                       subtitle: 'No code repositories match your current search and filter criteria.',
@@ -98,7 +98,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: filtered.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 12),
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final repo = filtered[index];
                       return _buildRepositoryCard(context, repo);
@@ -106,7 +106,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
                   ),
                 );
               },
-              loading: () => Center(
+              loading: () => const Center(
                 child: SGLoading(message: 'Querying GitHub organization repositories...'),
               ),
               error: (err, _) => SGErrorView(
@@ -182,7 +182,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
                         repo.owner,
                         style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
                         repo.name,
                         style: TextStyle(
@@ -213,22 +213,22 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
               ],
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // Metadata Chips (Language, Branch, Secrets, SAST)
             Row(
               children: [
                 _buildTag(repo.primaryLanguage, Icons.code_rounded, AppColors.textSecondary),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildTag(repo.branch, Icons.merge_type_rounded, AppColors.textMuted),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 if (repo.isPrivate) _buildTag('Private', Icons.lock_outline_rounded, AppColors.textMuted),
               ],
             ),
 
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Divider(color: AppColors.cardBorder, height: 1),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // Findings Breakdown Row
             Row(
@@ -242,7 +242,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text('Last Scanned', style: TextStyle(fontSize: 10, color: AppColors.textMuted)),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       _formatScanTime(repo.lastScannedAt),
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
@@ -269,7 +269,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 12, color: color),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Text(
             text,
             style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w500),
@@ -287,7 +287,7 @@ class _RepositoriesScreenState extends ConsumerState<RepositoriesScreen> {
           height: 6,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           '$count $label',
           style: TextStyle(

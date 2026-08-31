@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "162027421218",
+    "project_id": "guard-3edd5",
+    "storage_bucket": "guard-3edd5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162027421218:android:168758a84b4a6922bc147b",
+        "android_client_info": {
+          "package_name": "com.secureguard.enterprise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8ZX5VJuR2vOBaYVEWInQeUE3vkFqeel0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

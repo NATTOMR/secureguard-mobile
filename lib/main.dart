@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
-import 'core/network/api_client.dart';
 import 'core/services/notification_service.dart';
 import 'core/storage/hive_storage_service.dart';
 
@@ -17,10 +16,18 @@ void main() async {
   };
 
   // Initialize Encrypted Hive Offline Storage
-  await HiveStorageService.init();
+  try {
+    await HiveStorageService.init();
+  } catch (e) {
+    debugPrint('Hive initialization error: $e');
+  }
 
   // Initialize Enterprise Push Notifications & FCM
-  await NotificationService().initialize();
+  try {
+    await NotificationService().initialize();
+  } catch (e) {
+    debugPrint('Notification initialization error: $e');
+  }
 
   // Initialize SharedPreferences & Backend Connectivity Default
   try {
@@ -32,20 +39,11 @@ void main() async {
       }
     }
     if (prefs.containsKey('sg_is_demo_mode')) {
-      AppConfig.isDemoMode = prefs.getBool('sg_is_demo_mode') ?? false;
+      AppConfig.isDemoMode = prefs.getBool('sg_is_demo_mode') ?? true;
     } else {
-      // First Launch: probe live FastAPI backend
-      final testClient = ApiClient();
-      final health = await testClient.checkHealth().timeout(
-        const Duration(milliseconds: 3000),
-        onTimeout: () => (isReachable: false, statusCode: 0, latencyMs: 0, message: 'timeout'),
-      );
-      if (health.isReachable) {
-        AppConfig.isDemoMode = false;
-        await prefs.setBool('sg_is_demo_mode', false);
-      } else {
-        AppConfig.isDemoMode = true;
-      }
+      // Default to Demo Mode for instant out-of-the-box telemetry without requiring live cloud authentication
+      AppConfig.isDemoMode = true;
+      await prefs.setBool('sg_is_demo_mode', true);
     }
   } catch (_) {}
 

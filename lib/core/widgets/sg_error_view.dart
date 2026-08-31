@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import 'sg_button.dart';
 
@@ -8,7 +9,7 @@ class SGErrorView extends StatelessWidget {
   final String? message;
   final VoidCallback? onRetry;
 
-  SGErrorView({
+  const SGErrorView({
     super.key,
     this.title = 'Security Telemetry Error',
     this.errorMessage,
@@ -33,9 +34,9 @@ class SGErrorView extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.critical.withValues(alpha: 0.4)),
               ),
-              child: Icon(Icons.gpp_maybe_rounded, size: 44, color: AppColors.critical),
+              child: const Icon(Icons.gpp_maybe_rounded, size: 44, color: AppColors.critical),
             ),
-            SizedBox(height: 18),
+            const SizedBox(height: 18),
             Text(
               title,
               textAlign: TextAlign.center,
@@ -45,7 +46,7 @@ class SGErrorView extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               effectiveMessage,
               textAlign: TextAlign.center,
@@ -54,12 +55,42 @@ class SGErrorView extends StatelessWidget {
                 color: AppColors.textSecondary,
               ),
             ),
-            if (onRetry != null) ...[
-              SizedBox(height: 20),
+            if (effectiveMessage.contains('401') || effectiveMessage.toLowerCase().contains('authentication') || effectiveMessage.toLowerCase().contains('token')) ...[
+              const SizedBox(height: 20),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SGButton(
+                    label: 'Log In',
+                    icon: const Icon(Icons.login_rounded, size: 18, color: Colors.white),
+                    onPressed: () {
+                      try {
+                        GoRouter.of(context).go('/login');
+                      } catch (_) {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      }
+                    },
+                    width: 220,
+                    height: 42,
+                  ),
+                  if (onRetry != null) ...[
+                    const SizedBox(height: 10),
+                    SGButton(
+                      label: 'Retry Connection',
+                      onPressed: onRetry,
+                      width: 220,
+                      height: 42,
+                      variant: SGButtonVariant.secondary,
+                    ),
+                  ],
+                ],
+              ),
+            ] else if (onRetry != null) ...[
+              const SizedBox(height: 20),
               SGButton(
                 label: 'Retry Connection',
                 onPressed: onRetry,
-                width: 200,
+                width: 220,
                 height: 42,
                 variant: SGButtonVariant.secondary,
               ),

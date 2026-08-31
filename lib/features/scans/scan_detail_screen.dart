@@ -35,16 +35,16 @@ class ScanDetailScreen extends StatelessWidget {
                         'SAST Static Analysis Engine',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                       ),
-                      SGChip(label: 'COMPLETED', variant: SGChipVariant.success),
+                      const SGChip(label: 'COMPLETED', variant: SGChipVariant.success),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
                     'Target: auth-gateway-service (main branch)',
                     style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
-                  SizedBox(height: 16),
-                  Row(
+                  const SizedBox(height: 16),
+                  const Row(
                     children: [
                       SGChip(label: '8 Findings', variant: SGChipVariant.critical),
                       SizedBox(width: 8),
@@ -55,13 +55,13 @@ class ScanDetailScreen extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             Text(
               'Scan Execution Output Logs',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             Container(
               width: double.infinity,

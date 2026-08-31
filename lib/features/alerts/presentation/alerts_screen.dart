@@ -83,21 +83,21 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
             child: Row(
               children: [
                 _buildSeverityChip('All', null),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildSeverityChip('Critical', AppColors.critical),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildSeverityChip('High', AppColors.high),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildSeverityChip('Medium', AppColors.warning),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildSeverityChip('Low', AppColors.low),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildSeverityChip('Info', AppColors.info),
               ],
             ),
           ),
 
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
 
           // Alerts List
           Expanded(
@@ -116,7 +116,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                 }).toList();
 
                 if (filtered.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: SGEmptyState(
                       title: 'No Security Alerts',
                       subtitle: 'No incidents match your current search and severity filters.',
@@ -132,7 +132,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: filtered.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 12),
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final alert = filtered[index];
                       return _buildAlertCard(context, alert);
@@ -140,7 +140,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                   ),
                 );
               },
-              loading: () => Center(child: SGLoading(message: 'Querying SOC alert stream...')),
+              loading: () => const Center(child: SGLoading(message: 'Querying SOC alert stream...')),
               error: (err, _) => SGErrorView(
                 message: 'Failed to fetch alerts: $err',
                 onRetry: () => ref.read(liveAlertsNotifierProvider.notifier).refresh(),
@@ -217,7 +217,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                   decoration: BoxDecoration(
@@ -238,7 +238,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
               ],
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // Title
             Text(
@@ -251,7 +251,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
               ),
             ),
 
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
 
             // Description
             Text(
@@ -261,9 +261,9 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
               overflow: TextOverflow.ellipsis,
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Divider(color: AppColors.cardBorder, height: 1),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // Bottom Status Row
             Row(
@@ -280,13 +280,13 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                     shape: BoxShape.circle,
                   ),
                 ),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
                   'Status: ${alert.status.name.toUpperCase()}',
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textMuted),
                 ),
                 const Spacer(),
-                Text(
+                const Text(
                   'View Triage Details →',
                   style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600),
                 ),

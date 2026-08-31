@@ -21,7 +21,11 @@ import '../repositories/finding_repository.dart';
 import '../repositories/scan_repository.dart';
 
 // Core Network & Infrastructure Providers
-final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
+final apiClientProvider = Provider<ApiClient>((ref) {
+  final client = ApiClient();
+  client.initToken();
+  return client;
+});
 
 final notificationServiceProvider = Provider<NotificationService>((ref) => NotificationService());
 
@@ -236,6 +240,13 @@ class LiveAlertsNotifier extends StateNotifier<AsyncValue<List<AlertModel>>> {
           state = AsyncValue.data(updated);
         });
       } catch (_) {}
+    } else if (type == 'telemetry_sync' && event['alerts'] is List) {
+      try {
+        final alerts = (event['alerts'] as List)
+            .map((e) => AlertModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        state = AsyncValue.data(alerts);
+      } catch (_) {}
     }
   }
 
@@ -320,6 +331,7 @@ class LiveDashboardNotifier extends StateNotifier<AsyncValue<DashboardModel>> {
 
 final liveDashboardNotifierProvider = StateNotifierProvider<LiveDashboardNotifier, AsyncValue<DashboardModel>>((ref) {
   ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
   return LiveDashboardNotifier(
     ref.watch(dashboardRepositoryProvider),
     ref.watch(webSocketServiceProvider),
@@ -333,6 +345,7 @@ final dashboardDataProvider = Provider<AsyncValue<DashboardModel>>((ref) {
 
 final repositoriesDataProvider = FutureProvider<List<RepositoryModel>>((ref) async {
   ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
   return ref.watch(repositoryRepositoryProvider).getRepositories();
 });
 
@@ -342,16 +355,19 @@ final alertsDataProvider = Provider<AsyncValue<List<AlertModel>>>((ref) {
 
 final appSettingsProvider = FutureProvider<AppSettingsModel>((ref) async {
   ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
   return ref.watch(settingsRepositoryProvider).loadSettings();
 });
 
 final scansListProvider = FutureProvider((ref) async {
   ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
   return ref.watch(scanRepositoryProvider).getScans();
 });
 
 final findingsListProvider = FutureProvider((ref) async {
   ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
   return ref.watch(findingRepositoryProvider).getFindings();
 });
 

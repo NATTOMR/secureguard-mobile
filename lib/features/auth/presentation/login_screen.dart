@@ -32,6 +32,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _handleLoginSuccess() {
+    ref.invalidate(liveDashboardNotifierProvider);
+    ref.invalidate(liveAlertsNotifierProvider);
+    ref.invalidate(repositoriesDataProvider);
+    ref.invalidate(scansListProvider);
+    ref.invalidate(findingsListProvider);
+    ref.invalidate(appSettingsProvider);
     if (mounted) {
       context.go(AppRouter.dashboard);
     }
@@ -52,12 +58,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             SnackBar(
               content: Row(
                 children: [
-                  Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
-                  SizedBox(width: 8),
+                  const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Authentication Failed: $errorMessage',
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
@@ -69,7 +75,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: 'Use Demo Mode',
                 textColor: Colors.white,
                 onPressed: () {
-                  AppConfig.isDemoMode = true;
                   _handleOfflineLogin();
                 },
               ),
@@ -98,6 +103,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _handleOfflineLogin() async {
+    AppConfig.isDemoMode = true;
+    ref.read(isDemoModeProvider.notifier).state = true;
     await ref.read(authStateProvider.notifier).loginOffline();
     _handleLoginSuccess();
   }
@@ -134,7 +141,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Top Header Brand Logo
                 Row(
@@ -146,9 +153,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.cardBorder),
                       ),
-                      child: Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
+                      child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 28),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -156,7 +163,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'SecureGuard',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                         ),
-                        Text(
+                        const Text(
                           'ENTERPRISE SECURITY PLATFORM',
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary, letterSpacing: 1.2),
                         ),
@@ -165,45 +172,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ).animate().fadeIn(duration: 400.ms),
 
-                SizedBox(height: 36),
+                const SizedBox(height: 36),
 
                 Text(
                   AppStrings.loginTitle,
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                 ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 Text(
                   AppStrings.loginSubtitle,
                   style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ).animate().fadeIn(delay: 200.ms),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // GitHub SSO Button
                 SGButton(
                   label: AppStrings.githubLogin,
                   variant: SGButtonVariant.github,
                   isLoading: isLoading,
-                  icon: Icon(Icons.code_rounded, color: Colors.white, size: 22),
+                  icon: const Icon(Icons.code_rounded, color: Colors.white, size: 22),
                   onPressed: _handleGithubLogin,
                 ).animate().fadeIn(delay: 300.ms),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Row(
                   children: [
                     Expanded(child: Divider(color: AppColors.cardBorder)),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text('OR', style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.bold)),
                     ),
                     Expanded(child: Divider(color: AppColors.cardBorder)),
                   ],
                 ).animate().fadeIn(delay: 400.ms),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Corporate Email Input
                 SGTextField(
@@ -211,11 +218,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   hintText: 'analyst@company.com',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: Icon(Icons.email_outlined),
+                  prefixIcon: const Icon(Icons.email_outlined),
                   validator: (v) => v == null || v.isEmpty ? 'Email is required' : null,
                 ).animate().fadeIn(delay: 450.ms),
 
-                SizedBox(height: 18),
+                const SizedBox(height: 18),
 
                 // Password Input
                 SGTextField(
@@ -223,11 +230,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   hintText: '••••••••••••',
                   controller: _passwordController,
                   isPassword: true,
-                  prefixIcon: Icon(Icons.lock_outline_rounded),
+                  prefixIcon: const Icon(Icons.lock_outline_rounded),
                   validator: (v) => v == null || v.isEmpty ? 'Password is required' : null,
                 ).animate().fadeIn(delay: 500.ms),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 // Remember Me & Forgot Password
                 Row(
@@ -250,7 +257,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             },
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           AppStrings.rememberMe,
                           style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
@@ -263,7 +270,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SnackBar(content: Text('Password reset instructions dispatched.')),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         AppStrings.forgotPassword,
                         style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold),
                       ),
@@ -271,7 +278,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ).animate().fadeIn(delay: 550.ms),
 
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // Submit Button
                 SGButton(
@@ -280,7 +287,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: _handleEmailLogin,
                 ).animate().fadeIn(delay: 600.ms),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Offline & Biometric Buttons Row
                 Row(
@@ -293,7 +300,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: _handleOfflineLogin,
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     InkWell(
                       onTap: _handleBiometricAuth,
                       borderRadius: AppColors.cardBorderRadius,
@@ -305,13 +312,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           borderRadius: AppColors.cardBorderRadius,
                           border: Border.all(color: AppColors.cardBorder),
                         ),
-                        child: Icon(Icons.fingerprint_rounded, color: AppColors.primary, size: 26),
+                        child: const Icon(Icons.fingerprint_rounded, color: AppColors.primary, size: 26),
                       ),
                     ),
                   ],
                 ).animate().fadeIn(delay: 650.ms),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
               ],
             ),
           ),

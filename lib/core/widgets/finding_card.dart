@@ -47,7 +47,7 @@ class FindingCard extends StatelessWidget {
               children: [
                 Text(
                   finding.cveId,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
@@ -56,7 +56,7 @@ class FindingCard extends StatelessWidget {
                 SGChip(label: finding.severity.name, variant: chipVariant),
               ],
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(
               finding.title,
               style: TextStyle(
@@ -65,11 +65,11 @@ class FindingCard extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Icon(Icons.source_rounded, size: 13, color: AppColors.textMuted),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Flexible(
                   child: Text(
                     finding.repositoryName,
@@ -77,14 +77,14 @@ class FindingCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Icon(Icons.radar_rounded, size: 13, color: AppColors.textMuted),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   'Semgrep Engine',
                   style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   AppFormatters.formatShortDate(finding.detectedAt),
                   style: TextStyle(fontSize: 11, color: AppColors.textMuted),

@@ -49,7 +49,7 @@ class ChartCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (subtitle != null) ...[
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
                         subtitle!,
                         style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
@@ -69,7 +69,7 @@ class ChartCard extends StatelessWidget {
                   ),
                   child: Text(
                     badgeLabel!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
@@ -78,7 +78,7 @@ class ChartCard extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 18),
+          const SizedBox(height: 18),
           SizedBox(
             height: 170,
             child: chartWidget ?? _buildDefaultBarChart(),
@@ -116,27 +116,27 @@ class ChartCard extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 switch (value.toInt()) {
                   case 0:
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Crit', style: TextStyle(fontSize: 11, color: AppColors.critical, fontWeight: FontWeight.bold)),
                     );
                   case 1:
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('High', style: TextStyle(fontSize: 11, color: AppColors.high, fontWeight: FontWeight.bold)),
                     );
                   case 2:
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Med', style: TextStyle(fontSize: 11, color: AppColors.warning, fontWeight: FontWeight.bold)),
                     );
                   case 3:
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text('Low', style: TextStyle(fontSize: 11, color: AppColors.low, fontWeight: FontWeight.bold)),
                     );
                   default:
-                    return Text('');
+                    return const Text('');
                 }
               },
             ),
