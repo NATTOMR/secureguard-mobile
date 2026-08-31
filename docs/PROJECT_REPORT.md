@@ -365,44 +365,159 @@ The remainder of this report is organized into the following chapters:
 
 ## CHAPTER 2 — EXISTING SYSTEMS AND RELATED TECHNOLOGIES
 
-### 2.1 Security Operations Center
-Overview of enterprise SOC workflows, incident escalation paths, and telemetry pipelines.
+### 2.1 Security Operations Center (SOC)
+A Security Operations Center (SOC) is an organized, centralized function within an enterprise employing people, processes, and technology to continuously monitor and improve an organization's cybersecurity posture while preventing, detecting, analyzing, and responding to cyber incidents. The standard operational workflow within a SOC follows a tiered hierarchical triage model:
 
-### 2.2 SIEM
-Role of Security Information and Event Management (SIEM) engines in log aggregation, correlation, and alerting.
+* **Tier 1 (Triage Specialists)**: Continuously monitor incoming telemetry streams, validate alert legitimacy, filter false positives, and categorize incidents by severity.
+* **Tier 2 (Incident Responders)**: Perform in-depth forensic investigation on confirmed threats, correlate log traces across endpoints, and execute containment procedures.
+* **Tier 3 (Threat Hunters & Senior Specialists)**: Conduct proactive threat hunting, analyze zero-day exploits, and author detection rules.
 
-### 2.3 Wazuh
-Open-source security monitoring, endpoint detection, and compliance monitoring architecture.
+**Role in SecurePulse**: SecurePulse acts as a mobile extension of the SOC Tier 1 and Tier 2 operational surface. It provides on-call analysts with real-time incident notifications, raw payload inspection, and status acknowledgment mechanisms directly on their mobile devices.
 
-### 2.4 GitHub Security
-Codebase security features including Dependabot, Secret Scanning, and code review policy enforcement.
+* **Current Implementation**: Real-time event queue viewer, severity filtering (Critical, High, Medium, Low), detailed alert modal with origin IP and destination port parsing, and status transitions (`active` ➔ `investigating` ➔ `resolved`) via `/v1/soc/alerts/{id}/status`.
+* **Planned Integration**: Two-way integration with enterprise ticketing systems (Jira Service Desk, ServiceNow) and automated playbook triggers directly from the mobile client.
 
-### 2.5 Semgrep
-Fast, open-source static analysis engine for code vulnerability discovery and custom rule enforcement.
+---
 
-### 2.6 FastAPI
-High-performance asynchronous Python web framework for microservices, OpenAPI schemas, and WebSocket routing.
+### 2.2 Security Information and Event Management (SIEM)
+SIEM technology aggregates log data and event streams generated across an organization's entire IT infrastructure—including host operating systems, network firewalls, web proxies, and authentication servers. SIEM engines normalize disparate data formats, correlate events across time windows, and trigger security alerts when predefined correlation rules match suspicious behavior.
 
-### 2.7 PostgreSQL
-Relational database management system supporting ACID compliance and structured security telemetry storage.
+**Role in SecurePulse**: SecurePulse consumes correlated SIEM security alerts and renders them into an interactive incident triage feed.
 
-### 2.8 Flutter
-Google's multi-platform UI toolkit providing native compilation, hardware-accelerated graphics, and hot reload.
+* **Current Implementation**: Standardized ingestion of SIEM event objects via REST (`/v1/soc/alerts`) and streaming WebSockets (`/ws/alerts`), rendered with high-contrast severity tags and human-readable remediation advice.
+* **Planned Integration**: Multi-SIEM source aggregation bridging Splunk, Microsoft Sentinel, and Elastic Security simultaneously into a unified mobile feed.
 
-### 2.9 WebSocket
-Full-duplex bidirectional communication protocol enabling sub-second threat streaming.
+[FIGURE PLACEHOLDER]
+Description: SIEM Log Aggregation, Correlation, and Mobile Dispatch Pipeline to SecurePulse.
+Suggested filename: fig_2_1_siem_aggregation_pipeline.png
 
-### 2.10 JWT
-JSON Web Token standard (RFC 7519) for compact, cryptographically signed stateless authentication claims.
+---
+
+### 2.3 Wazuh Open-Source Security Platform
+Wazuh is an open-source, enterprise-ready security monitoring solution providing unified Extended Detection and Response (XDR) and SIEM capabilities. Wazuh deploys lightweight endpoint agents across Linux, Windows, and macOS endpoints that forward system logs, file integrity monitoring (FIM) events, and rootkit detection telemetry to a central Wazuh Manager and indexing cluster.
+
+**Role in SecurePulse**: Wazuh serves as the primary endpoint and host intrusion detection telemetry source.
+
+* **Current Implementation**: Standardized data model (`AlertModel`) parsing Wazuh rule triggers, including SSH brute force attacks, unauthorized privilege escalation, and anomalous authentication spikes. In Demo Mode, realistic Wazuh intrusion events are simulated; in Live Mode, events are ingested from the FastAPI backend.
+* **Planned Integration**: Direct querying of the Wazuh Manager REST API (`/agents`, `/syscheck`, `/rootcheck`) allowing security analysts to inspect endpoint agent connectivity and restart compromised agents directly from the mobile app.
+
+[CODE SNIPPET PLACEHOLDER]
+Description: Wazuh SIEM Alert Data Model parsing JSON telemetry payload into strongly typed Dart objects.
+Suggested filename: snippet_2_1_wazuh_alert_model.dart
+
+---
+
+### 2.4 GitHub Security & Codebase Auditing
+GitHub provides comprehensive software supply chain security tools, including Dependabot for vulnerable dependency detection, Secret Scanning for exposed tokens, and GitHub Code Scanning powered by CodeQL and third-party static analysis engines.
+
+**Role in SecurePulse**: SecurePulse monitors enterprise code repositories, tracks branch activity, evaluates repository health grades (A through F), and tracks open vulnerability counts.
+
+* **Current Implementation**: Repository monitoring view (`RepositoryModel`), tracking repository metadata (primary language, branch, privacy status, secret count, SAST finding count), and on-demand scan triggers (`POST /v1/repositories/{id}/scan`).
+* **Planned Integration**: Webhook-driven GitHub App integration capturing pull request events in real time and posting automated PR review comments with remediation diffs directly from the mobile copilot.
+
+[SCREENSHOT PLACEHOLDER]
+Description: SecurePulse Repository Security Screen displaying monitored codebases, health scores (A-F), and branch indicators.
+Suggested filename: fig_2_2_repository_security_audit.png
+
+---
+
+### 2.5 Semgrep Static Analysis Engine
+Semgrep is a fast, open-source, lightweight static analysis (SAST) tool designed for finding bugs, enforcing code standards, and discovering security vulnerabilities in source code without requiring a full build compiler step. Semgrep operates using declarative syntax rules written in YAML that match abstract syntax trees (ASTs).
+
+**Role in SecurePulse**: Semgrep provides the static vulnerability findings displayed across monitored codebases, categorizing vulnerabilities by Common Weakness Enumeration (CWE) and OWASP Top 10 classifications.
+
+* **Current Implementation**: Granular vulnerability findings view (`FindingModel` and `ScanModel`), displaying line numbers, affected files, CWE identifiers, and severity rankings for SQL injection, hardcoded secrets, and insecure cryptographic configurations.
+* **Planned Integration**: An in-app Semgrep rule authoring interface with syntax validation, enabling security engineers to draft and deploy custom YAML detection rules to cloud CI/CD pipelines directly from the phone.
+
+---
+
+### 2.6 FastAPI Backend Framework
+FastAPI is a modern, high-performance web framework for building APIs with Python 3.8+ based on standard Python type hints. Built upon Starlette for asynchronous web routing and Pydantic for data validation, FastAPI provides native asynchronous I/O (`asyncio`), automatic OpenAPI (Swagger) documentation generation, and native WebSocket support.
+
+**Role in SecurePulse**: FastAPI serves as the central cloud orchestration gateway. It interfaces with databases, runs background workers, communicates with external security tools (Wazuh, GitHub, Semgrep), and serves REST endpoints and WebSocket channels to the mobile client.
+
+* **Current Implementation**: Mobile client integrates with FastAPI endpoint schemas (`/v1/auth/login`, `/v1/dashboard/summary`, `/v1/repositories`, `/v1/soc/alerts`, `/v1/ai/chat`, `/ws/alerts`).
+* **Planned Integration**: Redis-backed Celery/RQ distributed task queue orchestration for asynchronous multi-repository scanning and distributed notification workers.
+
+---
+
+### 2.7 PostgreSQL Database
+PostgreSQL is a robust, open-source object-relational database management system known for its reliability, feature robustness, and ACID compliance. In security architectures, PostgreSQL provides structured schema enforcement for user management, role-based access control (RBAC), and persistent audit trails.
+
+**Role in SecurePulse**: 
+* **Backend Tier**: PostgreSQL stores structured enterprise security records, repository metadata, historical scan outputs, and analyst triage audit logs.
+* **Mobile Tier**: SecurePulse utilizes an embedded key-value database (`Hive`) and hardware keystore (`FlutterSecureStorage`) on the mobile client for zero-latency offline caching of security state.
+* **Current Implementation**: Client-side storage layer fully isolated and encrypted using AES-256 / RSA.
+* **Planned Integration**: Client-side SQLCipher relational cache with background delta synchronization to cloud PostgreSQL instances.
+
+---
+
+### 2.8 Flutter Cross-Platform Framework
+Flutter is an open-source UI software development kit created by Google. Unlike traditional hybrid frameworks that rely on web views or JavaScript bridges (e.g., React Native, Cordova), Flutter compiles directly to native ARM and x86 machine code using Dart. Flutter renders UI components using the Impeller / Skia graphics engine, guaranteeing predictable 60fps / 120fps rendering performance.
+
+**Role in SecurePulse**: Flutter provides the cross-platform presentation foundation for SecurePulse, ensuring identical, pixel-perfect rendering across Android, iOS, and Web platforms.
+
+* **Current Implementation**: Complete multi-tab navigation shell (`GoRouter`), Riverpod 2.6.1 reactive state management, custom Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light themes, and vector PDF compilation (`pdf` package).
+* **Planned Integration**: Specialized tablet/foldable dual-pane master-detail layouts and WearOS / Apple Watch companion UI extensions.
+
+---
+
+### 2.9 WebSocket Protocol
+The WebSocket protocol (RFC 6455) provides full-duplex, bidirectional communication channels over a single long-lived TCP connection. Unlike standard HTTP request-response cycles that introduce polling overhead and latency, WebSockets allow servers to push real-time event payloads to connected clients instantaneously.
+
+**Role in SecurePulse**: WebSockets deliver sub-second threat telemetry from the cloud backend directly to the mobile analyst.
+
+* **Current Implementation**: `WebSocketService` managing connection lifecycles, automatic URL scheme transformations (`http->ws` and `https->wss`), channel state broadcasting, and graceful fallback to HTTP polling.
+* **Planned Integration**: Binary serialization (Protocol Buffers) over WebSockets for high-throughput enterprise environments processing >10,000 events/second.
+
+[CODE SNIPPET PLACEHOLDER]
+Description: WebSocket Service connection lifecycle, heartbeat management, and automatic protocol scheme transformation.
+Suggested filename: snippet_2_2_websocket_service.dart
+
+---
+
+### 2.10 JSON Web Tokens (JWT)
+JSON Web Token (RFC 7519) is an open standard that defines a compact and self-contained method for securely transmitting information between parties as a JSON object. JWTs are digitally signed using cryptographic algorithms (HMAC SHA256 or RSA/ECDSA public-private key pairs), enabling stateless, tamper-proof user authentication.
+
+**Role in SecurePulse**: JWTs authenticate all REST API invocations and WebSocket handshake connections initiated by the mobile client.
+
+* **Current Implementation**: Stored in hardware-backed secure storage (`FlutterSecureStorage`), automatically injected into Dio HTTP headers (`Authorization: Bearer <token>`), and passed as query parameters during WebSocket handshakes.
+* **Planned Integration**: Automated OAuth2 refresh token rotation pipeline with biometric re-verification gates.
+
+---
 
 ### 2.11 AI-Assisted Security Operations
-Utilization of Large Language Models (LLMs) and heuristic rule engines for automated remediation guidance and threat analysis.
+Artificial Intelligence and Large Language Models (LLMs) have emerged as powerful tools in modern DevSecOps and SOC triage. AI models assist analysts by summarizing complex intrusion traces, explaining obscure CVE vulnerabilities, and generating precise code patches.
 
-### 2.12 Existing System Limitations
-Analysis of legacy desktop SIEM tools, lack of mobile-first triage interfaces, and high operational latency during off-hours.
+**Role in SecurePulse**: SecurePulse features an integrated AI Cybersecurity Copilot.
 
-### 2.13 SecurePulse Approach
-Unified mobile console combining SIEM feeds, SAST scanning, AI copilot intelligence, and local cryptographic reporting.
+* **Current Implementation**: Conversational chat interface (`AiAssistantScreen`) with markdown code formatting. Features local rule-based heuristic remediation generators in Demo Mode (covering CVE-2024-3094 XZ Utils backdoor, parameterized SQLAlchemy fixes for SQL injection, and AWS secret rotation protocols), and connects to cloud LLMs via `/v1/ai/chat` in Live Mode.
+* **Planned Integration**: Multi-agent reasoning pipeline that cross-references live SIEM alerts with repository ASTs to generate automated Git pull requests containing verified security patches.
+
+[SCREENSHOT PLACEHOLDER]
+Description: SecurePulse AI Copilot generating code-level remediation advice for CVE-2024-3094 and SQL injection vulnerabilities.
+Suggested filename: fig_2_3_ai_copilot_remediation.png
+
+---
+
+### 2.12 Limitations of Existing Security Platforms
+A rigorous comparative analysis highlights the operational deficits of traditional security architectures:
+
+| Feature / Capability | Traditional Desktop SIEM / SOC Platforms | Legacy Mobile Security Apps | SecurePulse Mobile Console |
+| :--- | :--- | :--- | :--- |
+| **Form Factor & Mobility** | Fixed workstation browser required | Basic notification viewers only | Native, 60fps responsive mobile UI |
+| **Real-Time Event Delivery** | Complex web dashboards | Delayed push notifications | Sub-second full-duplex WebSocket stream |
+| **Offline Operation** | Completely inoperable without network | Fails on network drop | Deterministic 0ms Demo / Offline Simulation |
+| **Local Storage Security** | Browser cookies / local storage | Plaintext SharedPreferences / SQLite | Hardware Keystore (AES-256) + Encrypted Hive |
+| **Biometric Access Gate** | Not supported | Basic OS pin prompt | Hardware Face ID / Fingerprint challenge |
+| **SAST Code Auditing** | Separate CI/CD web interface | Not supported | Integrated repo tracking & scan triggers |
+| **AI Remediation Guidance** | External web chat tools | Not supported | Context-aware AI Copilot with code diffs |
+| **Compliance Export** | Manual spreadsheet compilation | Not supported | On-device vector PDF with SHA256 audit stamp |
+
+---
+
+### 2.13 The SecurePulse Approach
+SecurePulse synthesizes these disparate technologies into a cohesive, mobile-first cybersecurity architecture. By combining Flutter's native client performance, FastAPI's asynchronous microservice backbone, Wazuh and Semgrep telemetry, hardware-backed cryptography, and conversational AI assistance, SecurePulse establishes a new standard for portable, resilient, and proactive enterprise cyber defense.
 
 ---
 
