@@ -106,6 +106,20 @@ secureguard-mobile/
 
 ---
 
+## 📚 Complete Documentation Suite
+
+Comprehensive technical, architectural, and operational documentation is available in the [`docs/`](docs/) directory:
+
+| Document | Description |
+| :--- | :--- |
+| 📋 [**Project Technical Report**](docs/PROJECT_REPORT.md) | Executive project dossier, problem matrix, test coverage, and security audit. |
+| 🧠 [**Architecture Mindmap**](docs/MINDMAP.md) | Visual Mermaid system architecture, dual mode dataflows, and navigation graphs. |
+| 📖 [**Operations Walkthrough**](docs/WALKTHROUGH.md) | End-to-end screen workflows, triage steps, and developer user manual. |
+| 🗺️ [**Product Roadmap**](docs/ROADMAP.md) | Strategic evolution phases, milestone timelines, and feature deliverables. |
+| ⚡ [**API Integration Guide**](docs/API_INTEGRATION.md) | FastAPI endpoint contracts, WebSocket streaming, and deployment guides. |
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
