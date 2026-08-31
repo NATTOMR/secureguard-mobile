@@ -74,7 +74,7 @@ class AiRepositoryImpl implements AiRepository {
           '4. **Git History Scrub:** Use `git-filter-repo` to purge the commit containing the secret.';
     }
 
-    return '### 🛡️ SecureGuard AI Analysis\n\n'
+    return '### 🛡️ SecurePulse AI Analysis\n\n'
         'I have analyzed your security inquiry regarding **"$query"**.\n\n'
         '- **Recommended Action:** Review the affected code branch and ensure all input is validated and sanitized.\n'
         '- **SAST Check:** Enforce Semgrep security rules before merging PRs.\n'

@@ -2,14 +2,14 @@ class AppStrings {
   AppStrings._();
 
   // Branding
-  static const String appName = 'SecureGuard';
+  static const String appName = 'SecurePulse';
   static const String appTagline = 'Enterprise Security Platform';
   static const String appVersion = 'v2.4.0 (Build 1082)';
 
   // Main 5 Navigation Items
   static const String navDashboard = 'Dashboard';
   static const String navRepositories = 'Repositories';
-  static const String navAiAssistant = 'SecureGuard AI';
+  static const String navAiAssistant = 'SecurePulse AI';
   static const String navAlerts = 'Alerts';
   static const String navSettings = 'Settings';
   static const String navProfile = 'Profile';
@@ -18,7 +18,7 @@ class AppStrings {
 
   // Auth Strings
   static const String loginTitle = 'Enterprise Security Login';
-  static const String loginSubtitle = 'Authenticate using your SecureGuard credentials or SSO';
+  static const String loginSubtitle = 'Authenticate using your SecurePulse credentials or SSO';
   static const String githubLogin = 'Continue with GitHub';
   static const String emailLogin = 'Continue with Email';
   static const String offlineLogin = 'Continue in Demo / Offline Mode';
@@ -42,8 +42,8 @@ class AppStrings {
   static const String quickActions = 'Quick Actions';
 
   // AI Assistant
-  static const String aiTitle = 'SecureGuard AI';
+  static const String aiTitle = 'SecurePulse AI';
   static const String aiSubtitle = 'Enterprise Security Assistant';
   static const String aiWelcome =
-      'Greetings, Security Analyst. I am **SecureGuard AI**.\nHow can I assist you with threat remediation, Semgrep SAST rules, CVE patch guidance, or secret rotation today?';
+      'Greetings, Security Analyst. I am **SecurePulse AI**.\nHow can I assist you with threat remediation, Semgrep SAST rules, CVE patch guidance, or secret rotation today?';
 }

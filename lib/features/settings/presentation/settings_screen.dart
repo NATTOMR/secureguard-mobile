@@ -214,7 +214,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
         ),
         content: Text(
-          'You will be signed out of the SecureGuard SOC platform. Any unsaved triage state will be cleared.',
+          'You will be signed out of the SecurePulse SOC platform. Any unsaved triage state will be cleared.',
           style: TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.4),
         ),
         actions: [
@@ -906,7 +906,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Org: SecureGuard-Enterprise • 8 Repos Active',
+                        'Org: SecurePulse-Enterprise • 8 Repos Active',
                         style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                         overflow: TextOverflow.ellipsis,
                       ),

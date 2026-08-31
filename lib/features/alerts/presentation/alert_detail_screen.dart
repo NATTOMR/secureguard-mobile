@@ -135,7 +135,7 @@ class AlertDetailScreen extends ConsumerWidget {
 
                 // Action Buttons
                 SGButton(
-                  label: 'Remediate with SecureGuard AI',
+                  label: 'Remediate with SecurePulse AI',
                   icon: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 20),
                   onPressed: () {
                     context.go(AppRouter.aiAssistant);

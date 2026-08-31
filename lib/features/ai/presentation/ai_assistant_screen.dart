@@ -196,7 +196,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                       controller: _promptController,
                       style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
                       decoration: InputDecoration(
-                        hintText: 'Ask SecureGuard AI (e.g. "Remediate SQL injection")...',
+                        hintText: 'Ask SecurePulse AI (e.g. "Remediate SQL injection")...',
                         hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         filled: true,
@@ -290,7 +290,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                   Icon(Icons.shield_rounded, size: 14, color: AppColors.primary),
                   SizedBox(width: 6),
                   Text(
-                    'SecureGuard AI Agent',
+                    'SecurePulse AI Agent',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,

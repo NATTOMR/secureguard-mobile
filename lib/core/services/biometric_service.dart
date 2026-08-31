@@ -20,7 +20,7 @@ class BiometricService {
       if (!isAvailable) return false;
 
       return await _auth.authenticate(
-        localizedReason: 'Scan fingerprint or Face ID to access SecureGuard Enterprise Platform',
+        localizedReason: 'Scan fingerprint or Face ID to access SecurePulse Enterprise Platform',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,

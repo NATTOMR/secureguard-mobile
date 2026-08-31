@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
                 // Platform Title
                 Text(
-                  'SecureGuard',
+                  'SecurePulse',
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
                         fontSize: 34,
                         letterSpacing: -1,

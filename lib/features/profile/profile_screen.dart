@@ -80,7 +80,7 @@ class ProfileScreen extends ConsumerWidget {
 
             // Logout Button
             SGButton(
-              label: 'Sign Out of SecureGuard Platform',
+              label: 'Sign Out of SecurePulse Platform',
               variant: SGButtonVariant.danger,
               icon: const Icon(Icons.logout_rounded, color: Colors.white),
               onPressed: () {

@@ -13,12 +13,12 @@ apt-get update && apt-get install --only-upgrade xz-utils liblzma5
 ```
 3. **Verify Integrity**:
 Run `lzma --version` and verify build checksum against vendor bulletin.
-4. **CI Gate Policy**: Enforce automated dependency blocker rule in SecureGuard policy engine.
+4. **CI Gate Policy**: Enforce automated dependency blocker rule in SecurePulse policy engine.
 ''';
     }
 
     return '''
-### SecureGuard Copilot Response
+### SecurePulse Copilot Response
 
 To remediate this security finding, implement parameter validation and sanitization at the API gateway layer:
 

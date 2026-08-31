@@ -29,7 +29,7 @@ class DashboardScreen extends ConsumerWidget {
       body: dashboardAsync.when(
         data: (data) => _buildDashboardContent(context, ref, data),
         loading: () => const Center(
-          child: SGLoading(message: 'Connecting to SecureGuard SOC engine...'),
+          child: SGLoading(message: 'Connecting to SecurePulse SOC engine...'),
         ),
         error: (err, stack) => SGErrorView(
           message: 'Unable to load dashboard telemetry: $err',
@@ -263,7 +263,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               QuickActionCard(
-                title: 'Ask SecureGuard AI',
+                title: 'Ask SecurePulse AI',
                 subtitle: 'Remediation Chat',
                 icon: Icons.auto_awesome_rounded,
                 accentColor: const Color(0xFF8B5CF6),
