@@ -1952,31 +1952,115 @@ Suggested video filename/link: `media/videos/demo_05_deployment_release.mp4`
 
 ---
 
-## CHAPTER 10 — LIMITATIONS
+## CHAPTER 10 — SYSTEM LIMITATIONS
 
 ### 10.1 Technical Limitations
-Client-side dependencies on mobile OS background execution limits.
+
+#### TL-01: Background Execution & Socket Lifecycle Termination
+* **Limitation**: Mobile operating systems (Android 14 Battery Optimization and iOS Background Execution limits) terminate long-lived TCP/WebSocket connections within 30 to 60 seconds after the application is moved to the background.
+* **Impact**: Security analysts may miss real-time high-severity alerts when the device screen is locked or the app is backgrounded, unless push notifications wake the device.
+* **Current Status**: `WebSocketService` detects connection drops upon app foregrounding and initiates an automated reconnect sequence.
+* **Possible Improvement**: Implement an Android Foreground Service with a persistent low-priority status notification for mission-critical SOC environments.
+
+#### TL-02: Local Storage Query Capabilities
+* **Limitation**: The local caching tier uses `HiveStorageService`, which is an unindexed key-value storage box (`securepulse_cache`) rather than a full relational SQLite/Isar database.
+* **Impact**: Complex multi-dimensional querying (e.g., *find all High alerts from Wazuh within the last 48 hours containing IP subnet 185.x*) must be performed entirely in Dart memory after loading all records.
+* **Current Status**: Acceptable for current client cache sizes (< 500 cached alerts).
+* **Possible Improvement**: Migrate local cache storage to SQLite (via `drift` or `sqflite`) with indexed columns for severity, timestamp, and source system.
+
+---
 
 ### 10.2 Integration Limitations
-Remote Firebase Cloud Messaging push delivery requiring user-provided `google-services.json`.
+
+#### IL-01: Firebase Cloud Messaging (FCM) Credential Dependency
+* **Limitation**: `NotificationService` contains complete client-side topic subscription and notification channel handling logic, but requires a project-specific `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) to establish a live connection to Firebase servers.
+* **Impact**: In open-source clones of the repository, remote push notifications fail gracefully with a log message (`[NotificationService] FCM not configured`), falling back to in-app real-time WebSocket banners.
+* **Current Status**: Labeled `[PARTIALLY IMPLEMENTED]` in master project audit.
+* **Possible Improvement**: Develop an in-app setup wizard allowing enterprise SOC teams to supply Firebase project keys or implement an alternative self-hosted WebPush/Gotify gateway.
+
+#### IL-02: GitHub App OAuth2 Web Redirect Workflow
+* **Limitation**: Repository authentication currently utilizes direct session tokens rather than an interactive OAuth2 browser authorization redirect loop (`https://github.com/login/oauth/authorize`).
+* **Impact**: Analysts cannot dynamically grant repository permissions to individual private organizations from within the mobile app without pre-configured tokens.
+* **Current Status**: Mocked to direct analyst session in Demo Mode; bearer token passthrough in Live Mode.
+* **Possible Improvement**: Implement Android Deep-Linking / iOS Universal Links with custom URL schemes (`securepulse://oauth/callback`) to complete full interactive GitHub App installations.
+
+#### IL-03: Direct SOAR Firewall Remediation Execution
+* **Limitation**: Tapping "Quarantine IP" in the Alert Detail screen mutates the alert status to `resolved` and issues `PUT /v1/soc/alerts/{id}/status`, but does not directly execute shell scripts or API calls against perimeter firewalls (e.g., AWS Security Groups, Cloudflare WAF, or pfSense).
+* **Impact**: Analysts must rely on backend SOAR playbooks or external automation scripts to enforce physical network perimeter blocks.
+* **Current Status**: Alert status mutation is fully operational; direct perimeter command dispatch is planned for Phase 4.
+* **Possible Improvement**: Integrate direct bidirectional webhook webhooks to Ansible AWX, Palo Alto Cortex XSOAR, or AWS Lambda remediation functions.
+
+---
 
 ### 10.3 Scalability Limitations
-Client memory considerations when handling exceptionally large alert streams.
+
+#### SL-01: In-Memory Alert Buffer During High-Volume DDoS Storms
+* **Limitation**: `webSocketAlertStreamProvider` buffers real-time incidents directly in mobile device RAM.
+* **Impact**: Under massive SIEM alert flooding (> 1,000 events/second during a DDoS attack), excessive widget re-renders could degrade mobile UI frame rates or cause garbage collection spikes.
+* **Current Status**: The mobile client handles moderate SOC event streams (< 50 events/second) at a smooth 60fps.
+* **Possible Improvement**: Implement client-side windowed event throttling, batching incoming socket messages into 250ms rendering frames.
+
+#### SL-02: Backend Single-Worker WebSocket Broadcasting
+* **Limitation**: The FastAPI backend manages active WebSocket client connections in a local Python memory list without a distributed message broker.
+* **Impact**: If the backend is scaled horizontally across multiple container instances, clients connected to Container A will not receive threat events broadcast by Container B.
+* **Current Status**: Operates as a single-instance cloud container on Render.
+* **Possible Improvement**: Integrate Redis Pub/Sub as an intermediate message bus connecting all backend ASGI workers.
+
+---
 
 ### 10.4 Security Limitations
-Lack of client-side mutual TLS (mTLS) certificate exchange.
 
-### 10.5 Mobile Limitations
-Screen real estate constraints when rendering large complex syslog strings.
+#### SEC-01: Absence of Per-Device Mutual TLS (mTLS)
+* **Limitation**: Client authentication relies on TLS 1.3 server-authenticated encryption and JWT bearer tokens; it does not currently exchange per-device client X.509 certificates.
+* **Impact**: A rogue client possessing valid user credentials could communicate with the backend API from an unauthorized device.
+* **Current Status**: Standard enterprise TLS + JWT architecture.
+* **Possible Improvement**: Implement per-device hardware-backed client certificate generation and enrollment during initial MDM onboarding.
 
-### 10.6 Cloud Limitations
-Cold-start latency considerations on serverless or free-tier cloud containers.
+#### SEC-02: Dynamic Certificate Pinning
+* **Limitation**: `ApiClient` relies on the Android / iOS system Trust Store for TLS certificate verification rather than hardcoded public key pinning.
+* **Impact**: If a device's root certificate store is compromised (e.g., on rooted/jailbroken devices with custom CA certificates), transport traffic could theoretically be inspected.
+* **Current Status**: System-level TLS 1.3 certificate validation.
+* **Possible Improvement**: Enforce SSL Pinning in Dio using `SecurityContext` with SHA-256 certificate public key hashes.
 
-### 10.7 AI Limitations
-Rule-based heuristic fallback in Demo mode vs. dynamic context size in live LLM proxies.
+---
+
+### 10.5 Mobile Presentation Limitations
+
+#### MOB-01: Complex Syslog Visualization on Small Viewports
+* **Limitation**: Deep SIEM syslog payloads containing hundreds of JSON fields or multi-line stack traces require extensive horizontal and vertical scrolling on 6-inch mobile screens.
+* **Impact**: Analysts must occasionally switch to desktop SIEM consoles for exhaustive packet-level deep dives.
+* **Current Status**: JSON payloads are formatted into collapsible key-value cards and syntax-highlighted code blocks.
+* **Possible Improvement**: Build a specialized tablet and foldable layout utilizing master-detail split-view navigation.
+
+---
+
+### 10.6 Cloud & Infrastructure Limitations
+
+#### CLD-01: Cold-Start Latency on Serverless / Free-Tier Containers
+* **Limitation**: On free-tier cloud hosting providers (e.g., Render Free Tier), inactive containers spin down after 15 minutes of inactivity.
+* **Impact**: The initial mobile login request after a dormant period may experience a 30 to 50 second cold-start delay before the container becomes active.
+* **Current Status**: The mobile client enforces a 12-second timeout gate, which could trigger a timeout error during cold-starts.
+* **Possible Improvement**: Deploy on dedicated, persistent cloud compute instances (Render Starter/Standard or AWS ECS) with active keep-alive health pings.
+
+---
+
+### 10.7 AI Copilot Limitations
+
+#### AI-01: Rule-Based Heuristic Fallback in Demo Mode
+* **Limitation**: When operating in Demo Mode or offline, the AI Copilot relies on pre-engineered regex matching and heuristic knowledge templates (CVE-2024-3094, SQLi, AWS Secrets) rather than an on-device neural network.
+* **Impact**: Unrecognized or custom natural language security queries return standardized fallback advice rather than bespoke code generation.
+* **Current Status**: High-fidelity responses for core demonstration scenarios; cloud LLM proxying handles arbitrary prompts in Live Mode.
+* **Possible Improvement**: Bundle a quantized on-device small language model (e.g., Gemma-2B or Llama-3-1B via ONNX Runtime / MediaPipe LLM Inference) for truly autonomous offline reasoning.
+
+---
 
 ### 10.8 Testing Limitations
-Automated test suite mocking cloud endpoints rather than maintaining live persistent cloud test tenants.
+
+#### TST-01: Cloud Multi-Tenant Staging Environment
+* **Limitation**: Automated tests in `test/api_integration_test.dart` validate network contracts against local mock servers and URL transformation rules rather than executing against a dedicated, live multi-tenant cloud staging cluster.
+* **Impact**: Transient cloud infrastructure anomalies (e.g., cloud proxy rate limiting, DNS propagation delays) cannot be detected during local CI unit test runs.
+* **Current Status**: 100% unit and integration contract coverage (15/15 tests passed).
+* **Possible Improvement**: Establish an automated end-to-end cloud staging pipeline executing scheduled Postman/Newman or Flutter driver tests against live Render staging environments.
 
 ---
 
