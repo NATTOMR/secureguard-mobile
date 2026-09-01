@@ -7,6 +7,7 @@ class ApiEndpoints {
   // Authentication
   static const String login = '/v1/auth/login';
   static const String me = '/v1/auth/me';
+  static const String githubAuth = '/v1/auth/github';
 
   // Dashboard & Overview
   static const String dashboard = '/v1/dashboard/summary';
@@ -18,6 +19,8 @@ class ApiEndpoints {
 
   // Alerts & SOC
   static const String alerts = '/v1/soc/alerts';
+  static const String wazuhAgents = '/v1/wazuh/agents';
+  static const String wazuhDaemons = '/v1/wazuh/daemons';
 
   // AI Security Assistant & Remediation
   static const String aiRemediate = '/v1/ai/remediate';

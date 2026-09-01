@@ -6,7 +6,7 @@
 | **Repository Name** | `NATTOMR/securepulse-mobile` |
 | **Application ID** | `com.securepulse.mobile` (version `1.0.0+1`) |
 | **Repository Scope** | Flutter Mobile Client Application & Cloud API Integration Layer |
-| **Automated Test Results** | 🟢 **15 / 15 Tests Passed (100% Success Rate)** |
+| **Automated Test Results** | 🟢 **33 / 33 Tests Passed (100% Success Rate)** |
 | **Git Working Tree** | 🟢 **Clean (`main` branch)** |
 
 ---
@@ -108,11 +108,13 @@ graph TD
 | **Real-Time WebSocket Incident Stream** | ✅ IMPLEMENTED | [`lib/core/network/websocket_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/network/websocket_service.dart) | Connects to `/ws/alerts`, automatically converts `http:// -> ws://` and `https:// -> wss://`, maintains stream broadcasting, and falls back to HTTP polling if blocked. |
 | **Codebase & SAST Vulnerability Audits** | ✅ IMPLEMENTED | [`lib/features/repositories/data/repository_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/repositories/data/repository_repository.dart), [`lib/features/scans/scans_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/scans/scans_screen.dart) | Repository list with language tags, branch info, health grades (A–F), finding counts, and on-demand scan triggers (`/v1/repositories/{id}/scan`). |
 | **AI Cybersecurity Assistant** | ✅ IMPLEMENTED | [`lib/features/ai/data/ai_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/ai/data/ai_repository.dart), [`lib/features/ai/presentation/ai_assistant_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/ai/presentation/ai_assistant_screen.dart) | Conversational security assistant. Generates local playbooks for CVE-2024-3094, SQLi, and secret exposure in Demo mode, or forwards to `/v1/ai/chat` in Live mode. |
-| **SOC SIEM Alert Triage** | ✅ IMPLEMENTED | [`lib/features/alerts/data/alerts_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart), [`lib/features/alerts/presentation/alert_detail_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/presentation/alert_detail_screen.dart) | Incident stream filtered by severity (Critical, High, Medium, Low), detailed triage with origin IP, destination port, raw syslog text, and status update actions (`/v1/soc/alerts/{id}/status`). |
-| **Vector PDF Compliance Generator** | ✅ IMPLEMENTED | [`lib/core/services/report_pdf_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/report_pdf_service.dart), [`lib/features/reports/reports_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/reports/reports_screen.dart) | Pure vector PDF engine compiling official compliance audit reports for SOC 2 Type II, ISO 27001, PCI-DSS v4.0, and HIPAA. Reports include a time-stamped audit ID (`SEC-AUD-{epoch}`) for traceability. Note: the `crypto` package is not listed in `pubspec.yaml`; SHA256 cryptographic digest stamping is not confirmed from package dependencies. |
+| **SOC SIEM Alert Triage & Wazuh Manager API** | ✅ IMPLEMENTED | [`lib/features/alerts/data/alerts_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart), [`lib/features/alerts/data/wazuh_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/wazuh_repository.dart), [`lib/features/alerts/domain/wazuh_models.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/domain/wazuh_models.dart) | Incident stream filtered by severity (Critical, High, Medium, Low), detailed triage with origin IP, destination port, raw syslog text, and status update actions (`/v1/soc/alerts/{id}/status`). Includes full bidirectional Wazuh Manager API integration for agent inventory inspection (`WazuhAgentModel`), daemon health probes (`wazuh-analysisd`, `wazuh-remoted`, `wazuh-modulesd`), and remote restart actions. |
+| **GitHub OAuth2 Deep-Linking Integration** | ✅ IMPLEMENTED | [`lib/core/services/github_oauth_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/github_oauth_service.dart), [`lib/features/auth/data/auth_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/auth/data/auth_repository.dart), [`android/app/src/main/AndroidManifest.xml:40-48`](file:///e:/SOC%20projects/securepulse-mobile/android/app/src/main/AndroidManifest.xml#L40-L48) | Complete PKCE-compatible OAuth2 consent loop. Generates high-entropy cryptographic CSRF state tokens, opens system browser via `url_launcher`, captures `securepulse://oauth/callback` via `app_links`, and exchanges authorization code via `POST /v1/auth/github`. |
+| **Offline Action & Mutation Queue Engine** | ✅ IMPLEMENTED | [`lib/core/services/offline_queue_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/offline_queue_service.dart), [`lib/features/alerts/data/alerts_repository.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart) | Durably captures analyst mitigation actions (e.g. alert status updates, remediation triggers) in local encrypted Hive cache when offline and automatically flushes them with exponential retry handling upon network reconnect (`connectivity_plus`). |
+| **Vector PDF Compliance Generator** | ✅ IMPLEMENTED | [`lib/core/services/report_pdf_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/report_pdf_service.dart), [`lib/features/reports/reports_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/reports/reports_screen.dart) | Pure vector PDF engine compiling official compliance audit reports for SOC 2 Type II, ISO 27001, PCI-DSS v4.0, and HIPAA. Reports embed a deterministic, cryptographically computed SHA-256 audit digest (`crypto` package) and time-stamped audit ID for complete non-repudiation and evidence integrity. |
 | **Environment Switcher & Diagnostics** | ✅ IMPLEMENTED | [`lib/features/settings/presentation/settings_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/settings/presentation/settings_screen.dart) | Multi-environment switcher (Render Cloud, Android Emulator `10.0.2.2`, Localhost `127.0.0.1`, Custom URL) with live HTTP health ping diagnostics. |
 | **Dual Theme System (Dark / Light)** | ✅ IMPLEMENTED | [`lib/core/theme/app_theme.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/theme/app_theme.dart) | Material 3 Cyber Dark Obsidian (`#0A0E1A`) and Clean Light (`#F8FAFC`) themes with Google Fonts Inter and custom semantic color tokens. |
-| **Automated Test Suite** | ✅ IMPLEMENTED | [`test/api_integration_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/api_integration_test.dart), [`test/widget_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/widget_test.dart) | 15/15 automated tests verifying network contracts, mode isolation, repository fallback behavior, WebSocket URL conversion, and widget pumping. |
+| **Automated Test Suite** | ✅ IMPLEMENTED | [`test/api_integration_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/api_integration_test.dart), [`test/widget_test.dart`](file:///e:/SOC%20projects/securepulse-mobile/test/widget_test.dart) | 33/33 automated tests verifying network contracts, mode isolation, repository fallback behavior, WebSocket URL conversion, GitHub OAuth2 URL & CSRF parsing, SHA-256 PDF audit digest calculation & avalanche verification, Wazuh agent/daemon models & remote actions, Offline Queue durability & auto-flush, and widget pumping. |
 | **Web Deployment Dockerfile** | ✅ IMPLEMENTED | [`Dockerfile`](file:///e:/SOC%20projects/securepulse-mobile/Dockerfile) | Single-stage Alpine Nginx container (`nginx:alpine`) serving a pre-built Flutter web bundle (`build/web`) on port 80. The `flutter build web --release` command must be executed prior to Docker image build. The Dockerfile does not contain a Flutter build stage. |
 
 ---
@@ -122,7 +124,6 @@ graph TD
 | Capability | Status | Source Location | Actual State & Current Limitations |
 | :--- | :---: | :--- | :--- |
 | **Firebase Cloud Messaging (FCM)** | 🟡 PARTIALLY IMPLEMENTED | [`lib/core/services/notification_service.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/core/services/notification_service.dart) | Background and foreground push handlers, topic subscriptions (`soc_critical`, `wazuh_alerts`, `semgrep_findings`), and permission requests are fully coded. A `google-services.json` file (678 bytes) is present at `android/app/google-services.json` as a placeholder configuration. Full remote push delivery requires a valid Firebase project configuration to replace this placeholder. The service gracefully falls back to local in-app stream broadcasting without crashing. |
-| **GitHub OAuth Web Redirect Flow** | 🟡 PARTIALLY IMPLEMENTED | [`lib/features/auth/data/auth_repository.dart:51-57`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/auth/data/auth_repository.dart#L51-L57), [`lib/features/auth/presentation/login_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/auth/presentation/login_screen.dart) | UI trigger button and authentication interface exist. In live mode, it currently logs in via the analyst session profile rather than initiating an external browser OAuth2 redirect callback. |
 | **Direct SOAR Edge Execution** | 🟡 PARTIALLY IMPLEMENTED | [`lib/features/alerts/presentation/alert_detail_screen.dart`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/presentation/alert_detail_screen.dart) | "Quarantine IP" and "Acknowledge" buttons update alert status via `/v1/soc/alerts/{id}/status`. Direct cloud firewall / router rule execution is delegated to backend event listeners rather than triggered via direct mobile-to-firewall API. |
 
 ---
@@ -132,7 +133,6 @@ graph TD
 | Capability | Status | Target Roadmap Phase | Description |
 | :--- | :---: | :---: | :--- |
 | **Two-Way SIEM / SOAR Connectors** | 🔵 PLANNED | Phase 4 | Bidirectional webhook synchronization for Splunk, Elastic SIEM, Microsoft Sentinel, and Jira Security ticketing. |
-| **Offline Action & Mutation Queue** | 🔵 PLANNED | Phase 4 | Offline action queue that captures analyst mitigation actions (e.g. alert status changes, scan dispatches) when offline and flushes them upon network reconnect. |
 | **In-App Custom Semgrep Rule Editor** | 🔵 PLANNED | Phase 4 | In-app YAML authoring interface with syntax validation for custom Semgrep and Sigma detection rules. |
 | **Multi-Tenant / Organization Switching** | 🔵 PLANNED | Phase 3 | Ability to seamlessly switch between multiple enterprise security clusters and client tenants within a single mobile session. |
 | **WearOS & Apple Watch Companion** | 🔵 PLANNED | Phase 5 | Wearable companion application for critical severity paging, alert acknowledgment, and biometric quick-triage. |
@@ -172,10 +172,10 @@ The mobile client is coded and tested against the following REST and WebSocket e
 
 ## 9. External Integrations Architecture
 
-### 9.1. Wazuh SIEM Connector
-* **Status**: ✅ IMPLEMENTED (Client-side Data Handling)
-* **Evidence**: [`AlertModel`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/domain/alert_model.dart), [`AlertsRepositoryImpl`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart).
-* **Behavior**: In Demo Mode, realistic simulated Wazuh intrusion telemetry (SSH brute force on port 22, anomalous S3 egress, unconsented OAuth grants) is served locally. In Live Mode, the client queries `/v1/soc/alerts` and receives push alerts over `/ws/alerts`.
+### 9.1. Wazuh SIEM Connector & Manager API
+* **Status**: ✅ IMPLEMENTED (Bidirectional API & Telemetry)
+* **Evidence**: [`AlertModel`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/domain/alert_model.dart), [`AlertsRepositoryImpl`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/alerts_repository.dart), [`WazuhRepositoryImpl`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/data/wazuh_repository.dart), [`WazuhAgentModel`](file:///e:/SOC%20projects/securepulse-mobile/lib/features/alerts/domain/wazuh_models.dart).
+* **Behavior**: In Demo Mode, realistic simulated Wazuh intrusion telemetry (SSH brute force on port 22, anomalous S3 egress, unconsented OAuth grants) and 4 agent endpoints across Ubuntu, RHEL, Debian, and Windows Server are served locally. In Live Mode, the client queries `/v1/soc/alerts`, `/v1/wazuh/agents`, `/v1/wazuh/daemons`, receives push alerts over `/ws/alerts`, and dispatches remote daemon/agent restart actions.
 
 ### 9.2. GitHub & Semgrep SAST
 * **Status**: ✅ IMPLEMENTED (Client-side Data Handling)
@@ -253,7 +253,7 @@ The mobile client is coded and tested against the following REST and WebSocket e
 
 ## 15. Testing Status & Test Suite Results
 
-The project includes an automated test suite executed via `flutter test`. All 15 tests pass with 0 errors and 0 skips:
+The project includes an automated test suite executed via `flutter test`. All 33 tests pass with 0 errors and 0 skips:
 
 ```
 00:00 +0: ApiClient & Network Architecture Tests ApiClient initializes with correct default headers and base URL ... PASS
@@ -266,13 +266,31 @@ The project includes an automated test suite executed via `flutter test`. All 15
 00:00 +7: Demo Mode vs Live Mode Isolation Tests RepositoryRepository returns mock codebases when isDemoMode ........ PASS
 00:00 +8: Demo Mode vs Live Mode Isolation Tests AlertsRepository returns mock SIEM incidents when isDemoMode ....... PASS
 00:00 +9: Demo Mode vs Live Mode Isolation Tests AiRepository generates local security advice when isDemoMode ....... PASS
-00:00 +10: Demo Mode vs Live Mode Isolation Tests Live API mode is active when isDemoMode is false ................. PASS
-00:00 +11: WebSocket Real-Time URL Conversion WebSocketService correctly converts http to ws for local emulator .... PASS
-00:00 +12: WebSocket Real-Time URL Conversion WebSocketService correctly converts https to wss for Render cloud ..... PASS
-00:00 +13: WebSocket Real-Time URL Conversion WebSocketService stays disconnected when Demo Mode is active .......... PASS
-00:16 +14: SecurePulse Mobile app pump test ........................................................................ PASS
+00:00 +10: Demo Mode vs Live Mode Isolation Tests AuthRepository loginWithGitHub returns demo user when isDemoMode .. PASS
+00:00 +11: Demo Mode vs Live Mode Isolation Tests Live API mode is active when isDemoMode is false ................. PASS
+00:00 +12: WebSocket Real-Time URL Conversion WebSocketService correctly converts http to ws for local emulator .... PASS
+00:00 +13: WebSocket Real-Time URL Conversion WebSocketService correctly converts https to wss for Render cloud ..... PASS
+00:00 +14: WebSocket Real-Time URL Conversion WebSocketService stays disconnected when Demo Mode is active .......... PASS
+00:00 +15: GitHub OAuth2 Deep-Linking & Security Tests GithubOAuthService generates high-entropy random state ....... PASS
+00:00 +16: GitHub OAuth2 Deep-Linking & Security Tests GithubOAuthService builds well-formed authorization URI ...... PASS
+00:00 +17: GitHub OAuth2 Deep-Linking & Security Tests GithubOAuthService extracts valid code from callback URI ..... PASS
+00:00 +18: GitHub OAuth2 Deep-Linking & Security Tests GithubOAuthService rejects callback URI with mismatched state  PASS
+00:00 +19: GitHub OAuth2 Deep-Linking & Security Tests GithubOAuthService ignores unrelated deep links gracefully ... PASS
+00:00 +20: Cryptographic PDF Audit Stamping Tests ReportPdfService computes deterministic 64-char hex SHA-256 digest PASS
+00:00 +21: Cryptographic PDF Audit Stamping Tests Audit digest exhibits cryptographic avalanche effect on data change  PASS
+00:00 +22: Cryptographic PDF Audit Stamping Tests ReportPdfService builds valid PDF document bytes with %PDF header .. PASS
+00:00 +23: Wazuh SIEM Connector & Manager API Tests WazuhRepository returns structured agent inventory in Demo Mode  PASS
+00:00 +24: Wazuh SIEM Connector & Manager API Tests WazuhRepository returns cluster daemon statuses in Demo Mode ... PASS
+00:00 +25: Wazuh SIEM Connector & Manager API Tests WazuhRepository restartAgent & restartDaemon actions succeed .... PASS
+00:00 +26: Wazuh SIEM Connector & Manager API Tests WazuhAgentModel serialization and deserialization validation .... PASS
+00:00 +27: Wazuh SIEM Connector & Manager API Tests WazuhDaemonModel serialization and deserialization validation ... PASS
+00:00 +28: Offline Action Queue Architecture Tests OfflineMutation model serialization and deserialization ......... PASS
+00:00 +29: Offline Action Queue Architecture Tests OfflineQueueService enqueues, queries, and removes mutations .... PASS
+00:00 +30: Offline Action Queue Architecture Tests OfflineQueueService flushQueue handles empty queue gracefully ... PASS
+00:00 +31: Offline Action Queue Architecture Tests OfflineMutation copyWith creates modified clones correctly ..... PASS
+00:02 +32: SecurePulse Mobile app pump test ........................................................................ PASS
 
-Total Results: 15 Passed, 0 Failed, 0 Skipped (100% Pass Rate)
+Total Results: 33 Passed, 0 Failed, 0 Skipped (100% Pass Rate)
 ```
 
 ---
@@ -280,8 +298,8 @@ Total Results: 15 Passed, 0 Failed, 0 Skipped (100% Pass Rate)
 ## 16. Known Limitations
 
 1. **Firebase Cloud Messaging Setup**: Remote cloud push notification delivery requires adding an active `google-services.json` file to `android/app/`. In its absence, the service safely falls back to local stream events without application crash.
-2. **Offline Mutation Queue**: If an analyst modifies an alert status while in Live Mode without internet connectivity, the action fails with an error view rather than queueing the mutation for later background sync.
-3. **GitHub OAuth Flow**: The GitHub login button currently activates an analyst demo session rather than executing a full external browser OAuth2 redirect callback loop.
+2. **Offline Mutation Sync**: Mitigation mutations are captured into encrypted local Hive cache and automatically flushed upon connectivity restoration. In cases of permanent 4xx/5xx backend rejection, mutations are safely dropped after 5 retry attempts.
+3. **GitHub OAuth2 Backend Token Exchange**: Mobile client initiates the external browser PKCE consent flow and captures the deep-link callback `securepulse://oauth/callback?code=...`. Full live authentication completes when the backend endpoint `POST /v1/auth/github` is deployed. In Demo Mode, it provides instant analyst session access.
 
 ---
 

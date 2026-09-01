@@ -6,9 +6,12 @@ import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
 import '../core/network/websocket_service.dart';
 import '../core/services/notification_service.dart';
+import '../core/services/offline_queue_service.dart';
 import '../features/ai/data/ai_repository.dart';
 import '../features/alerts/data/alerts_repository.dart';
+import '../features/alerts/data/wazuh_repository.dart';
 import '../features/alerts/domain/alert_model.dart';
+import '../features/alerts/domain/wazuh_models.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/domain/user_model.dart';
 import '../features/dashboard/data/dashboard_repository.dart';
@@ -40,6 +43,17 @@ final webSocketStatusStreamProvider = StreamProvider<WebSocketStatus>((ref) {
   return ws.statusStream;
 });
 
+final offlineQueueServiceProvider = Provider<OfflineQueueService>((ref) {
+  final service = OfflineQueueService.instance;
+  service.attachApiClient(ref.watch(apiClientProvider));
+  return service;
+});
+
+final pendingMutationsStreamProvider = StreamProvider<List<OfflineMutation>>((ref) {
+  final queue = ref.watch(offlineQueueServiceProvider);
+  return queue.queueStream;
+});
+
 // Repository Providers
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(apiClient: ref.watch(apiClientProvider));
@@ -55,6 +69,10 @@ final repositoryRepositoryProvider = Provider<RepositoryRepository>((ref) {
 
 final alertsRepositoryProvider = Provider<AlertsRepository>((ref) {
   return AlertsRepositoryImpl(apiClient: ref.watch(apiClientProvider));
+});
+
+final wazuhRepositoryProvider = Provider<WazuhRepository>((ref) {
+  return WazuhRepositoryImpl(apiClient: ref.watch(apiClientProvider));
 });
 
 final aiRepositoryProvider = Provider<AiRepository>((ref) {
@@ -369,6 +387,18 @@ final findingsListProvider = FutureProvider((ref) async {
   ref.watch(isDemoModeProvider);
   ref.watch(authStateProvider);
   return ref.watch(findingRepositoryProvider).getFindings();
+});
+
+final wazuhAgentsProvider = FutureProvider<List<WazuhAgentModel>>((ref) async {
+  ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
+  return ref.watch(wazuhRepositoryProvider).getAgents();
+});
+
+final wazuhDaemonsProvider = FutureProvider<List<WazuhDaemonModel>>((ref) async {
+  ref.watch(isDemoModeProvider);
+  ref.watch(authStateProvider);
+  return ref.watch(wazuhRepositoryProvider).getDaemons();
 });
 
 

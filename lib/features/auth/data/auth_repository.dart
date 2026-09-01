@@ -1,6 +1,7 @@
 import '../../../core/config/app_config.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
+import '../../../core/services/github_oauth_service.dart';
 import '../../../core/storage/secure_storage_service.dart';
 import '../domain/user_model.dart';
 
@@ -52,8 +53,31 @@ class AuthRepositoryImpl implements AuthRepository {
     if (AppConfig.isDemoMode) {
       return getDemoUser();
     }
-    // In production API mode, redirect to GitHub OAuth app flow
-    return getDemoUser();
+
+    // 1. Trigger external browser OAuth flow and await callback code
+    final code = await GithubOAuthService.instance.startOAuthFlow();
+
+    // 2. Exchange authorization code with FastAPI backend
+    final response = await apiClient.post(
+      ApiEndpoints.githubAuth,
+      data: {'code': code},
+    );
+
+    if (response is Map<String, dynamic>) {
+      final token = (response['token'] ?? response['access_token']) as String?;
+      if (token != null && token.isNotEmpty) {
+        await SecureStorageService.saveToken(token);
+        apiClient.setAuthToken(token);
+      }
+
+      final userData = response['user'] is Map<String, dynamic>
+          ? response['user'] as Map<String, dynamic>
+          : response;
+
+      return UserModel.fromJson(userData);
+    }
+
+    throw Exception('Unexpected response format during GitHub authentication');
   }
 
   @override

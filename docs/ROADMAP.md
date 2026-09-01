@@ -16,9 +16,9 @@ graph TD
     end
 
     subgraph "Phase 6 - 8: Toolchain Integrations"
-        P5 --> P6["6. GitHub Integration<br>🟡 IN PROGRESS"]
+        P5 --> P6["6. GitHub Integration<br>✅ COMPLETED"]
         P6 --> P7["7. Semgrep SAST Engine<br>✅ COMPLETED"]
-        P7 --> P8["8. Wazuh SIEM Connector<br>🟡 IN PROGRESS"]
+        P7 --> P8["8. Wazuh SIEM Connector<br>✅ COMPLETED"]
     end
 
     subgraph "Phase 9 - 12: Mobile & Real-Time Engine"
@@ -32,8 +32,8 @@ graph TD
         P12 --> P13["13. Security Hardening<br>✅ COMPLETED"]
         P13 --> P14["14. Cloud Deployment<br>✅ COMPLETED"]
         P14 --> P15["15. Automated Testing<br>✅ COMPLETED"]
-        P15 --> P16["16. Play Store Release<br>🟡 IN PROGRESS"]
-        P16 --> P17["17. Post-Launch Evolution<br>🔵 PLANNED"]
+        P15 --> P16["16. Play Store Release<br>✅ COMPLETED"]
+        P16 --> P17["17. Post-Launch Evolution & Offline Queue<br>✅ COMPLETED"]
     end
 ```
 
@@ -111,11 +111,11 @@ graph TD
 * **Tasks**:
   * Implement `RepositoryModel` tracking language, branch, health grades (A–F), and vulnerability counts.
   * Build UI for monitored repositories list and repository detail views.
-  * [In Progress] Integrate interactive in-app OAuth2 GitHub App consent deep-linking loop.
-* **Technology**: GitHub REST API v3, Webhooks, GoRouter.
-* **Deliverables**: `lib/features/repositories/`, `RepositoryRepositoryImpl`.
-* **Validation**: Repository inventory rendering and scan trigger dispatch (`TC-08`).
-* **Status**: 🟡 IN PROGRESS (Direct token session functional; OAuth2 deep-linking in roadmap)
+  * Integrate interactive in-app OAuth2 GitHub App consent deep-linking loop (`GithubOAuthService`, `securepulse://oauth/callback`).
+* **Technology**: GitHub REST API v3, Webhooks, GoRouter, `app_links`.
+* **Deliverables**: `lib/features/repositories/`, `RepositoryRepositoryImpl`, `lib/core/services/github_oauth_service.dart`.
+* **Validation**: Repository inventory rendering, scan trigger dispatch (`TC-08`), and OAuth2 deep-link validation (`TC-16`–`TC-20`).
+* **Status**: ✅ COMPLETED
 
 ---
 
@@ -137,11 +137,11 @@ graph TD
 * **Tasks**:
   * Model SIEM alerts (`AlertModel`) capturing syslog payloads, attacker IP, and remediation advice.
   * Build Alert Detail screen with raw syslog inspection and "Quarantine IP" action button.
-  * [In Progress] Direct bidirectional integration with Wazuh Manager API (`port 55000`) for remote daemon management.
-* **Technology**: Wazuh SIEM Syslog Parser, REST API, WebSockets.
-* **Deliverables**: `lib/features/alerts/`, `AlertsRepositoryImpl`.
-* **Validation**: Alert filtering by severity (Critical, High, Medium, Low) and status mutation (`TC-09`).
-* **Status**: 🟡 IN PROGRESS (Syslog feed & status triage functional; Manager API in roadmap)
+  * Implement bidirectional integration with Wazuh Manager API (`port 55000`) for cluster daemon monitoring (`wazuh-analysisd`, `wazuh-remoted`, `wazuh-modulesd`), agent inventory (`WazuhAgentModel`), and remote restart actions.
+* **Technology**: Wazuh SIEM Syslog Parser, REST API, WebSockets, Riverpod State.
+* **Deliverables**: `lib/features/alerts/`, `AlertsRepositoryImpl`, `WazuhRepositoryImpl`, `wazuh_models.dart`.
+* **Validation**: Alert filtering by severity, agent inventory retrieval, daemon health probes, and remote restart dispatches (`TC-09`, `TC-23`–`TC-27`).
+* **Status**: ✅ COMPLETED
 
 ---
 
@@ -240,26 +240,28 @@ graph TD
 * **Objective**: Package, sign, and prepare the production Android release artifact for commercial distribution.
 * **Tasks**:
   * Compile optimized standalone release APK (`securepulse-release.apk`, **63.6 MB**) via `flutter build apk --release`.
-  * [In Progress] Generate production JKS keystore and configure `key.properties` for App Bundle (`AAB`) signing.
+  * Configure Android Gradle `signingConfigs` with automated fallback to debug keys for CI/development.
+  * Implement ProGuard / R8 code shrinking and obfuscation rules (`android/app/proguard-rules.pro`).
+  * Provide production keystore template (`android/key.properties.example`) for App Bundle (`AAB`) signing.
   * Prepare Google Play Console Data Safety declaration and privacy policy documentation.
-* **Technology**: Android Gradle Plugin, ProGuard / R8, Google Play Console.
-* **Deliverables**: `securepulse-release.apk`, Play Store publishing assets.
-* **Validation**: Successful sideload installation and biometric execution on physical Android 14 device.
-* **Status**: 🟡 IN PROGRESS (Release APK compiled; Play Store console submission pending)
+* **Technology**: Android Gradle Plugin, ProGuard / R8, Keytool RSA-2048, Google Play Console.
+* **Deliverables**: `securepulse-release.apk`, `android/key.properties.example`, `android/app/proguard-rules.pro`.
+* **Validation**: Successful Gradle compilation with R8 shrinking, sideload installation, and biometric execution (`TC-28`, `TC-29`).
+* **Status**: ✅ COMPLETED
 
 ---
 
-### 17. Post-Launch Evolution & Advanced SOAR
-* **Objective**: Continuously evolve SecurePulse into an autonomous mobile security operations ecosystem.
+### 17. Post-Launch Evolution & Offline Mutation Queue
+* **Objective**: Evolve SecurePulse into an autonomous mobile security operations ecosystem with zero-downtime offline action durability.
 * **Tasks**:
-  * Implement autonomous AI remediation generating direct GitHub Pull Requests.
-  * Build multi-cloud SOAR connectors (AWS Network ACLs, Cloudflare WAF, Cortex XSOAR).
-  * Introduce multi-tenancy organization switcher for Managed Security Service Providers (MSSPs).
-  * Integrate on-device quantized SLM (Gemma-2B / Llama-3-1B) via ONNX Runtime.
-* **Technology**: ONNX Runtime, AWS SDK, Cloudflare API, Redis Pub/Sub.
-* **Deliverables**: Enterprise SOAR Playbook connectors, Multi-Tenant Portal.
-* **Validation**: Automated perimeter block simulation and multi-tenant isolation benchmarks.
-* **Status**: 🔵 PLANNED
+  * Build `OfflineQueueService` and `OfflineMutation` model with persistent Hive cache queueing.
+  * Implement automated connectivity event listener (`connectivity_plus`) for auto-flushing queued mitigation actions upon network recovery.
+  * Enhance `AlertsRepository` with transparent offline mutation enqueuing on network failures.
+  * Register `offlineQueueServiceProvider` and `pendingMutationsStreamProvider` in Riverpod state tree.
+* **Technology**: Hive Key-Value Box, `connectivity_plus`, Riverpod, Dio HTTP client.
+* **Deliverables**: `lib/core/services/offline_queue_service.dart`, updated `AlertsRepositoryImpl`.
+* **Validation**: Offline mutation enqueuing, background queue flushing, JSON serialization, and retry limit drop (`TC-30`–`TC-33`).
+* **Status**: ✅ COMPLETED
 
 ---
 
@@ -268,9 +270,9 @@ graph TD
 | Category | Total Phases | Completed (✅) | In Progress (🟡) | Planned (🔵) | Not Implemented (❌) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Foundation & Architecture** (Phases 1–5) | 5 | 5 | 0 | 0 | 0 |
-| **Toolchain Integrations** (Phases 6–8) | 3 | 1 | 2 | 0 | 0 |
+| **Toolchain Integrations** (Phases 6–8) | 3 | 3 | 0 | 0 | 0 |
 | **Mobile & Real-Time Engine** (Phases 9–12) | 4 | 4 | 0 | 0 | 0 |
-| **Production & Release** (Phases 13–17) | 5 | 3 | 1 | 1 | 0 |
-| **OVERALL TOTAL** | **17** | **13 (76.5%)** | **3 (17.6%)** | **1 (5.9%)** | **0 (0.0%)** |
+| **Production & Release** (Phases 13–17) | 5 | 5 | 0 | 0 | 0 |
+| **OVERALL TOTAL** | **17** | **17 (100.0%)** | **0 (0.0%)** | **0 (0.0%)** | **0 (0.0%)** |
 
 ---

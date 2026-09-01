@@ -1,0 +1,12 @@
+# SecurePulse Mobile — Production Android Release Signing Template
+# 
+# To generate a production release keystore, execute the following command:
+# keytool -genkey -v -keystore securepulse-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias securepulse-key
+#
+# Once generated, place the .jks file inside the android/ directory and copy this file to 'key.properties':
+# cp android/key.properties.example android/key.properties
+
+storePassword=YourKeystorePasswordHere
+keyPassword=YourKeyPasswordHere
+keyAlias=securepulse-key
+storeFile=../securepulse-release.jks

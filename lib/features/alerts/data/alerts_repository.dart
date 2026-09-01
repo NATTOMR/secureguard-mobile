@@ -1,6 +1,7 @@
 import '../../../core/config/app_config.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
+import '../../../core/services/offline_queue_service.dart';
 import '../../../core/storage/secure_storage_service.dart';
 import '../domain/alert_model.dart';
 
@@ -74,10 +75,24 @@ class AlertsRepositoryImpl implements AlertsRepository {
   @override
   Future<void> updateAlertStatus(String id, AlertStatus newStatus) async {
     if (AppConfig.isDemoMode) return;
-    await apiClient.put(
-      '${ApiEndpoints.alerts}/$id/status',
-      data: {'status': newStatus.name},
-    );
+    try {
+      await apiClient.put(
+        '${ApiEndpoints.alerts}/$id/status',
+        data: {'status': newStatus.name},
+      );
+    } catch (_) {
+      // Offline fallback: enqueue mutation for background sync upon reconnect
+      await OfflineQueueService.instance.enqueue(
+        OfflineMutation(
+          id: 'mut_alert_${id}_${DateTime.now().millisecondsSinceEpoch}',
+          type: MutationType.updateAlertStatus,
+          endpoint: '${ApiEndpoints.alerts}/$id/status',
+          method: 'PUT',
+          payload: {'status': newStatus.name},
+          createdAt: DateTime.now(),
+        ),
+      );
+    }
   }
 
   // -------------------------------------------------------------

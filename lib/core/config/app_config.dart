@@ -22,6 +22,15 @@ class AppConfig {
   static const bool enableBiometrics = true;
   static const bool enablePushNotifications = true;
   
+  // GitHub OAuth2 App Configuration
+  static const String githubClientId = 'Ov23liSecurePulseApp'; // Replace with production GitHub OAuth App Client ID
+  static const String githubOAuthScopes = 'read:user,user:email,repo';
+  static const String githubCallbackScheme = 'securepulse';
+  static const String githubCallbackHost = 'oauth';
+  static const String githubCallbackPath = '/callback';
+  static const String githubCallbackUrl = '$githubCallbackScheme://$githubCallbackHost$githubCallbackPath';
+  static const String githubAuthorizeUrl = 'https://github.com/login/oauth/authorize';
+
   // Platform Execution Mode:
   // - true: Offline / Demo simulation mode (standalone operation without FastAPI)
   // - false: Production / Live API mode (requires running FastAPI backend)

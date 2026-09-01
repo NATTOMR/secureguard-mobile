@@ -36,6 +36,16 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- GitHub OAuth2 Callback Deep-Link Handler -->
+            <intent-filter android:label="SecurePulse OAuth Callback">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="securepulse"
+                    android:host="oauth"
+                    android:pathPrefix="/callback" />
+            </intent-filter>
         </activity>
         <meta-data
             android:name="flutterEmbedding"
