@@ -7,139 +7,84 @@ This document provides an exhaustive structural and architectural mindmap of the
 ## 🗺️ Master Architectural Mindmap
 
 ```mermaid
-mindmap
-  root((SECUREPULSE))
-    Mobile Client
-      Dashboard
-        Posture Gauge 88-94%
-        Vulnerability Donut Chart
-        Service Latency Health Badges
-        Quick Action Dock
-      Repositories
-        Monitored Codebases
-        Branch & Commit SHA Tracking
-        Health Grades A to F
-        On-Demand Scan Triggering
-      Alerts
-        Severity Filtering All/Crit/High/Med/Low
-        Raw Syslog Payload Inspection
-        Attacker IP & Port Tracking
-        One-Tap Quarantine IP Status Triage
-      AI Copilot
-        Streaming Markdown Chat
-        Offline CVE Heuristics (CVE-2024-3094, SQLi)
-        Live Cloud LLM Bridge
-        Copyable Code Patches
-      Settings
-        Environment Switcher (Cloud/Emulator/Local)
-        Live Latency Ping Tool
-        Biometric App-Lock Toggle
-        Theme Switcher (Dark Obsidian / Light)
-    Cloud Backend
-      FastAPI Microservice
-        Python 3.11 ASGI Engine
-        Pydantic Request/Response Schemas
-        CORS Whitelist Middleware
-        12s Timeout Gates
-      REST API Endpoints
-        /health (Uptime Monitoring)
-        /v1/auth/login & /me
-        /v1/dashboard/summary
-        /v1/repositories & /scan
-        /v1/soc/alerts & /status
-        /v1/ai/chat
-        /v1/reports
-      WebSocket Engine
-        /ws/alerts (Real-Time Threat Stream)
-        Dynamic Scheme Conversion (http->ws, https->wss)
-        Query Token Authentication Handshake
-        fixed 15-second retry Reconnect Loop
-      Authentication Tier
-        Stateless JWT HS256 Tokens
-        Password bcrypt Hashing
-        Role-Based Claims (Analyst/Responder/Auditor)
-      Database Persistence
-        Cloud PostgreSQL 16 (SSL Enforced)
-        Connection Pooling
-        Hive Local Key-Value Box (securepulse_cache)
-    Security Sources
-      Wazuh SIEM
-        Host Intrusion Detection (HIDS)
-        SSH Brute-Force Syslog Ingestion
-        Rootkit & FIM Event Parsing
-        Wazuh Manager REST API [PLANNED]
-      GitHub Integration
-        Enterprise Codebase Sync
-        Branch Metadata & Commit Hashes
-        Direct Session Bearer Auth
-        Interactive OAuth2 Deep-Linking [PLANNED]
-      Semgrep Engine
-        Static Application Security Testing (SAST)
-        Line-Level Vulnerability Pinpointing
-        CWE-89 & CWE-798 Rule Mapping
-        Custom In-App Rule Editor [PLANNED]
-    Processing Pipeline
-      Security Events
-        Syslog Stream Normalization
-        WebSocket Event Deserialization
-        Event Queue In-Memory Buffering
-      Findings
-        Severity Mapping (Critical/High/Med/Low)
-        Source Code File & Line Attribution
-        Remediation Guidance Formatting
-      Alerts
-        Lifecycle State Machine (Active->In Progress->Resolved)
-        Status Mutation Ingestion
-        Mitigation Action Triggering
-      Scans
-        On-Demand Scan Job Scheduling
-        Scan Progress Polling
-        Historical Scan Archive
-      Risk & Posture
-        Composite Posture Score Calculation
-        Vulnerability Count Aggregation
-        MTTD & MTTR Metrics [PLANNED]
-    Artificial Intelligence
-      Security Copilot
-        Offline Regex Heuristic Matcher
-        CVE Remediation Playbooks
-        Cloud LLM Proxy (Live Mode)
-        Autonomous PR Patch Creator [PLANNED]
-        On-Device Quantized SLM Gemma-2B [PLANNED]
-    Infrastructure
-      Render Cloud
-        Dockerized ASGI Web Service
-        Automated Git CI/CD Deployments
-        30s Health Check Probes
-      PostgreSQL
-        Managed Cloud Relational Database
-        Continuous WAL Archiving & PITR
-        SSL Mode Require Enforced
-      HTTPS / WSS Transport
-        Let's Encrypt TLS 1.3 Termination
-        Port 443 Encrypted WebSocket Framing
-        Local Loopback Cleartext Isolation
-    Security & Cryptography
-      JWT Security
-        RFC 7519 Standard Stateless Tokens
-        Header Bearer Injection
-        Instant Keystore Token Purge on Logout
-      Secret Management
-        Zero Hardcoded Secrets in Client Code
-        Cloud Runtime Environment Variables
-        Encrypted Render Key Vault
-      Authorization & RBAC
-        Role-Based Endpoint Protection
-        Token Claim Verification
-        Multi-Tenant Scoped Tokens [PLANNED]
-      Webhook Validation
-        HMAC-SHA256 Payload Signatures
-        Constant-Time Hash Comparison
-        GitHub X-Hub-Signature-256 Check
-      Audit Logging
-        Pure-Dart On-Device SHA256 Hash Digest
-        Cryptographic Stamp on Compliance PDFs
-        Tamper-Evident Report Verification
+flowchart TB
+
+    S["SECUREPULSE"]
+
+    S --> M["📱 MOBILE CLIENT"]
+    S --> B["☁️ CLOUD BACKEND"]
+    S --> SS["🛡️ SECURITY SOURCES"]
+    S --> P["⚙️ PROCESSING PIPELINE"]
+    S --> AI["🤖 ARTIFICIAL INTELLIGENCE"]
+    S --> I["🌐 INFRASTRUCTURE"]
+    S --> SEC["🔐 SECURITY"]
+
+    M --> D["Dashboard"]
+    M --> R["Repositories"]
+    M --> A["Alerts"]
+    M --> C["AI Copilot"]
+    M --> ST["Settings"]
+
+    B --> F["FastAPI"]
+    B --> API["REST API"]
+    B --> WS["WebSocket"]
+    B --> DB["PostgreSQL"]
+
+    SS --> W["Wazuh"]
+    SS --> G["GitHub"]
+    SS --> SEM["Semgrep"]
+
+    W --> EV["Security Events"]
+    G --> EV
+    SEM --> EV
+
+    EV --> P
+    P --> FIND["Findings"]
+    P --> ALERT["Alerts"]
+    P --> SCAN["Scans"]
+    P --> RISK["Risk & Posture"]
+
+    F --> API
+    F --> WS
+    F --> DB
+
+    WS --> A
+    WS --> D
+
+    API --> D
+    API --> R
+    API --> A
+    API --> C
+
+    AI --> C
+    AI --> LLM["Cloud LLM"]
+    AI --> OFF["Offline Security Analysis"]
+
+    I --> REN["Render Cloud"]
+    I --> PG["Managed PostgreSQL"]
+    I --> HTTPS["HTTPS / WSS"]
+
+    SEC --> JWT["JWT Authentication"]
+    SEC --> RBAC["RBAC Authorization"]
+    SEC --> SECRET["Secret Management"]
+    SEC --> WEB["Webhook Validation"]
+    SEC --> AUDIT["Audit Logging"]
+
+    REN --> F
+    PG --> DB
+    HTTPS --> WS
+
+    classDef main fill:#0b1220,stroke:#2563eb,color:#ffffff,stroke-width:3px;
+    classDef mobile fill:#111827,stroke:#3b82f6,color:#ffffff;
+    classDef backend fill:#111827,stroke:#22c55e,color:#ffffff;
+    classDef security fill:#111827,stroke:#ef4444,color:#ffffff;
+    classDef ai fill:#111827,stroke:#a855f7,color:#ffffff;
+
+    class S main;
+    class M,D,R,A,C,ST mobile;
+    class B,F,API,WS,DB backend;
+    class SEC,JWT,RBAC,SECRET,WEB,AUDIT security;
+    class AI,LLM,OFF ai;
 ```
 
 ---
