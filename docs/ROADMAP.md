@@ -39,6 +39,91 @@ graph TD
 
 ---
 
+## 🏛️ Master System Architectural Topology
+
+```mermaid
+flowchart TB
+
+    S["SECUREPULSE"]
+
+    S --> M["📱 MOBILE CLIENT"]
+    S --> B["☁️ CLOUD BACKEND"]
+    S --> SS["🛡️ SECURITY SOURCES"]
+    S --> P["⚙️ PROCESSING PIPELINE"]
+    S --> AI["🤖 ARTIFICIAL INTELLIGENCE"]
+    S --> I["🌐 INFRASTRUCTURE"]
+    S --> SEC["🔐 SECURITY"]
+
+    M --> D["Dashboard"]
+    M --> R["Repositories"]
+    M --> A["Alerts"]
+    M --> C["AI Copilot"]
+    M --> ST["Settings"]
+
+    B --> F["FastAPI"]
+    B --> API["REST API"]
+    B --> WS["WebSocket"]
+    B --> DB["PostgreSQL"]
+
+    SS --> W["Wazuh"]
+    SS --> G["GitHub"]
+    SS --> SEM["Semgrep"]
+
+    W --> EV["Security Events"]
+    G --> EV
+    SEM --> EV
+
+    EV --> P
+    P --> FIND["Findings"]
+    P --> ALERT["Alerts"]
+    P --> SCAN["Scans"]
+    P --> RISK["Risk & Posture"]
+
+    F --> API
+    F --> WS
+    F --> DB
+
+    WS --> A
+    WS --> D
+
+    API --> D
+    API --> R
+    API --> A
+    API --> C
+
+    AI --> C
+    AI --> LLM["Cloud LLM"]
+    AI --> OFF["Offline Security Analysis"]
+
+    I --> REN["Render Cloud"]
+    I --> PG["Managed PostgreSQL"]
+    I --> HTTPS["HTTPS / WSS"]
+
+    SEC --> JWT["JWT Authentication"]
+    SEC --> RBAC["RBAC Authorization"]
+    SEC --> SECRET["Secret Management"]
+    SEC --> WEB["Webhook Validation"]
+    SEC --> AUDIT["Audit Logging"]
+
+    REN --> F
+    PG --> DB
+    HTTPS --> WS
+
+    classDef main fill:#0b1220,stroke:#2563eb,color:#ffffff,stroke-width:3px;
+    classDef mobile fill:#111827,stroke:#3b82f6,color:#ffffff;
+    classDef backend fill:#111827,stroke:#22c55e,color:#ffffff;
+    classDef security fill:#111827,stroke:#ef4444,color:#ffffff;
+    classDef ai fill:#111827,stroke:#a855f7,color:#ffffff;
+
+    class S main;
+    class M,D,R,A,C,ST mobile;
+    class B,F,API,WS,DB backend;
+    class SEC,JWT,RBAC,SECRET,WEB,AUDIT security;
+    class AI,LLM,OFF ai;
+```
+
+---
+
 ## 📍 Comprehensive 17-Phase Product Roadmap
 
 ### 1. Vision & Requirements
