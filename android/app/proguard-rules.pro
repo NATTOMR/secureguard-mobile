@@ -21,6 +21,12 @@
 -keep class com.google.firebase.** { *; }
 -dontwarn com.google.firebase.**
 
+# Google Play Core & Deferred Components
+-dontwarn com.google.android.play.core.**
+-dontwarn com.google.android.play.core.splitcompat.**
+-dontwarn com.google.android.play.core.splitinstall.**
+-dontwarn com.google.android.play.core.tasks.**
+
 # Prevent obfuscation of serialization attributes
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
