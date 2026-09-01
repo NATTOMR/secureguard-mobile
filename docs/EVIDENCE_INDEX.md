@@ -43,35 +43,35 @@ This document serves as the master evidence checklist and tracking register for 
 ### 2. Backend
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-005** | Chapter 6 (6.3) | `CODE SNIPPET` | Centralized REST & WebSocket Endpoint Contracts | `lib/core/network/api_endpoints.dart` | `PENDING` |
-| **E-006** | Walkthrough (Sec 9) | `API RESPONSE` | Live `/health` Uptime Check JSON Response | `fig_w_01_api_health_probe.png` | `PENDING` |
-| **E-007** | Chapter 9 (9.3) | `SCREENSHOT` | FastAPI OpenAPI Swagger Interactive Documentation | `fig_9_1_api_swagger_docs.png` | `PENDING` |
+| **E-005** | Chapter 6 (6.3) | `CODE SNIPPET` | Centralized REST & WebSocket Endpoint Contracts | `lib/core/network/api_endpoints.dart` | `✅ AVAILABLE` |
+| **E-006** | Walkthrough (Sec 9) | `API RESPONSE` | Live `/health` Uptime Check JSON Response | `fig_w_01_api_health_probe.png` | `✅ CAPTURED` |
+| **E-007** | Chapter 9 (9.3) | `SCREENSHOT` | FastAPI OpenAPI Swagger Interactive Documentation | `fig_9_1_api_swagger_docs.png` | `✅ CAPTURED` |
 
 ---
 
 ### 3. Database
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-008** | Chapter 6 (6.7) | `CODE SNIPPET` | Hive Encrypted Offline Key-Value Box Initialization | `lib/core/storage/hive_storage_service.dart` | `PENDING` |
-| **E-009** | Chapter 9 (9.4) | `LOG` | Cloud PostgreSQL Connection Pool SSL Handshake Log | `log_db_ssl_connection_pool.txt` | `PENDING` |
+| **E-008** | Chapter 6 (6.7) | `CODE SNIPPET` | Hive Encrypted Offline Key-Value Box Initialization | `lib/core/storage/hive_storage_service.dart` | `✅ AVAILABLE` |
+| **E-009** | Chapter 9 (9.4) | `LOG` | Cloud PostgreSQL Connection Pool SSL Handshake Log | `log_db_ssl_connection_pool.txt` | `✅ AVAILABLE` |
 
 ---
 
 ### 4. Authentication
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-010** | Chapter 6 (6.2) | `SCREENSHOT` | Splash Shimmer Screen & Startup Sequence | `fig_6_1_splash_screen_startup.png` | `PENDING` |
-| **E-011** | Chapter 7 (7.2) | `SCREENSHOT` | Native Android / iOS Biometric Challenge Modal | `fig_7_1_biometric_auth_prompt.png` | `PENDING` |
-| **E-012** | Chapter 6 (6.5) | `CODE SNIPPET` | Biometric Session Recovery & JWT Bearer Setting | `lib/features/auth/data/auth_repository.dart` | `PENDING` |
-| **E-013** | Chapter 7 (7.6) | `CODE SNIPPET` | Hardware Keystore Write / Read / Delete Routines | `lib/core/storage/secure_storage_service.dart` | `PENDING` |
+| **E-010** | Chapter 6 (6.2) | `SCREENSHOT` | Splash Shimmer Screen & Startup Sequence | `fig_6_1_splash_screen_startup.png` | `✅ CAPTURED` |
+| **E-011** | Chapter 7 (7.2) | `SCREENSHOT` | Native Android / iOS Biometric Challenge Modal | `fig_7_1_biometric_auth_prompt.png` | `✅ CAPTURED` |
+| **E-012** | Chapter 6 (6.5) | `CODE SNIPPET` | Biometric Session Recovery & JWT Bearer Setting | `lib/features/auth/data/auth_repository.dart` | `✅ AVAILABLE` |
+| **E-013** | Chapter 7 (7.6) | `CODE SNIPPET` | Hardware Keystore Write / Read / Delete Routines | `lib/core/storage/secure_storage_service.dart` | `✅ AVAILABLE` |
 
 ---
 
 ### 5. Dashboard
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-014** | Chapter 6 (6.15) | `SCREENSHOT` | Executive Dashboard with Posture Gauge & Service Badges | `fig_6_5_executive_dashboard_screen.png` | `PENDING` |
-| **E-015** | Walkthrough (Sec 14) | `SCREENSHOT` | Interactive `fl_chart` Donut Vulnerability Breakdown | `fig_w_03_executive_dashboard_ops.png` | `PENDING` |
+| **E-014** | Chapter 6 (6.15) | `SCREENSHOT` | Executive Dashboard with Posture Gauge & Service Badges | `fig_6_5_executive_dashboard_screen.png` | `✅ CAPTURED` |
+| **E-015** | Walkthrough (Sec 14) | `SCREENSHOT` | Interactive `fl_chart` Donut Vulnerability Breakdown | `fig_w_03_executive_dashboard_ops.png` | `✅ CAPTURED` |
 | **E-016** | Chapter 6 (6.22) | `VIDEO` | Application Launch, Biometric Auth & Dashboard Demo | `media/videos/demo_01_launch_dashboard.mp4` | `PENDING` |
 
 ---
@@ -79,18 +79,18 @@ This document serves as the master evidence checklist and tracking register for 
 ### 6. Repositories
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-017** | Chapter 6 (6.8) | `SCREENSHOT` | Monitored Codebases Inventory & Health Badges (A–F) | `fig_6_2_repository_list_screen.png` | `PENDING` |
-| **E-018** | Walkthrough (Sec 15) | `SCREENSHOT` | Repository Detail Screen with Branch Tracking | `fig_w_04_repository_sast_findings.png` | `PENDING` |
-| **E-019** | Chapter 5 (5.7) | `CODE SNIPPET` | On-Demand SAST Scan Trigger Dispatch Implementation | `lib/features/repositories/data/repository_repository.dart` | `PENDING` |
+| **E-017** | Chapter 6 (6.8) | `SCREENSHOT` | Monitored Codebases Inventory & Health Badges (A–F) | `fig_6_2_repository_list_screen.png` | `✅ CAPTURED` |
+| **E-018** | Walkthrough (Sec 15) | `SCREENSHOT` | Repository Detail Screen with Branch Tracking | `fig_w_04_repository_sast_findings.png` | `✅ CAPTURED` |
+| **E-019** | Chapter 5 (5.7) | `CODE SNIPPET` | On-Demand SAST Scan Trigger Dispatch Implementation | `lib/features/repositories/data/repository_repository.dart` | `✅ AVAILABLE` |
 
 ---
 
 ### 7. Alerts
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-020** | Chapter 6 (6.16) | `SCREENSHOT` | SOC Alert Feed with Severity Filter Pills (Crit/High/Med) | `fig_6_6_soc_alerts_screen.png` | `PENDING` |
-| **E-021** | Chapter 6 (6.9) | `SCREENSHOT` | Incident Triage Modal with Attacker IP & Quarantine Action | `fig_6_3_alert_detail_screen.png` | `PENDING` |
-| **E-022** | Chapter 5 (5.4) | `CODE SNIPPET` | Alert Status Mutation & Resolution Dispatch Logic | `lib/features/alerts/data/alerts_repository.dart` | `PENDING` |
+| **E-020** | Chapter 6 (6.16) | `SCREENSHOT` | SOC Alert Feed with Severity Filter Pills (Crit/High/Med) | `fig_6_6_soc_alerts_screen.png` | `✅ CAPTURED` |
+| **E-021** | Chapter 6 (6.9) | `SCREENSHOT` | Incident Triage Modal with Attacker IP & Quarantine Action | `fig_6_3_alert_detail_screen.png` | `✅ CAPTURED` |
+| **E-022** | Chapter 5 (5.4) | `CODE SNIPPET` | Alert Status Mutation & Resolution Dispatch Logic | `lib/features/alerts/data/alerts_repository.dart` | `✅ AVAILABLE` |
 | **E-023** | Chapter 6 (6.22) | `VIDEO` | Live Alert Ingestion, Raw Syslog Inspection & Mitigation | `media/videos/demo_02_alert_triage_mitigation.mp4` | `PENDING` |
 
 ---
@@ -98,8 +98,8 @@ This document serves as the master evidence checklist and tracking register for 
 ### 8. AI Copilot
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-024** | Chapter 6 (6.14) | `SCREENSHOT` | AI Copilot Chat Interface with Streaming Markdown | `fig_6_4_ai_assistant_screen.png` | `PENDING` |
-| **E-025** | Walkthrough (Sec 17) | `SCREENSHOT` | AI Remediation Patch Output for CVE-2024-3094 | `fig_w_06_ai_copilot_remediation.png` | `PENDING` |
+| **E-024** | Chapter 6 (6.14) | `SCREENSHOT` | AI Copilot Chat Interface with Streaming Markdown | `fig_6_4_ai_assistant_screen.png` | `✅ CAPTURED` |
+| **E-025** | Walkthrough (Sec 17) | `SCREENSHOT` | AI Remediation Patch Output for CVE-2024-3094 | `fig_w_06_ai_copilot_remediation.png` | `✅ CAPTURED` |
 | **E-026** | Chapter 6 (6.22) | `VIDEO` | AI Copilot Interactive Querying & Compliance PDF Export | `media/videos/demo_03_ai_copilot_pdf_export.mp4` | `PENDING` |
 
 ---
@@ -107,8 +107,8 @@ This document serves as the master evidence checklist and tracking register for 
 ### 9. WebSocket
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-027** | Chapter 6 (6.13) | `CODE SNIPPET` | Dynamic URL Scheme Mapping (`http->ws`, `https->wss`) | `lib/core/network/websocket_service.dart` | `PENDING` |
-| **E-028** | Chapter 8 (8.6) | `LOG` | WebSocket Handshake Token Verification & Connection Log | `log_websocket_handshake_session.txt` | `PENDING` |
+| **E-027** | Chapter 6 (6.13) | `CODE SNIPPET` | Dynamic URL Scheme Mapping (`http->ws`, `https->wss`) | `lib/core/network/websocket_service.dart` | `✅ AVAILABLE` |
+| **E-028** | Chapter 8 (8.6) | `LOG` | WebSocket Handshake Token Verification & Connection Log | `log_websocket_handshake_session.txt` | `✅ AVAILABLE` |
 | **E-029** | Chapter 8 (8.6) | `VIDEO` | Live WSS Threat Injection & Auto-Reconnect Demonstration | `media/videos/demo_04_websocket_resilience.mp4` | `PENDING` |
 
 ---
@@ -116,34 +116,34 @@ This document serves as the master evidence checklist and tracking register for 
 ### 10. Wazuh
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-030** | Walkthrough (Sec 22) | `SCREENSHOT` | Parsed Wazuh HIDS Syslog Alarm in Mobile App | `fig_w_10_wazuh_syslog_inspection.png` | `PENDING` |
-| **E-031** | Chapter 4 (4.7) | `LOG` | Raw Wazuh Syslog JSON Event Ingestion Payload | `log_wazuh_raw_syslog_payload.json` | `PENDING` |
+| **E-030** | Walkthrough (Sec 22) | `SCREENSHOT` | Parsed Wazuh HIDS Syslog Alarm in Mobile App | `fig_w_10_wazuh_syslog_inspection.png` | `✅ CAPTURED` |
+| **E-031** | Chapter 4 (4.7) | `LOG` | Raw Wazuh Syslog JSON Event Ingestion Payload | `log_wazuh_raw_syslog_payload.json` | `✅ AVAILABLE` |
 
 ---
 
 ### 11. GitHub
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-032** | Walkthrough (Sec 23) | `SCREENSHOT` | GitHub Monitored Repository Codebase Sync Screen | `fig_w_11_github_repository_sync.png` | `PENDING` |
-| **E-033** | Chapter 7 (7.10) | `LOG` | GitHub HMAC-SHA256 Signature Verification Log | `log_github_webhook_hmac_verify.txt` | `PENDING` |
+| **E-032** | Walkthrough (Sec 23) | `SCREENSHOT` | GitHub Monitored Repository Codebase Sync Screen | `fig_w_11_github_repository_sync.png` | `✅ CAPTURED` |
+| **E-033** | Chapter 7 (7.10) | `LOG` | GitHub HMAC-SHA256 Signature Verification Log | `log_github_webhook_hmac_verify.txt` | `✅ AVAILABLE` |
 
 ---
 
 ### 12. Semgrep
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-034** | Chapter 6 (6.12) | `SCREENSHOT` | Semgrep Static Analysis Finding with CWE-89 Tag | `fig_6_8_semgrep_finding_detail.png` | `PENDING` |
-| **E-035** | Walkthrough (Sec 24) | `SCREENSHOT` | Line-Level Vulnerability Code Snippet Highlight | `fig_w_12_semgrep_code_highlight.png` | `PENDING` |
-| **E-036** | Chapter 5 (5.7) | `CODE SNIPPET` | Semgrep Finding Deserialization Model | `lib/models/finding_model.dart` | `PENDING` |
+| **E-034** | Chapter 6 (6.12) | `SCREENSHOT` | Semgrep Static Analysis Finding with CWE-89 Tag | `fig_6_8_semgrep_finding_detail.png` | `✅ CAPTURED` |
+| **E-035** | Walkthrough (Sec 24) | `SCREENSHOT` | Line-Level Vulnerability Code Snippet Highlight | `fig_w_12_semgrep_code_highlight.png` | `✅ CAPTURED` |
+| **E-036** | Chapter 5 (5.7) | `CODE SNIPPET` | Semgrep Finding Deserialization Model | `lib/models/finding_model.dart` | `✅ AVAILABLE` |
 
 ---
 
 ### 13. Cloud Deployment
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-037** | Chapter 9 (9.5) | `SCREENSHOT` | Render Cloud Dashboard Active Service Status & Metrics | `fig_9_2_render_dashboard_service.png` | `PENDING` |
-| **E-038** | Walkthrough (Sec 25) | `SCREENSHOT` | Render Git Auto-Deploy Build Log Output | `fig_w_08_render_cloud_deployment.png` | `PENDING` |
-| **E-039** | Chapter 9 (9.8) | `CODE SNIPPET` | Multi-Stage Production Dockerfile (Flutter Web + Nginx) | `Dockerfile` | `PENDING` |
+| **E-037** | Chapter 9 (9.5) | `SCREENSHOT` | Render Cloud Dashboard Active Service Status & Metrics | `fig_9_2_render_dashboard_service.png` | `✅ CAPTURED` |
+| **E-038** | Walkthrough (Sec 25) | `SCREENSHOT` | Render Git Auto-Deploy Build Log Output | `fig_w_08_render_cloud_deployment.png` | `✅ CAPTURED` |
+| **E-039** | Chapter 9 (9.8) | `CODE SNIPPET` | Multi-Stage Production Dockerfile (Flutter Web + Nginx) | `Dockerfile` | `✅ AVAILABLE` |
 | **E-040** | Chapter 9 (9.14) | `VIDEO` | Cloud Git CI/CD Build & APK Sideload Demonstration | `media/videos/demo_05_deployment_release.mp4` | `PENDING` |
 
 ---
@@ -151,9 +151,9 @@ This document serves as the master evidence checklist and tracking register for 
 ### 14. Android Application
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-041** | Chapter 9 (9.9) | `SCREENSHOT` | Android Release APK Compilation Console Output | `fig_9_3_android_release_apk.png` | `PENDING` |
-| **E-042** | Chapter 9 (9.11) | `SCREENSHOT` | Google Play Console Data Safety & Release Management | `fig_9_4_play_store_console.png` | `PENDING` |
-| **E-043** | Walkthrough (Sec 27) | `SCREENSHOT` | Android Physical Device Sideload Confirmation | `fig_w_09_android_apk_build.png` | `PENDING` |
+| **E-041** | Chapter 9 (9.9) | `SCREENSHOT` | Android Release APK Compilation Console Output | `fig_9_3_android_release_apk.png` | `✅ CAPTURED` |
+| **E-042** | Chapter 9 (9.11) | `SCREENSHOT` | Google Play Console Data Safety & Release Management | `fig_9_4_play_store_console.png` | `✅ CAPTURED` |
+| **E-043** | Walkthrough (Sec 27) | `SCREENSHOT` | Android Physical Device Sideload Confirmation | `fig_w_09_android_apk_build.png` | `✅ CAPTURED` |
 | **E-044** | Walkthrough (Sec 30) | `VIDEO` | Complete End-to-End Operational Walkthrough | `media/videos/demo_06_master_walkthrough.mp4` | `PENDING` |
 
 ---
@@ -161,19 +161,19 @@ This document serves as the master evidence checklist and tracking register for 
 ### 15. Testing
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-045** | Chapter 8 (8.12) | `SCREENSHOT` | Automated Test Suite Terminal Output (15/15 Passed) | `fig_8_2_automated_test_results.png` | `PENDING` |
-| **E-046** | Chapter 8 (8.4) | `API RESPONSE` | Interactive API Client Request / Response Interceptor Log | `fig_8_1_api_response_verification.png` | `PENDING` |
-| **E-047** | Chapter 8 (8.7) | `LOG` | Static Analysis `flutter analyze` Clean Log Output | `log_flutter_analyze_clean.txt` | `PENDING` |
-| **E-048** | Chapter 8 (8.12) | `LOG` | Exhaustive Automated Test Execution Terminal Log | `log_flutter_test_all_passed.txt` | `PENDING` |
+| **E-045** | Chapter 8 (8.12) | `SCREENSHOT` | Automated Test Suite Terminal Output (33/33 Passed) | `fig_8_2_automated_test_results.png` | `✅ CAPTURED` |
+| **E-046** | Chapter 8 (8.4) | `API RESPONSE` | Interactive API Client Request / Response Interceptor Log | `fig_8_1_api_response_verification.png` | `✅ AVAILABLE` |
+| **E-047** | Chapter 8 (8.7) | `LOG` | Static Analysis `dart analyze` Clean Log Output | `fig_8_1_analyze_clean.png` | `✅ CAPTURED` |
+| **E-048** | Chapter 8 (8.12) | `LOG` | Exhaustive Automated Test Execution Terminal Log | `log_flutter_test_all_passed.txt` | `✅ AVAILABLE` |
 
 ---
 
 ### 16. Security
 | Evidence ID | Referenced Section | Evidence Type | Description | Suggested Filename | Status |
 | :---: | :--- | :---: | :--- | :--- | :---: |
-| **E-049** | Chapter 7 (7.15) | `SCREENSHOT` | Generated Compliance PDF with SHA256 Audit Stamp | `fig_7_2_pdf_compliance_report_stamp.png` | `PENDING` |
-| **E-050** | Walkthrough (Sec 18) | `SCREENSHOT` | Settings Screen with Environment & Biometric Toggles | `fig_w_07_settings_diagnostics.png` | `PENDING` |
-| **E-051** | Chapter 7 (7.15) | `CODE SNIPPET` | Pure-Dart SHA256 Audit Digest Generation Routine | `lib/core/services/report_pdf_service.dart` | `PENDING` |
-| **E-052** | Chapter 6 (6.6) | `CODE SNIPPET` | `_handleDioError()` Network Error Sanitization | `lib/core/network/api_client.dart` | `PENDING` |
+| **E-049** | Chapter 7 (7.15) | `SCREENSHOT` | Generated Compliance PDF with SHA256 Audit Stamp | `fig_7_2_pdf_compliance_report_stamp.png` | `✅ CAPTURED` |
+| **E-050** | Walkthrough (Sec 18) | `SCREENSHOT` | Settings Screen with Environment & Biometric Toggles | `fig_w_07_settings_diagnostics.png` | `✅ CAPTURED` |
+| **E-051** | Chapter 7 (7.15) | `CODE SNIPPET` | Pure-Dart SHA256 Audit Digest Generation Routine | `lib/core/services/report_pdf_service.dart` | `✅ AVAILABLE` |
+| **E-052** | Chapter 6 (6.6) | `CODE SNIPPET` | `_handleDioError()` Network Error Sanitization | `lib/core/network/api_client.dart` | `✅ AVAILABLE` |
 
 ---
